@@ -1,9 +1,18 @@
 import React, { useState } from 'react';
 
+import { 
+    Link,
+} from 'react-router-dom';
+
+import { useSnackbar } from 'notistack';
+
 import { Grid, Paper, Button } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core";
-import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
+import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart';
 import VisibilityIcon from '@material-ui/icons/Visibility';
+
+//My component
+import Constants from '../../Constants.js'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -17,20 +26,18 @@ const useStyles = makeStyles((theme) => ({
     viewBtn: {
         fontSize: 12,
     },
-    addToCartBtn: {
-        fontSize: 12,
-        backgroundColor: "#4fbfa8",
-        '&:hover': {
-            backgroundColor: "#03A685",
-        },
-        '&:active': {
-            backgroundColor: "#01755D",
-        }
-    }
+    addToCartBtn: {...Constants.BUTTON_CONTAINED, fontSize: 12},
 }));
 
-export default function Product() {
+export default function Product(props) {
     const classes = useStyles();
+    const { enqueueSnackbar } = useSnackbar();
+
+    const handleClickAddToCartBtn = () => {
+        enqueueSnackbar('Đã thêm vào giỏ hàng!', {
+            variant: 'success'
+        });
+    };
 
     return (
         <Grid item md={4} sm={6} xs={12}>
@@ -45,7 +52,7 @@ export default function Product() {
                         />
                     </Grid>
                     <Grid item xs={12}>
-                        <b>Ten san pham</b>
+                        <b>{props.productName}</b>
                     </Grid>
                     <Grid item xs={12}>
                         <p>Giá san pham</p>
@@ -53,9 +60,11 @@ export default function Product() {
                     <Grid item xs={5}>
                         <Button
                             variant="contained"
-                            className={[classes.button, classes.viewBtn].join(" ")}
+                            className={classes.viewBtn}
                             startIcon={<VisibilityIcon />}
                             style={{ width: '100%' }}
+                            component={Link}
+                            to={`${props.link}`}
                         >
                             Xem
                         </Button>
@@ -63,10 +72,10 @@ export default function Product() {
                     <Grid item xs={5}>
                         <Button
                             variant="contained"
-                            color="secondary"
-                            className={[classes.button, classes.addToCartBtn].join(" ")}
-                            startIcon={<ShoppingCartIcon />}
+                            className={classes.addToCartBtn}
+                            startIcon={<AddShoppingCartIcon />}
                             style={{ width: '100%' }}
+                            onClick={handleClickAddToCartBtn}
                         >
                             Thêm
                         </Button>

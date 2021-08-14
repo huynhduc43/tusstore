@@ -2,6 +2,7 @@ import React from "react";
 
 //Material UI
 import CssBaseline from '@material-ui/core/CssBaseline';
+import { Typography } from "@material-ui/core";
 
 //My components
 
@@ -9,13 +10,7 @@ export default function Homepage() {
     return (
         <React.Fragment>
             <CssBaseline />
-            <h1
-                style={{
-                    textAlign: "center",
-                }}
-            >
-                Homepage
-            </h1>
+            {"Home page"}
         </React.Fragment>
     );
 }

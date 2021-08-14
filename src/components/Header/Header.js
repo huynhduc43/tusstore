@@ -12,7 +12,6 @@ import Button from '@material-ui/core/Button';
 import Toolbar from '@material-ui/core/Toolbar';
 import { makeStyles } from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';
-import MenuItem from '@material-ui/core/MenuItem';
 import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
@@ -24,12 +23,14 @@ import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import Grow from '@material-ui/core/Grow';
 import Paper from '@material-ui/core/Paper';
 import Popper from '@material-ui/core/Popper';
-import MenuList from '@material-ui/core/MenuList';
-import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
+import { Badge } from "@material-ui/core";
 
 //My components
+import Constants from "../Constants";
 import { auto } from "async";
 import ListItemCustom from './ListItemCustom';
+import { Favorite } from "@material-ui/icons";
+import NavItem from './NavItem';
 
 const useStyles = makeStyles((theme) => ({
     icon: {
@@ -70,6 +71,9 @@ const useStyles = makeStyles((theme) => ({
     toolbarButtons: {
         marginLeft: 'auto',
     },
+    appBar: {
+        boxShadow: "0 0px 2px 0px #000",
+    },
     appBar1: {
         backgroundColor: "#000",
         boxShadow: "0 -1000px 0 1000px #000",
@@ -82,104 +86,29 @@ const useStyles = makeStyles((theme) => ({
         zIndex: -1,
         padding: 0,
     },
-    shoppingCartIcon: {
+    circleBtn: {
         '&:hover': {
-            color: "#4fbfa8",
+            color: Constants.GREEN,
         }
     },
     button: {
         '&:hover': {
-            backgroundColor: "#4fbfa8",
-            // minHeight: 70,
+            backgroundColor: Constants.GREEN,
         }
     },
-    buttonSign: {
+    navItemBtn: {
         '&:hover': {
-            backgroundColor: "#4fbfa8",
+            color: "#fff",
+            backgroundColor: Constants.GREEN,
         }
     },
 }));
-
-const NavItem = (props) => {
-    const classes = useStyles();
-
-    const [open, setOpen] = useState(false);
-    const anchorRef = React.useRef(null);
-
-
-    const handleToggle = () => {
-        setOpen((prevOpen) => !prevOpen);
-    };
-
-    const handleClose = (event) => {
-        if (anchorRef.current && anchorRef.current.contains(event.target)) {
-            return;
-        }
-
-        setOpen(false);
-    };
-
-    function handleListKeyDown(event) {
-        if (event.key === 'Tab') {
-            event.preventDefault();
-            setOpen(false);
-        }
-    }
-
-    // return focus to the button when we transitioned from !open -> open
-    const prevOpen = React.useRef(open);
-    React.useEffect(() => {
-        if (prevOpen.current === true && open === false) {
-            anchorRef.current.focus();
-        }
-
-        prevOpen.current = open;
-    }, [open]);
-
-    return (
-        <div>
-            <Button
-                ref={anchorRef}
-                aria-controls={open ? 'menu-list-grow' : undefined}
-                aria-haspopup="true"
-                onClick={handleToggle}
-                className={classes.button}
-            >
-                {props.name}<ArrowDropDownIcon />
-            </Button>
-            <Popper open={open} anchorEl={anchorRef.current} role={undefined} transition disablePortal>
-                {({ TransitionProps, placement }) => (
-                    <Grow
-                        {...TransitionProps}
-                        style={{ transformOrigin: placement === 'bottom' ? 'center top' : 'center bottom' }}
-                    >
-                        <Paper>
-                            <ClickAwayListener onClickAway={handleClose}>
-                                <MenuList autoFocusItem={open} id="" onKeyDown={handleListKeyDown}>
-                                    {props.items.map((item, i) => {
-                                        return (
-                                            <MenuItem key={i} component={Links} to={item.itemUrl} onClick={handleClose}>{item.itemName}</MenuItem>
-                                        );
-                                    })}
-                                </MenuList>
-                            </ClickAwayListener>
-                        </Paper>
-                    </Grow>
-                )}
-            </Popper>
-
-        </div>
-    );
-}
 
 const NavBar = (props) => {
     const classes = useStyles();
     const location = useLocation();
     const [open1, setOpen1] = React.useState(false);
-    const [open2, setOpen2] = React.useState(false);
-    //const [anchorEl, setAnchorEl] = useState(null);
     const anchorRef1 = useRef(null);
-    const anchorRef2 = useRef(null);
 
     const theme = useTheme();
     const isDownXS = useMediaQuery(theme.breakpoints.down("xs"));
@@ -207,145 +136,138 @@ const NavBar = (props) => {
         prevOpen1.current = open1;
     }, [open1]);
 
-    // return focus to the button when we transitioned from !open -> open
-    const prevOpen2 = React.useRef(open2);
-    React.useEffect(() => {
-        if (prevOpen2.current === true && open2 === false) {
-            anchorRef2.current.focus();
-        }
-
-        prevOpen2.current = open2;
-    }, [open2]);
-
     return (
         <>
-        <AppBar>
-            <Container className={classes.appBar1}>
-                <Toolbar>
-                    {isDownXS ? (
-                        <Grid container>
-                            <Grid container item xs={12}
-                                justifyContent="center"
-                                alignItems="center"
-                            >
-                                <Button component={Links} to="/offer" color="inherit"
-                                    style={{textAlign:"center"}}
+            <AppBar position="relative" className={classes.appBar}>
+                <Container className={classes.appBar1}>
+                    <Toolbar>
+                        {isDownXS ? (
+                            <Grid container>
+                                <Grid container item xs={12}
+                                    justifyContent="center"
+                                    alignItems="center"
                                 >
+                                    <Button component={Links} to="/offer" color="inherit"
+                                        style={{ textAlign: "center" }}
+                                    >
+                                        Get flat 35% off on orders over $50!
+                                    </Button>
+                                </Grid>
+
+                                <Grid container item xs={12} 
+                                    style={{
+                                        paddingBottom: 10,
+                                    }}
+                                    justifyContent="center"
+                                >
+                                    <Button component={Links} to="/sign-in" className={classes.button} color="inherit">
+                                        Đăng nhập
+                                    </Button>
+                                    <Button component={Links} to="/sign-up" className={classes.button} color="inherit">
+                                        Đăng ký
+                                    </Button>
+                                </Grid>
+                            </Grid>
+                        ) : (
+                            <>
+                                <Button component={Links} to="/offer" color="inherit">
                                     Get flat 35% off on orders over $50!
                                 </Button>
-                            </Grid>
-
-                            <Grid container item xs={12}
-                                justifyContent="center"
-                            >
-                                <Button component={Links} to="/sign-in" className={classes.buttonSign} color="inherit">
-                                    Đăng nhập
-                                </Button>
-                                <Button component={Links} to="/sign-up" className={classes.buttonSign} color="inherit">
-                                    Đăng ký
-                                </Button>
-                            </Grid>
-                        </Grid>
-                    ) : (
-                        <>
-                            <Button component={Links} to="/offer" color="inherit">
-                                Get flat 35% off on orders over $50!
-                            </Button>
-                            <div className={classes.toolbarButtons}>
-                                <Button component={Links} to="/sign-in" className={classes.buttonSign} color="inherit">
-                                    Đăng nhập
-                                </Button>
-                                <Button component={Links} to="/sign-up" className={classes.buttonSign} color="inherit">
-                                    Đăng ký
-                                </Button>
-                            </div>
-                        </>
-                    )}
-                </Toolbar>
-            </Container>
-            <Container className={classes.appBar2}>
-                <Toolbar>
-                    <Button
-                        edge="start"
-                        className={[classes.menuButton, classes.button].join(" ")}
-                        aria-label="menu"
-                        component={Links}
-                        to="/"
-                    >
-                        <img src="../../logoTD.png"
-                            style={{
-                                width: 24,
-                                height: auto,
-                                margin: 5,
-                            }}
-                            alt="Logo TusStore"
-                        />
-                        <p>TusStore</p>
-                    </Button>
-
-                    {isDownXS ? (<>
-                        {/* <IconButton color="inherit" className={classes.shoppingCartIcon} onClick={handleToggle1}>
-                            <MenuIcon />
-                        </IconButton> */}
-                        <IconButton
-                            ref={anchorRef1}
-                            aria-controls={open1 ? 'menu-list-grow' : undefined}
-                            aria-haspopup="true"
-                            onClick={handleToggle1}
-                            className={classes.shoppingCartIcon}
+                                <div className={classes.toolbarButtons}>
+                                    <Button component={Links} to="/sign-in" className={classes.button} color="inherit">
+                                        Đăng nhập
+                                    </Button>
+                                    <Button component={Links} to="/sign-up" className={classes.button} color="inherit">
+                                        Đăng ký
+                                    </Button>
+                                </div>
+                            </>
+                        )}
+                    </Toolbar>
+                </Container>
+                <Container className={classes.appBar2}>
+                    <Toolbar>
+                        <Button
+                            edge="start"
+                            className={[...classes.menuButton, classes.navItemBtn]}
+                            aria-label="menu"
+                            component={Links}
+                            to="/"
                         >
-                            <MenuIcon />
-                        </IconButton>
-                        <Popper open={open1} anchorEl={anchorRef1.current} role={undefined} transition disablePortal>
-                            {({ TransitionProps, placement }) => (
-                                <Grow
-                                    {...TransitionProps}
-                                    style={{ transformOrigin: placement === 'bottom' ? 'center top' : 'center bottom' }}
-                                >
-                                    <Paper>
-                                        <ClickAwayListener onClickAway={handleClose1}>
-                                            <List
-                                                component="nav"
-                                                aria-labelledby="nested-list-subheader"
-                                            >
-                                                {props.data.map((data, i) => {
-                                                    return (
-                                                        <ListItemCustom nameListItem={data.nameNavItem} nestedList={data.list} />
-                                                    );
-                                                })}
+                            <img src="../../logoTD.svg"
+                                style={{
+                                    width: 24,
+                                    height: auto,
+                                    margin: 5,
+                                }}
+                                alt="Logo TusStore"
+                            />
+                            <p>TusStore</p>
+                        </Button>
 
-                                            </List>
-                                        </ClickAwayListener>
-                                    </Paper>
-                                </Grow>
-                            )}
-                        </Popper>
+                        {isDownXS ? (<>
+                            <IconButton
+                                ref={anchorRef1}
+                                aria-controls={open1 ? 'menu-list-grow' : undefined}
+                                aria-haspopup="true"
+                                onClick={handleToggle1}
+                                className={classes.circleBtn}
+                            >
+                                <MenuIcon />
+                            </IconButton>
+                            <Popper open={open1} anchorEl={anchorRef1.current} role={undefined} transition disablePortal>
+                                {({ TransitionProps, placement }) => (
+                                    <Grow
+                                        {...TransitionProps}
+                                        style={{ transformOrigin: placement === 'bottom' ? 'center top' : 'center bottom' }}
+                                    >
+                                        <Paper>
+                                            <ClickAwayListener onClickAway={handleClose1}>
+                                                <List
+                                                    component="nav"
+                                                    aria-labelledby="nested-list-subheader"
+                                                >
+                                                    {props.data.map((data, i) => {
+                                                        return (
+                                                            <ListItemCustom nameListItem={data.nameNavItem} nestedList={data.list} />
+                                                        );
+                                                    })}
+
+                                                </List>
+                                            </ClickAwayListener>
+                                        </Paper>
+                                    </Grow>
+                                )}
+                            </Popper>
+                        </>) : (<>
+                            {props.data.map((data, i) => {
+                                return (
+                                    <NavItem key={i} name={data.nameNavItem} items={data.list} />
+                                );
+                            })}
+                        </>)}
+
+                        <div className={classes.toolbarButtons}>
+                            <IconButton color="inherit" className={classes.circleBtn}>
+                                <SearchIcon />
+                            </IconButton>
+                            <IconButton color="inherit" className={classes.circleBtn}>
+                                <Favorite/>
+                            </IconButton>
+                            <IconButton color="inherit" className={classes.circleBtn}
+                                component={Links} to="/cart"
+                            >
+                                <Badge badgeContent={4} max={9} color="secondary">
+                                    <ShoppingCartIcon />
+                                </Badge>
+                            </IconButton>
 
 
-                    </>) : (<>
-                        {props.data.map((data, i) => {
-                            return (
-                                <NavItem key={i} name={data.nameNavItem} items={data.list} />
-                            );
-                        })}
-                    </>)}
-
-                    <div className={classes.toolbarButtons}>
-                        <IconButton color="inherit" className={classes.shoppingCartIcon}>
-                            <SearchIcon />
-                        </IconButton>
-                        <IconButton color="inherit" className={classes.shoppingCartIcon}>
-                            <ShoppingCartIcon />
-                        </IconButton>
-                    </div>
-                </Toolbar>
-
-            </Container>
-
-        </AppBar>
-        <Toolbar />
-        <Toolbar />
-        {(location.pathname !== '/sign-in' && location.pathname !== '/sign-up') ? <Toolbar /> : <></>}
+                        </div>
+                    </Toolbar>
+                </Container>
+            </AppBar>
+            {(location.pathname !== '/sign-in' && location.pathname !== '/sign-up') ? <Toolbar /> : <></>}
         </>
     );
 }

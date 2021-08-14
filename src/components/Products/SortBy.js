@@ -53,8 +53,7 @@ export default function SortBy() {
         setValue(event.target.value);
     };
     return (
-        <FormControl className={classes.margin}>
-            
+        <FormControl className={classes.margin}>        
             <Select
                 labelId="demo-customized-select-label"
                 id="demo-customized-select"

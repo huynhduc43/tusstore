@@ -159,7 +159,6 @@ export default function SignIn() {
         <Links to="/react-router-demo">React router demo</Links>
       </div>
       <Box mt={8}>
-        <Copyright />
       </Box>
     </Container>
     </>

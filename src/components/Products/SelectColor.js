@@ -1,4 +1,5 @@
 import React from 'react';
+
 import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
@@ -16,11 +17,12 @@ const useStyles = makeStyles((theme) => ({
     button: Constants.BUTTON_CONTAINED
 }));
 
-export default function SelectType() {
+export default function SelectColor() {
     const classes = useStyles();
     const [state, setState] = React.useState({
-        checkedA: true,
-        checkedB: true,
+        greenPlant: true,
+        yellowPlant: true,
+        redPlant: true,
     });
 
     const handleChange = (event) => {
@@ -31,12 +33,16 @@ export default function SelectType() {
         <form>
             <FormGroup>
                 <FormControlLabel
-                    control={<Checkbox checked={state.checkedA} onChange={handleChange} name="checkedA" />}
-                    label="Có hoa"
+                    control={<Checkbox checked={state.greenPlant} onChange={handleChange} name="greenPlant" />}
+                    label="Xanh lá"
                 />
                 <FormControlLabel
-                    control={<Checkbox checked={state.checkedB} onChange={handleChange} name="checkedB" />}
-                    label="Không có hoa"
+                    control={<Checkbox checked={state.yellowPlant} onChange={handleChange} name="yellowPlant" />}
+                    label="Vàng"
+                />
+                <FormControlLabel
+                    control={<Checkbox checked={state.redPlant} onChange={handleChange} name="redPlant" />}
+                    label="Đỏ"
                 />
             </FormGroup>
             <Grid container spacing={1} justifyContent="space-evenly">

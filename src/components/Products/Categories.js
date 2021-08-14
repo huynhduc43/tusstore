@@ -1,8 +1,11 @@
 import React from 'react';
+
 import { makeStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
+
+import Constants from '../Constants'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -12,13 +15,14 @@ const useStyles = makeStyles((theme) => ({
   },
   listItem: {
     '&:hover': {
-        backgroundColor: "#4fbfa8",
+      backgroundColor: Constants.GREEN,
     }
   },
   isSelected: {
-    backgroundColor: "#4fbfa8",
+    color: "#fff",
+    backgroundColor: Constants.GREEN,
     '&:hover': {
-        backgroundColor: "#4fbfa8",
+      backgroundColor: Constants.GREEN,
     }
   }
 }));
