@@ -4,7 +4,9 @@
         "terminalCursor.foreground": "#ffff00",
         "list.inactiveSelectionBackground": "#585c5b",
         "[One Dark Pro]": {                  // Optional
-            "tab.activeBackground": "#585c5b"
-        }
+            "tab.activeBackground": "#585c5b",
+            // "editor.selectionHighlightBackground": "#ffffff33",
+            "editor.selectionBackground": "#4D5656",
+        },
     }
 }

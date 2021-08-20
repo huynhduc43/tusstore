@@ -7,12 +7,16 @@ import {
   BrowserRouter as Router,
 } from "react-router-dom";
 
+import theme from './components/Theme';
+import { ThemeProvider } from '@material-ui/core';
+
 ReactDOM.render(
   <React.StrictMode>
     <Router>
-      <App />
+      <ThemeProvider theme={theme}>
+        <App />
+      </ThemeProvider>
     </Router>
-
   </React.StrictMode>,
   document.getElementById('root')
 );

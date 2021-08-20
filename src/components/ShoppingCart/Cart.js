@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
         padding: theme.spacing(2),
         textAlign: 'center',
     },
-    checkoutBtn: Constants.BUTTON,
+    checkoutBtn: Constants.BUTTON_CONTAINED,
     sticky: {
         position: "sticky",
         top: 24,

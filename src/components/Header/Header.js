@@ -10,7 +10,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import AppBar from '@material-ui/core/AppBar';
 import Button from '@material-ui/core/Button';
 import Toolbar from '@material-ui/core/Toolbar';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles, alpha } from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
@@ -31,6 +31,8 @@ import { auto } from "async";
 import ListItemCustom from './ListItemCustom';
 import { Favorite } from "@material-ui/icons";
 import NavItem from './NavItem';
+import InputBase from '@material-ui/core/InputBase';
+import SearchDialog from './SearchDialog';
 
 const useStyles = makeStyles((theme) => ({
     icon: {
@@ -70,6 +72,9 @@ const useStyles = makeStyles((theme) => ({
     },
     toolbarButtons: {
         marginLeft: 'auto',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
     },
     appBar: {
         boxShadow: "0 0px 2px 0px #000",
@@ -89,7 +94,10 @@ const useStyles = makeStyles((theme) => ({
     circleBtn: {
         '&:hover': {
             color: Constants.GREEN,
-        }
+        },
+        [theme.breakpoints.down('sm')]: {
+            
+        },
     },
     button: {
         '&:hover': {
@@ -102,6 +110,50 @@ const useStyles = makeStyles((theme) => ({
             backgroundColor: Constants.GREEN,
         }
     },
+    search: {
+        position: 'relative',
+        border: "1px solid #000",
+        borderRadius: theme.shape.borderRadius,
+        '&:hover': {
+            color: Constants.GREEN,
+            borderColor: Constants.GREEN,
+        },
+        '&:focus': {
+            color: Constants.GREEN,
+            borderColor: Constants.GREEN,
+        },
+        marginLeft: 0,
+        width: '100%',
+        [theme.breakpoints.up('sm')]: {
+            marginLeft: theme.spacing(1),
+            width: 'auto',
+        },
+    },
+    searchIcon: {
+        padding: theme.spacing(0, 2),
+        height: '100%',
+        position: 'absolute',
+        pointerEvents: 'none',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    inputRoot: {
+        color: 'inherit',
+    },
+    inputInput: {
+        padding: theme.spacing(1, 1, 1, 0),
+        // vertical padding + font size from searchIcon
+        paddingLeft: `calc(1.5em + ${theme.spacing(4)}px)`,
+        transition: theme.transitions.create('width'),
+        width: '100%',
+        [theme.breakpoints.up('md')]: {
+            width: '25ch',
+            '&:focus': {
+                width: '30ch',
+            },
+        },
+    },
 }));
 
 const NavBar = (props) => {
@@ -109,9 +161,11 @@ const NavBar = (props) => {
     const location = useLocation();
     const [open1, setOpen1] = React.useState(false);
     const anchorRef1 = useRef(null);
+    const [openSearchDialog, setOpenSearchDialog] = React.useState(false);
 
     const theme = useTheme();
     const isDownXS = useMediaQuery(theme.breakpoints.down("xs"));
+    const isDownSM = useMediaQuery(theme.breakpoints.down("sm"));
     //console.log(isMedium);
 
     const handleToggle1 = () => {
@@ -136,8 +190,13 @@ const NavBar = (props) => {
         prevOpen1.current = open1;
     }, [open1]);
 
+    const handleClickOpenSearchDialog = () => {
+        setOpenSearchDialog(true);
+    }
+
     return (
         <>
+            <SearchDialog status={openSearchDialog} onClickOpenSearch={setOpenSearchDialog}/>
             <AppBar position="relative" className={classes.appBar}>
                 <Container className={classes.appBar1}>
                     <Toolbar>
@@ -154,7 +213,7 @@ const NavBar = (props) => {
                                     </Button>
                                 </Grid>
 
-                                <Grid container item xs={12} 
+                                <Grid container item xs={12}
                                     style={{
                                         paddingBottom: 10,
                                     }}
@@ -248,12 +307,38 @@ const NavBar = (props) => {
                         </>)}
 
                         <div className={classes.toolbarButtons}>
-                            <IconButton color="inherit" className={classes.circleBtn}>
-                                <SearchIcon />
+                            {!isDownSM &&
+                                <div className={classes.search}>
+                                    <div className={classes.searchIcon}>
+                                        <IconButton color="inherit" className={classes.circleBtn}
+                                            component={Links} to='/account/wishlist'
+                                        >
+                                            <SearchIcon />
+                                        </IconButton>
+                                    </div>
+                                    <InputBase
+                                        placeholder="Tìm kiếm..."
+                                        classes={{
+                                            root: classes.inputRoot,
+                                            input: classes.inputInput,
+                                        }}
+                                        inputProps={{ 'aria-label': 'search' }}
+                                    />
+                                </div>
+                            }
+                            {isDownSM && 
+                                <IconButton color="inherit" className={classes.circleBtn}
+                                    onClick={handleClickOpenSearchDialog}
+                                >
+                                    <SearchIcon/>
+                                </IconButton>
+                            }
+                            <IconButton color="inherit" className={classes.circleBtn}
+                                component={Links} to='/account/wishlist'
+                            >
+                                <Favorite />
                             </IconButton>
-                            <IconButton color="inherit" className={classes.circleBtn}>
-                                <Favorite/>
-                            </IconButton>
+
                             <IconButton color="inherit" className={classes.circleBtn}
                                 component={Links} to="/cart"
                             >
@@ -261,8 +346,6 @@ const NavBar = (props) => {
                                     <ShoppingCartIcon />
                                 </Badge>
                             </IconButton>
-
-
                         </div>
                     </Toolbar>
                 </Container>

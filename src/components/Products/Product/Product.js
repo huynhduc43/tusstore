@@ -24,9 +24,9 @@ const useStyles = makeStyles((theme) => ({
         color: theme.palette.text.secondary,
     },
     viewBtn: {
-        fontSize: 12,
+
     },
-    addToCartBtn: {...Constants.BUTTON_CONTAINED, fontSize: 12},
+    addToCartBtn: {...Constants.BUTTON_CONTAINED},
 }));
 
 export default function Product(props) {

@@ -18,6 +18,7 @@ import Footer from './components/Footer/Footer';
 import Homepage from './components/Homepage';
 import ListOfProducts from './components/Products/ListOfProducts';
 import Cart from './components/ShoppingCart/Cart';
+import Account from './components/Account/Account';
 
 const Main = () => (
   <div style={{
@@ -29,6 +30,7 @@ const Main = () => (
         <ListOfProducts />
       </Route>
       <Route path="/cart" component={Cart} />
+      <Route path='/account' component={Account}/>
       <Route path="/sign-up">
         <SignUp />
       </Route>
