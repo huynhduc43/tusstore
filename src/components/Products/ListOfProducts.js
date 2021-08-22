@@ -1,16 +1,12 @@
-import React, { useState } from "react";
+import React from "react";
 
-import { Container, Divider, Grid, Paper } from "@material-ui/core";
+import { Container, Grid, Paper } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core";
-import { Typography } from "@material-ui/core";
+
 
 import {
-  Switch,
-  BrowserRouter as Route,
-  Link,
   useLocation,
   useRouteMatch,
-  withRouter,
 } from "react-router-dom";
 
 //My components
@@ -18,11 +14,11 @@ import Product from "./Product/Product";
 import BreadcrumbsCustom from '../BreadcrumbsCustom';
 import SortBy from "./SortBy";
 import Show from './Show';
-import Categories from './Categories';
-import SelectType from './SelectType';
-import SelectColor from './SelectColor';
+import AdvancedFiltering from './AdvancedFiltering';
 import PaginationCustom from "./PaginationCustom";
 import ProductDetail from "./Product/ProductDetail";
+import { useMediaQuery } from '@material-ui/core';
+import { useTheme } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -32,27 +28,48 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(2),
     textAlign: 'center',
   },
+  sticky: {
+    position: "sticky",
+    top: 24,
+  }
 }));
+
+const products = [
+  {
+    id: "1",
+    name: "Product 1",
+  },
+  {
+    id: "2",
+    name: "Product 2",
+  },
+  {
+    id: "3",
+    name: "Product 3",
+  },
+  {
+    id: "4",
+    name: "Product 1",
+  },
+  {
+    id: "5",
+    name: "Product 2",
+  },
+  {
+    id: "6",
+    name: "Product 3",
+  }
+];
 
 export default function ListOfProducts(props) {
   const classes = useStyles();
   const location = useLocation();
+  const theme = useTheme();
+  const isDownSM = useMediaQuery(theme.breakpoints.down("sm"));
+  const isDownXS = useMediaQuery(theme.breakpoints.down("xs"));
 
-  let { path, url } = useRouteMatch();
-  const products = [
-    {
-      id: "1",
-      name: "Product 1",
-    },
-    {
-      id: "2",
-      name: "Product 2",
-    },
-    {
-      id: "3",
-      name: "Product 3",
-    }
-  ];
+  let { url } = useRouteMatch();
+
   React.useEffect(() => {
   }, [location])
 
@@ -64,54 +81,42 @@ export default function ListOfProducts(props) {
 
             <Grid item xs={12}>
               <Paper className={classes.paper}>
-                <BreadcrumbsCustom />
+                <BreadcrumbsCustom path={location.pathname}/>
               </Paper>
             </Grid>
 
-            <Grid item xs={3} >
-              <Grid container spacing={3}>
-                <Grid item xs={12}>
-                  <Paper className={classes.paper} >
-                    <Typography color="textPrimary">Danh mục sản phẩm</Typography>
-                    <Divider />
-                    <Categories />
-                  </Paper>
-                </Grid>
-                <Grid item xs={12}>
-                  <Paper className={classes.paper}>
-                    <Typography color="textPrimary">Loại cây</Typography>
-                    <Divider />
-                    <SelectType />
-                  </Paper>
-                </Grid>
-                <Grid item xs={12}>
-                  <Paper className={classes.paper}>
-                    <Typography color="textPrimary">Màu sắc</Typography>
-                    <Divider />
-                    <SelectColor />
-                  </Paper>
-                </Grid>
+            {isDownSM &&
+              <Grid item xs={12}>
+                <Paper className={classes.paper}>xs=12</Paper>
+              </Grid>
+            }
+
+            <Grid container item xs={isDownSM ? 12 : 3} >
+              <Grid item xs={12}>
+                <Paper className={[classes.paper, classes.sticky].join(" ")}>
+                  <AdvancedFiltering />
+                </Paper>
               </Grid>
             </Grid>
 
-            <Grid container item xs={9} direction="column">
+
+            <Grid container item md={9} xs={12} direction="column">
               <Grid container spacing={3}>
                 {location.pathname !== "/list-of-cactus/large-cactus" ? <ProductDetail /> :
                   (<>
-                    <Grid item xs={12}>
-                      <Paper className={classes.paper}>xs=12</Paper>
-                    </Grid>
+                    {!isDownSM &&
+                      <Grid item xs={12}>
+                        <Paper className={classes.paper}>xs=12</Paper>
+                      </Grid>
+                    }
 
                     <Grid item xs={12}>
                       <Paper className={classes.paper}>
-                        <Grid container item xs={12} spacing={1} alignItems="center" direction="row">
-                          <Grid item md={4} sm={12} xs={12}>
-                            <Paper className={classes.paper}>xs=4</Paper>
-                          </Grid>
-                          <Grid item md={4} sm={6} xs={12}>
+                        <Grid container item xs={12} spacing={1} alignItems="center">
+                          <Grid item sm={6} xs={12}>
                             <Show />
                           </Grid>
-                          <Grid container item md={4} sm={6} xs={12} alignItems="center" justifyContent="center">
+                          <Grid container item sm={6} xs={12} alignItems="center" justifyContent="center">
                             <p>Sắp xếp theo&nbsp;</p>
                             <SortBy />
                           </Grid>
@@ -120,7 +125,7 @@ export default function ListOfProducts(props) {
                     </Grid>
 
                     <Grid item xs={12}>
-                      <Grid container spacing={3}>
+                      <Grid container spacing={isDownXS ? 1 : 3}>
                         {
                           products.map((product) => (
                             <Product link={`${url}/${product.id}`} key={product.id} productId={product.id} productName={product.name} />

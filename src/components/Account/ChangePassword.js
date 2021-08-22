@@ -20,6 +20,8 @@ export default function ChangePassword() {
     const [newPass, setNewPass] = useState("");
     const [repeatNewPass, setRepeatNewPass] = useState("");
 
+    console.log(currentPass, newPass, repeatNewPass);//to avoid warning and run on mobile
+
     const handleChangeCurrentPass = (e) => {
         setCurrentPass(e.target.value);
     }
@@ -41,7 +43,7 @@ export default function ChangePassword() {
             <Typography variant="h6">Đổi mật khẩu</Typography>
             <Divider className={classes.divider}/>
             <Grid container justifyContent="center">
-                <Grid item xs={4}>
+                <Grid item sm={4} xs={10}>
                     <form onSubmit={handleSubmit}>
                         <TextField
                             variant="outlined"

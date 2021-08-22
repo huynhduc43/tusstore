@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useRef } from "react";
 
 import {
     Link as Links,
@@ -10,7 +10,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import AppBar from '@material-ui/core/AppBar';
 import Button from '@material-ui/core/Button';
 import Toolbar from '@material-ui/core/Toolbar';
-import { makeStyles, alpha } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
@@ -24,6 +24,7 @@ import Grow from '@material-ui/core/Grow';
 import Paper from '@material-ui/core/Paper';
 import Popper from '@material-ui/core/Popper';
 import { Badge } from "@material-ui/core";
+import NotificationsIcon from '@material-ui/icons/Notifications';
 
 //My components
 import Constants from "../Constants";
@@ -33,6 +34,7 @@ import { Favorite } from "@material-ui/icons";
 import NavItem from './NavItem';
 import InputBase from '@material-ui/core/InputBase';
 import SearchDialog from './SearchDialog';
+import AccountButton from './AccountButton';
 
 const useStyles = makeStyles((theme) => ({
     icon: {
@@ -95,9 +97,6 @@ const useStyles = makeStyles((theme) => ({
         '&:hover': {
             color: Constants.GREEN,
         },
-        [theme.breakpoints.down('sm')]: {
-            
-        },
     },
     button: {
         '&:hover': {
@@ -154,6 +153,9 @@ const useStyles = makeStyles((theme) => ({
             },
         },
     },
+    notificationIcon: {
+        color: "#fff",
+    },
 }));
 
 const NavBar = (props) => {
@@ -196,7 +198,7 @@ const NavBar = (props) => {
 
     return (
         <>
-            <SearchDialog status={openSearchDialog} onClickOpenSearch={setOpenSearchDialog}/>
+            <SearchDialog status={openSearchDialog} onClickOpenSearch={setOpenSearchDialog} />
             <AppBar position="relative" className={classes.appBar}>
                 <Container className={classes.appBar1}>
                     <Toolbar>
@@ -215,16 +217,19 @@ const NavBar = (props) => {
 
                                 <Grid container item xs={12}
                                     style={{
-                                        paddingBottom: 10,
+                                        paddingBottom: 5,
                                     }}
                                     justifyContent="center"
                                 >
-                                    <Button component={Links} to="/sign-in" className={classes.button} color="inherit">
+                                    {/* <Button component={Links} to="/sign-in" className={classes.button} color="inherit">
                                         Đăng nhập
                                     </Button>
                                     <Button component={Links} to="/sign-up" className={classes.button} color="inherit">
                                         Đăng ký
-                                    </Button>
+                                    </Button> */}
+
+                                    {/* Login */}
+                                    <AccountButton/>
                                 </Grid>
                             </Grid>
                         ) : (
@@ -233,13 +238,21 @@ const NavBar = (props) => {
                                     Get flat 35% off on orders over $50!
                                 </Button>
                                 <div className={classes.toolbarButtons}>
-                                    <Button component={Links} to="/sign-in" className={classes.button} color="inherit">
+                                    {/* <Button component={Links} to="/sign-in" className={classes.button} color="inherit">
                                         Đăng nhập
                                     </Button>
                                     <Button component={Links} to="/sign-up" className={classes.button} color="inherit">
                                         Đăng ký
-                                    </Button>
+                                    </Button> */}
+
+                                    {/* Login */}
+                                    <IconButton>
+                                        <NotificationsIcon className={classes.notificationIcon} />
+                                    </IconButton>
+                                    |
+                                    <AccountButton/>
                                 </div>
+
                             </>
                         )}
                     </Toolbar>
@@ -248,7 +261,7 @@ const NavBar = (props) => {
                     <Toolbar>
                         <Button
                             edge="start"
-                            className={[...classes.menuButton, classes.navItemBtn]}
+                            className={[classes.menuButton, classes.navItemBtn].join(" ")}
                             aria-label="menu"
                             component={Links}
                             to="/"
@@ -288,7 +301,11 @@ const NavBar = (props) => {
                                                 >
                                                     {props.data.map((data, i) => {
                                                         return (
-                                                            <ListItemCustom nameListItem={data.nameNavItem} nestedList={data.list} />
+                                                            <ListItemCustom key={i}
+                                                                nameListItem={data.nameNavItem}
+                                                                nestedList={data.list}
+                                                                onClickClose={handleClose1}
+                                                            />
                                                         );
                                                     })}
 
@@ -326,11 +343,11 @@ const NavBar = (props) => {
                                     />
                                 </div>
                             }
-                            {isDownSM && 
+                            {isDownSM &&
                                 <IconButton color="inherit" className={classes.circleBtn}
                                     onClick={handleClickOpenSearchDialog}
                                 >
-                                    <SearchIcon/>
+                                    <SearchIcon />
                                 </IconButton>
                             }
                             <IconButton color="inherit" className={classes.circleBtn}
@@ -361,6 +378,10 @@ export default function Header() {
             nameNavItem: "Xương rồng",
             list: [
                 {
+                    itemName: "Tất cả",
+                    itemUrl: '/list-of-cactus',
+                },
+                {
                     itemName: "Cỡ lớn",
                     itemUrl: '/list-of-cactus/large-cactus',
                 },
@@ -382,20 +403,24 @@ export default function Header() {
             nameNavItem: "Sen đá",
             list: [
                 {
+                    itemName: "Tất cả",
+                    itemUrl: '/list-of-lotus',
+                },
+                {
                     itemName: "Cỡ lớn",
-                    itemUrl: '/list-of-cactus/large-cactus',
+                    itemUrl: '/list-of-lotus/large-lotus',
                 },
                 {
                     itemName: "Cỡ vừa",
-                    itemUrl: '/list-of-cactus/medium-cactus',
+                    itemUrl: '/list-of-lotus/medium-lotus',
                 },
                 {
                     itemName: "Cỡ nhỏ",
-                    itemUrl: '/list-of-cactus/small-cactus',
+                    itemUrl: '/list-of-lotus/small-lotus',
                 },
                 {
                     itemName: "Mix",
-                    itemUrl: '/list-of-cactus/mix-cactus',
+                    itemUrl: '/list-of-lotus/mix-lotus',
                 }
             ]
         },
@@ -403,12 +428,16 @@ export default function Header() {
             nameNavItem: "Chậu",
             list: [
                 {
+                    itemName: "Tất cả",
+                    itemUrl: '/list-of-pots/ceramic-pots',
+                },
+                {
                     itemName: "Chậu sứ",
-                    itemUrl: '/list-of-cactus/large-cactus',
+                    itemUrl: '/list-of-pots/ceramic-pots',
                 },
                 {
                     itemName: "Chậu đất nung",
-                    itemUrl: '/list-of-cactus/medium-cactus',
+                    itemUrl: '/list-of-pots/terracotta-pots',
                 },
             ]
         }

@@ -22,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function NestedList(props) {
     const classes = useStyles();
-    const [open, setOpen] = React.useState(false);
+    const [open, setOpen] = React.useState(props.status);
 
     const handleClick = () => {
         setOpen(!open);
@@ -39,7 +39,12 @@ export default function NestedList(props) {
 
                     {props.nestedList.map((data, i) => {
                         return (
-                            <ListItem key={i} button className={classes.nested} component={Link} to={data.itemUrl}>
+                            <ListItem key={i} button 
+                            className={classes.nested} 
+                            component={Link} 
+                            to={data.itemUrl}
+                            onClick={props.onClickClose}
+                            >
                                 <ListItemText primary={data.itemName} />
                             </ListItem>
                         );

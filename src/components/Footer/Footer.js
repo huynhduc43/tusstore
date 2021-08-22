@@ -10,7 +10,7 @@ export default function Footer() {
       <Container>
         <Toolbar>
           <Typography variant="body1" color="inherit">
-            © 2021 TusStore
+            © {new Date().getFullYear()} TusStore
           </Typography>
         </Toolbar>
       </Container>

@@ -55,6 +55,7 @@ export default function SortBy() {
     return (
         <FormControl className={classes.margin}>        
             <Select
+                size="small"
                 labelId="demo-customized-select-label"
                 id="demo-customized-select"
                 value={value}

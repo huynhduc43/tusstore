@@ -7,6 +7,7 @@ import { Button, Grid } from '@material-ui/core';
 import DoneIcon from '@material-ui/icons/Done';
 import { makeStyles } from "@material-ui/core";
 
+
 //My components
 import Constants from "../Constants";
 
@@ -31,6 +32,7 @@ export default function SelectColor() {
 
     return (
         <form>
+            
             <FormGroup>
                 <FormControlLabel
                     control={<Checkbox checked={state.greenPlant} onChange={handleChange} name="greenPlant" />}
@@ -52,7 +54,7 @@ export default function SelectColor() {
                         variant="contained"
                         startIcon={<DoneIcon />}
                         className={classes.button}
-                        
+
                     >
                         Áp dụng
                     </Button>

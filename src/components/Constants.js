@@ -19,5 +19,13 @@ export default Object.freeze({
         '&:active': {
             backgroundColor: "#01755D",
         }
+    },
+    RADIO_GROUP: {
+        '& .MuiRadio-colorSecondary.Mui-checked': {
+            color: "#4fbfa8",
+        },
+        '& .MuiRadio-colorSecondary:hover': {
+            backgroundColor: "#4FBFA811",
+        },
     }
 });

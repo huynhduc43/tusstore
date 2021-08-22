@@ -1,16 +1,10 @@
 import React, { useState, useEffect } from 'react';
 
-import {
-    Link,
-    useLocation,
-} from 'react-router-dom';
-
 import { Button, Grid, Paper, Typography } from '@material-ui/core';
 import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
 import { makeStyles } from '@material-ui/core';
-import { auto } from 'async';
 
 import { useSnackbar } from 'notistack';
 
@@ -102,7 +96,7 @@ export default function ProductDetail(props) {
                             <Button
                                 variant="contained"
                                 startIcon={<AddShoppingCartIcon />}
-                                className={[...classes.button, classes.addToCartBtn]}
+                                className={[classes.button, classes.addToCartBtn].join(" ")}
                                 onClick={handleClickAddToCartBtn}
                             >
                                 Thêm
@@ -120,7 +114,7 @@ export default function ProductDetail(props) {
                                 (<Button
                                     variant="outlined"
                                     startIcon={<FavoriteIcon />}
-                                    className={[...classes.button, classes.addToWishlist]}
+                                    className={[classes.button, classes.addToWishlist].join(" ")}
                                     onClick={handleClickWishlistBtn}
                                 >Yêu thích</Button>)}
                         </Grid>

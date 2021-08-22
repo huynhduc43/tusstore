@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { Switch, Route, Link, NavLink, useLocation } from 'react-router-dom';
+import { Switch, Route, NavLink, useLocation } from 'react-router-dom';
 
 import { Avatar, Collapse, Container, Divider, Grid, ListItemIcon, ListItemText, Paper, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core';

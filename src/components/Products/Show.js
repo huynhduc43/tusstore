@@ -1,49 +1,36 @@
-import React, {useState} from 'react';
+import React from 'react';
 
-import { NavLink } from 'react-router-dom';
-
-import Button from '@material-ui/core/Button';
-import ButtonGroup from '@material-ui/core/ButtonGroup';
 import { makeStyles } from '@material-ui/core/styles';
+import Radio from '@material-ui/core/Radio';
+import RadioGroup from '@material-ui/core/RadioGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormControl from '@material-ui/core/FormControl';
+import FormLabel from '@material-ui/core/FormLabel';
 
 import Constants from '../Constants';
 
 const useStyles = makeStyles((theme) => ({
     btnGroup: Constants.BUTTON_OUTLINED,
-    active: Constants.BUTTON_CONTAINED
+    active: Constants.BUTTON_CONTAINED,
+    root: Constants.RADIO_GROUP,
 }));
 
 export default function BasicButtonGroup() {
     const classes = useStyles();
-    const [active, setActive] = useState([true, false, false]);
+    const [value, setValue] = React.useState('12');
 
-    const handleClick = (e) => {
-        console.log(e.target.value);
-        switch (e.target.value){
-            case "12":
-                alert("Hien thi 12 san pham");
-                setActive([true, false, false]);
-                break;
-            case "24":
-                alert("Hien thi 24 san pham");
-                setActive([false, true, false]);
-                break;
-            default:
-                alert("Hien thi tat ca san pham");
-                setActive([false, false, true]);
-        }
-    }
+  const handleChange = (event) => {
+    setValue(event.target.value);
+  };
 
-    return (
-        <>
-            <ButtonGroup
-                aria-label="contained primary button group show"
-            >
-                <Button className={(active[0]  ? classes.active : classes.btnGroup)} value="12" onClick={handleClick}>12</Button>
-                <Button className={(active[1]  ? classes.active : classes.btnGroup)} value="24" onClick={handleClick}>24</Button>
-                <Button className={(active[2]  ? classes.active : classes.btnGroup)} value="all" onClick={handleClick}>All</Button>
-
-            </ButtonGroup>
-        </>
-    );
+  return (
+    <FormControl component="fieldset" className={classes.root}>
+      <FormLabel component="legend">Số sản phẩm mỗi trang</FormLabel>
+      <RadioGroup row aria-label="show" name="show" value={value} onChange={handleChange}>
+        <FormControlLabel value="12" control={<Radio />} label="12" />
+        <FormControlLabel value="24" control={<Radio />} label="24" />
+        <FormControlLabel value="all" control={<Radio />} label="All" />
+      </RadioGroup>
+    </FormControl>
+  );
 }

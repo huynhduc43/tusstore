@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 
 import { Checkbox } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core";
@@ -44,7 +44,7 @@ export default function TableRowCustom(props) {
     }
 
     return (
-        <TableRow key={props.row.id}>
+        <TableRow>
             <TableCell align="left" padding="none">
                 <Checkbox
                     name={props.row.id}
@@ -77,9 +77,8 @@ export default function TableRowCustom(props) {
                     onClick={handleClickIncreaseBtn}
                 ><AddCircleIcon color="primary" /></IconButton>
             </TableCell>
-            <TableCell align="right">{props.row.fat}</TableCell>
-            <TableCell align="right">{props.row.carbs}</TableCell>
-            <TableCell align="right" padding="none">
+            <TableCell align="right" style={{paddingLeft: 50, paddingRight: 0,}}>{props.row.price}</TableCell>
+            <TableCell align="right">
                 <IconButton color="secondary">
                     <DeleteOutlinedIcon />
                 </IconButton>

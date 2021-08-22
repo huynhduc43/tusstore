@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 import { 
     Link,
@@ -24,9 +24,9 @@ const useStyles = makeStyles((theme) => ({
         color: theme.palette.text.secondary,
     },
     viewBtn: {
-
+        
     },
-    addToCartBtn: {...Constants.BUTTON_CONTAINED},
+    addToCartBtn: Constants.BUTTON_CONTAINED,
 }));
 
 export default function Product(props) {
@@ -40,9 +40,9 @@ export default function Product(props) {
     };
 
     return (
-        <Grid item md={4} sm={6} xs={12}>
+        <Grid item sm={4} xs={6}>
             <Paper className={classes.paper}>
-                <Grid container justifyContent="space-evenly">
+                <Grid container spacing={1} justifyContent="space-evenly">
                     <Grid item xs={12}>
                         <img src="https://d19m59y37dris4.cloudfront.net/obaju/2-1-1/img/product1_2.jpg"
                             style={{
@@ -57,9 +57,10 @@ export default function Product(props) {
                     <Grid item xs={12}>
                         <p>Giá san pham</p>
                     </Grid>
-                    <Grid item xs={5}>
+                    <Grid item sm={6} xs={12}>
                         <Button
                             variant="contained"
+                            fullWidth
                             className={classes.viewBtn}
                             startIcon={<VisibilityIcon />}
                             style={{ width: '100%' }}
@@ -69,9 +70,10 @@ export default function Product(props) {
                             Xem
                         </Button>
                     </Grid>
-                    <Grid item xs={5}>
+                    <Grid item sm={6} xs={12}>
                         <Button
                             variant="contained"
+                            fullWidth
                             className={classes.addToCartBtn}
                             startIcon={<AddShoppingCartIcon />}
                             style={{ width: '100%' }}

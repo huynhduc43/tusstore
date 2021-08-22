@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 import { Button, Divider, Grid, Paper, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core';
@@ -12,7 +12,6 @@ import 'date-fns';
 import DateFnsUtils from '@date-io/date-fns';
 import {
     MuiPickersUtilsProvider,
-    KeyboardTimePicker,
     KeyboardDatePicker,
 } from '@material-ui/pickers';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
@@ -23,16 +22,9 @@ import Constants from '../Constants';
 import ChangeAvatar from './ChangeAvatar';
 
 const useStyles = makeStyles(theme => ({
-    root: {
+    root: {...Constants.RADIO_GROUP,
         padding: theme.spacing(2),
         textAlign: "center",
-
-        '& .MuiRadio-colorSecondary.Mui-checked': {
-            color: Constants.GREEN,
-        },
-        '& .MuiRadio-colorSecondary:hover': {
-            backgroundColor: "#4FBFA811",
-        },
     },
     divider: {
         margin: "10px 0",
@@ -58,7 +50,7 @@ export default function Profile() {
     const [gender, setGender] = React.useState('female');
     const [selectedDate, setSelectedDate] = React.useState();
     const theme = useTheme();
-    const isDownMD = useMediaQuery(theme.breakpoints.down("xs"));
+    const isDownXS = useMediaQuery(theme.breakpoints.down("xs"));
 
 
     const handleChange = (event) => {
@@ -75,7 +67,7 @@ export default function Profile() {
             <Divider className={classes.divider} />
 
             <Grid container direction="row-reverse" alignItems="flex-start">
-                {isDownMD &&
+                {isDownXS &&
                     <Grid container item sm={4} xs={12} alignItems="flex-start" justifyContent="center"
                         style={{paddingBottom: 20}}
                     >
@@ -174,7 +166,7 @@ export default function Profile() {
                         <Button variant="contained" color="primary" className={classes.saveBtn}>Lưu thay đổi</Button>
                     </Grid>
                 </Grid>
-                {!isDownMD &&
+                {!isDownXS &&
                     <Grid container item sm={4} xs={12} justifyContent="center">
                         <ChangeAvatar />
                     </Grid>
