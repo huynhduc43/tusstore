@@ -11,7 +11,7 @@ import Constants from "../Constants";
 const useStyles = makeStyles((theme) => ({
     root: {
         '& .Mui-selected': {
-            backgroundColor: Constants.GREEN,
+            backgroundColor: Constants.GREEN + " !important",
             color: '#fff !important',
         },
         '& .Mui-selected:hover': {
@@ -25,7 +25,10 @@ const useStyles = makeStyles((theme) => ({
         '& .MuiPaginationItem-rounded': {
             color: Constants.GREEN,
         },
+        '& .MuiPaginationItem-page': {
+            backgroundColor: "#fff",
 
+        },
     }
 }));
 

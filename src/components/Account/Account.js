@@ -36,6 +36,19 @@ const useStyles = makeStyles((theme) => ({
     selected: Constants.BUTTON_CONTAINED,
     icon: {
         color: "#fff",
+    },
+    listItem: {
+        "&:hover": {
+            color: "#fff",
+            backgroundColor: Constants.GREEN,
+            "& .MuiListItemIcon-root": {
+                color: "#fff",
+            }
+        },
+        "&:active": {
+            color: "#fff",
+            backgroundColor: Constants.GREEN,
+        },
     }
 }));
 
@@ -100,7 +113,7 @@ export default function Account() {
                             </ListItem>
                             <Collapse in={open} timeout="auto" unmountOnExit>
                                 <List component="div" disablePadding>
-                                    <ListItem button className={classes.nested}
+                                    <ListItem button className={[classes.nested, classes.listItem].join(" ")}
                                         component={NavLink}
                                         to='/account/profile'
                                         activeClassName={classes.selected}
@@ -109,7 +122,7 @@ export default function Account() {
                                         </ListItemIcon>
                                         <ListItemText primary="Thông tin" />
                                     </ListItem>
-                                    <ListItem button className={classes.nested}
+                                    <ListItem button className={[classes.nested, classes.listItem].join(" ")}
                                         component={NavLink}
                                         to="/account/change-password"
                                         activeClassName={classes.selected}
@@ -125,6 +138,7 @@ export default function Account() {
                                 to="/account/manage-orders"
                                 activeClassName={classes.selected}
                                 onClick={handleAutoClose}
+                                className={classes.listItem}
                             >
                                 <ListItemIcon>
                                     {location.pathname === "/account/manage-orders" ?
@@ -137,6 +151,7 @@ export default function Account() {
                                 to="/account/wishlist"
                                 activeClassName={classes.selected}
                                 onClick={handleAutoClose}
+                                className={classes.listItem}
                             >
                                 <ListItemIcon>
                                     {location.pathname === "/account/wishlist" ?
@@ -150,6 +165,7 @@ export default function Account() {
                                 to="/account/notifications"
                                 activeClassName={classes.selected}
                                 onClick={handleAutoClose}
+                                className={classes.listItem}
                             >
                                 <ListItemIcon>
                                     {location.pathname === "/account/notifications" ?

@@ -1,5 +1,6 @@
 export default Object.freeze({
     GREEN: "#4fbfa8",
+    GRAY: "#f0f0f0",
     BUTTON_CONTAINED: {
         color: "#fff",
         backgroundColor: "#4fbfa8",

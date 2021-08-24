@@ -8,6 +8,7 @@ import Collapse from '@material-ui/core/Collapse';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import { Link } from 'react-router-dom';
+import Constants from '../Constants';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -17,7 +18,20 @@ const useStyles = makeStyles((theme) => ({
     },
     nested: {
         paddingLeft: theme.spacing(4),
+        "&:hover": {
+            color: "#fff",
+            backgroundColor: Constants.GREEN,
+        },
+        "&:active": {
+            color: "#fff",
+            backgroundColor: Constants.GREEN,
+        }
     },
+    listItem: {
+        "&:active": {
+            backgroundColor: Constants.GREEN,
+        }
+    }
 }));
 
 export default function NestedList(props) {

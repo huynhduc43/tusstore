@@ -18,6 +18,7 @@ const useStyles = makeStyles(theme => ({
         borderRadius: "50%",
         width: "80%",
         height: "auto",
+        padding: 8,
     },
     changeAvtBtn: {
         ...Constants.BUTTON_CONTAINED,

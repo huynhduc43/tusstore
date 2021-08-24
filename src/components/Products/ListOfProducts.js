@@ -2,7 +2,8 @@ import React from "react";
 
 import { Container, Grid, Paper } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core";
-
+import { useMediaQuery } from '@material-ui/core';
+import { useTheme } from '@material-ui/core/styles';
 
 import {
   useLocation,
@@ -17,8 +18,6 @@ import Show from './Show';
 import AdvancedFiltering from './AdvancedFiltering';
 import PaginationCustom from "./PaginationCustom";
 import ProductDetail from "./Product/ProductDetail";
-import { useMediaQuery } from '@material-ui/core';
-import { useTheme } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -81,7 +80,7 @@ export default function ListOfProducts(props) {
 
             <Grid item xs={12}>
               <Paper className={classes.paper}>
-                <BreadcrumbsCustom path={location.pathname}/>
+                <BreadcrumbsCustom path={location.pathname} />
               </Paper>
             </Grid>
 

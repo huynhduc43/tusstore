@@ -14,14 +14,18 @@ import SignUp from './components/SignUp';
 import SignIn from './components/SignIn';
 import Header from './components/Header/Header';
 import Footer from './components/Footer/Footer';
-import Homepage from './components/Homepage';
+import Homepage from './components/Homepage/Homepage';
 import ListOfProducts from './components/Products/ListOfProducts';
 import Cart from './components/ShoppingCart/Cart';
 import Account from './components/Account/Account';
+import Constants from './components/Constants';
 
 const Main = () => (
   <div style={{
     minHeight: 'calc(100vh - 306px)',
+    backgroundColor: Constants.GRAY,
+    paddingTop: 48,
+    paddingBottom: 48,
   }}>
     <Switch>
       <Route exact path="/" component={Homepage}></Route>

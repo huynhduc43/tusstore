@@ -10,6 +10,9 @@ import { useSnackbar } from 'notistack';
 
 //My components
 import Constants from '../../Constants';
+import Comment from './Comment';
+import CustomRating from './CustomRating';
+import HotProductCarousel from '../../Homepage/HotProductCarousel';
 
 const useStyles = makeStyles((theme) => ({
     image: {
@@ -30,6 +33,12 @@ const useStyles = makeStyles((theme) => ({
         '&:active': {
             backgroundColor: "#C0392B",
         }
+    },
+    paper: {
+        padding: theme.spacing(2),
+    },
+    rcmProductTitle: {
+        color: Constants.GREEN,
     }
 }));
 
@@ -76,60 +85,97 @@ export default function ProductDetail(props) {
     }, []);
 
     return (
-        <>
-            <Grid item md={6} >
+        <Grid container item spacing={3} justifyContent="center">
+
+            <Grid item md={6} sm={7} xs={12}>
                 <img src="https://d19m59y37dris4.cloudfront.net/obaju/2-1-1/img/product1_2.jpg"
                     alt="product"
                     className={classes.image}
                 />
             </Grid>
-            <Grid item md={6}>
-                <Paper>
-                    <Typography variant="h4" align="center">
-                        {product.dish}
-                    </Typography>
-                    <Typography variant="h3" align="center">
-                        {product.measurement}
-                    </Typography>
-                    <Grid container spacing={3} justifyContent="center">
-                        <Grid item>
-                            <Button
-                                variant="contained"
-                                startIcon={<AddShoppingCartIcon />}
-                                className={[classes.button, classes.addToCartBtn].join(" ")}
-                                onClick={handleClickAddToCartBtn}
-                            >
-                                Thêm
-                            </Button>
-                        </Grid>
-                        <Grid item>
-                            {isExistInWishlist ? (
-                                <Button
-                                    variant="outlined"
-                                    startIcon={<DeleteOutlineIcon />}
-                                    className={classes.removeWishlist}
-                                    onClick={handleClickWishlistBtn}
-                                > Bỏ yêu thích</Button>
-                            ) :
-                                (<Button
-                                    variant="outlined"
-                                    startIcon={<FavoriteIcon />}
-                                    className={[classes.button, classes.addToWishlist].join(" ")}
-                                    onClick={handleClickWishlistBtn}
-                                >Yêu thích</Button>)}
-                        </Grid>
-                    </Grid>
-                </Paper>
-            </Grid>
-            <Grid item md={12} >
 
-                <Paper>
+            <Grid item md={6} sm={5} xs={12} >
+                <Grid container spacing={3} justifyContent="flex-start">
+                    <Grid item xs={12}>
+                        <Paper className={classes.paper}>
+                            <Typography variant="h5" align="center">
+                                {product.dish}
+                            </Typography>
+                            <Typography variant="h6" align="center">
+                                {product.measurement}
+                            </Typography>
+                            <Grid container spacing={3} justifyContent="center">
+                                <Grid item>
+                                    <Button
+                                        variant="contained"
+                                        startIcon={<AddShoppingCartIcon />}
+                                        className={[classes.button, classes.addToCartBtn].join(" ")}
+                                        onClick={handleClickAddToCartBtn}
+                                    >
+                                        Thêm
+                                    </Button>
+                                </Grid>
+                                <Grid item>
+                                    {isExistInWishlist ? (
+                                        <Button
+                                            variant="outlined"
+                                            startIcon={<DeleteOutlineIcon />}
+                                            className={classes.removeWishlist}
+                                            onClick={handleClickWishlistBtn}
+                                        > Bỏ yêu thích</Button>
+                                    ) :
+                                        (<Button
+                                            variant="outlined"
+                                            startIcon={<FavoriteIcon />}
+                                            className={[classes.button, classes.addToWishlist].join(" ")}
+                                            onClick={handleClickWishlistBtn}
+                                        >Yêu thích</Button>)}
+                                </Grid>
+                            </Grid>
+                        </Paper>
+                    </Grid>
+
+                    <Grid item xs={12}>
+                        <Paper className={classes.paper}>
+                            <CustomRating />
+                        </Paper>
+                    </Grid>
+                </Grid>
+
+            </Grid>
+
+            <Grid item md={12} >
+                <Paper className={classes.paper}>
+                    <Typography variant="h6"><b>Thông tin sản phẩm</b></Typography>
                     <Typography variant="body1">
                         {product.description}
                     </Typography>
-
                 </Paper>
             </Grid>
-        </>
+
+            <Grid item md={12} >
+                <Paper className={classes.paper}>
+                    <Typography variant="h6"><b>Bình luận</b></Typography>
+                    <Comment />
+                </Paper>
+            </Grid>
+
+            <Grid item xs={12}>
+                <Paper className={classes.paper}>
+                    <Typography
+                        variant="h6"
+                        align="center"
+                        className={classes.rcmProductTitle}
+                    >
+                        CÓ THỂ BẠN SẼ THÍCH
+                    </Typography>
+                </Paper>
+            </Grid>
+            <Grid container item md={12}>
+                <Grid item xs={12}>
+                    <HotProductCarousel />
+                </Grid>
+            </Grid>
+        </Grid>
     )
 }

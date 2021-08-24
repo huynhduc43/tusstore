@@ -46,7 +46,7 @@ export default function ChangePassword() {
                 <Grid item sm={4} xs={10}>
                     <form onSubmit={handleSubmit}>
                         <TextField
-                            variant="outlined"
+                            variant="filled"
                             margin="normal"
                             required
                             fullWidth
@@ -60,7 +60,7 @@ export default function ChangePassword() {
                         />
 
                         <TextField
-                            variant="outlined"
+                            variant="filled"
                             margin="normal"
                             required
                             fullWidth
@@ -74,7 +74,7 @@ export default function ChangePassword() {
                         />
 
                         <TextField
-                            variant="outlined"
+                            variant="filled"
                             margin="normal"
                             required
                             fullWidth

@@ -35,6 +35,16 @@ const useStyles = makeStyles((theme) => ({
             backgroundColor: "#4fbfa8",
         }
     },
+    menuItem: {
+        "&:hover": {
+            color: "#fff",
+            backgroundColor: Constants.GREEN,
+        },
+        "&:active": {
+            color: "#fff",
+            backgroundColor: Constants.GREEN,
+        }
+    }
 }));
 
 export default function NavItem(props) {
@@ -95,7 +105,14 @@ export default function NavItem(props) {
                                 <MenuList autoFocusItem={open} id="" onKeyDown={handleListKeyDown}>
                                     {props.items.map((item, i) => {
                                         return (
-                                            <MenuItem key={i} component={Links} to={item.itemUrl} onClick={handleClose}>{item.itemName}</MenuItem>
+                                            <MenuItem
+                                                key={i}
+                                                component={Links} to={item.itemUrl}
+                                                onClick={handleClose}
+                                                className={classes.menuItem}
+                                            >
+                                                {item.itemName}
+                                            </MenuItem>
                                         );
                                     })}
                                 </MenuList>

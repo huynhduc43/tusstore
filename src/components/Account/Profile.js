@@ -22,7 +22,8 @@ import Constants from '../Constants';
 import ChangeAvatar from './ChangeAvatar';
 
 const useStyles = makeStyles(theme => ({
-    root: {...Constants.RADIO_GROUP,
+    root: {
+        ...Constants.RADIO_GROUP,
         padding: theme.spacing(2),
         textAlign: "center",
     },
@@ -32,6 +33,11 @@ const useStyles = makeStyles(theme => ({
     title: {
         textAlign: "right",
         paddingRight: 8,
+        [theme.breakpoints.down("xs")]: {
+            textAlign: "left",
+            paddingLeft: 8,
+            paddingTop: 8,
+        }
     },
     textfield: {
         padding: 8,
@@ -69,16 +75,16 @@ export default function Profile() {
             <Grid container direction="row-reverse" alignItems="flex-start">
                 {isDownXS &&
                     <Grid container item sm={4} xs={12} alignItems="flex-start" justifyContent="center"
-                        style={{paddingBottom: 20}}
+                        style={{ paddingBottom: 20 }}
                     >
                         <ChangeAvatar />
                     </Grid>
                 }
                 <Grid container item sm={8} xs={12} alignItems="center" >
-                    <Grid item xs={3} className={classes.title}>
+                    <Grid item sm={3} xs={12} className={classes.title}>
                         Tên đăng nhập
                     </Grid>
-                    <Grid item xs={9} className={classes.textfield}>
+                    <Grid item sm={9} xs={12} className={classes.textfield}>
                         <TextField
                             variant="outlined"
                             required
@@ -92,10 +98,10 @@ export default function Profile() {
                         />
                     </Grid>
 
-                    <Grid item xs={3} className={classes.title}>
+                    <Grid item sm={3} xs={12} className={classes.title}>
                         Tên
                     </Grid>
-                    <Grid item xs={9} className={classes.textfield}>
+                    <Grid item sm={9} xs={12} className={classes.textfield}>
                         <TextField
                             variant="outlined"
                             required
@@ -109,10 +115,10 @@ export default function Profile() {
                     </Grid>
 
                     <Grid container alignItems="center">
-                        <Grid item xs={3} className={classes.title}>
+                        <Grid item sm={3} xs={12} className={classes.title}>
                             Số điện thoại
                         </Grid>
-                        <Grid item sm={5} xs={9} className={classes.textfield}>
+                        <Grid item sm={5} xs={12} className={classes.textfield}>
                             <TextField
                                 variant="outlined"
                                 required
@@ -127,10 +133,10 @@ export default function Profile() {
                     </Grid>
 
 
-                    <Grid item xs={3} className={classes.title}>
+                    <Grid item sm={3} xs={12} className={classes.title}>
                         Giới tính
                     </Grid>
-                    <Grid item xs={9} container justifyContent="flex-start" className={classes.textfield}>
+                    <Grid item sm={9} xs={12} container justifyContent="flex-start" className={classes.textfield}>
                         <FormControl component="fieldset">
                             <RadioGroup row aria-label="gender" name="gender1" value={gender} onChange={handleChange}>
                                 <FormControlLabel value="female" control={<Radio classes={classes.radio} />} label="Nữ" />
@@ -140,10 +146,10 @@ export default function Profile() {
                         </FormControl>
                     </Grid>
 
-                    <Grid item xs={3} className={classes.title}>
+                    <Grid item sm={3} xs={12} className={classes.title}>
                         Ngày sinh
                     </Grid>
-                    <Grid item xs={9} container justifyContent="flex-start" style={{ padding: 12 }}>
+                    <Grid item sm={9} xs={12} container justifyContent="flex-start" style={{ padding: 12 }}>
                         <MuiPickersUtilsProvider utils={DateFnsUtils}>
                             <KeyboardDatePicker
                                 disableToolbar
@@ -159,10 +165,13 @@ export default function Profile() {
                         </MuiPickersUtilsProvider>
                     </Grid>
 
-                    <Grid item xs={3}>
+                    <Grid item sm={3} xs={12}>
                     </Grid>
 
-                    <Grid item xs={9} container justifyContent="flex-start" alignItems="center">
+                    <Grid item sm={9} xs={12} container
+                        justifyContent={isDownXS ? "center" : "flex-start"}
+                        alignItems="center"
+                    >
                         <Button variant="contained" color="primary" className={classes.saveBtn}>Lưu thay đổi</Button>
                     </Grid>
                 </Grid>

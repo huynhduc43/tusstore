@@ -2,7 +2,6 @@ import React, { useRef } from "react";
 
 import {
     Link as Links,
-    useLocation
 } from "react-router-dom";
 
 //Material UI
@@ -156,11 +155,17 @@ const useStyles = makeStyles((theme) => ({
     notificationIcon: {
         color: "#fff",
     },
+    offer: {
+        "&:hover": {
+            color: "#fff",
+            textAlign: "center",
+            textDecoration: "underline",
+        }
+    }
 }));
 
 const NavBar = (props) => {
     const classes = useStyles();
-    const location = useLocation();
     const [open1, setOpen1] = React.useState(false);
     const anchorRef1 = useRef(null);
     const [openSearchDialog, setOpenSearchDialog] = React.useState(false);
@@ -209,7 +214,7 @@ const NavBar = (props) => {
                                     alignItems="center"
                                 >
                                     <Button component={Links} to="/offer" color="inherit"
-                                        style={{ textAlign: "center" }}
+                                        className={classes.offer}
                                     >
                                         Get flat 35% off on orders over $50!
                                     </Button>
@@ -234,7 +239,9 @@ const NavBar = (props) => {
                             </Grid>
                         ) : (
                             <>
-                                <Button component={Links} to="/offer" color="inherit">
+                                <Button component={Links} to="/offer" color="inherit"
+                                    className={classes.offer}
+                                >
                                     Get flat 35% off on orders over $50!
                                 </Button>
                                 <div className={classes.toolbarButtons}>
@@ -274,7 +281,9 @@ const NavBar = (props) => {
                                 }}
                                 alt="Logo TusStore"
                             />
-                            <p>TusStore</p>
+                            <p style={{
+                                margin: "auto"
+                            }}>TusStore</p>
                         </Button>
 
                         {isDownXS ? (<>
@@ -367,7 +376,6 @@ const NavBar = (props) => {
                     </Toolbar>
                 </Container>
             </AppBar>
-            {(location.pathname !== '/sign-in' && location.pathname !== '/sign-up') ? <Toolbar /> : <></>}
         </>
     );
 }
