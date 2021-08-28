@@ -1,4 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+
+import { Link } from 'react-router-dom';
 
 import { makeStyles } from '@material-ui/core/styles';
 import { Grid, Paper } from '@material-ui/core';
@@ -51,13 +54,31 @@ const useStyles = makeStyles((theme) => ({
         marginRight: "auto",
         width: "100%",
         height: 350,
+        [theme.breakpoints.down("xs")]: {
+            width: 250,
+            height: 200,
+        }
     },
     detail: {
-        paddingBottom: 20,
+        minHeight: 200,
+        [theme.breakpoints.down("sm")]: {
+            padding: "32px 5px 5px 5px",
+            minHeight: 180,
+        },
+        [theme.breakpoints.down("xs")]: {
+            minHeight: 200,
+        }
     },
-    fixedImg: {
-        width: 250,
-    },
+    name: {
+        textDecoration: "none",
+        color: "#000",
+        [theme.breakpoints.down("xs")]: {
+            minHeight: 70,
+        },
+        [theme.breakpoints.down(340)]: {
+            minHeight: 100,
+        },
+    }
 }));
 
 export default function NewestProductCarousel() {
@@ -66,10 +87,21 @@ export default function NewestProductCarousel() {
     const theme = useTheme();
     const isDownSM = useMediaQuery(theme.breakpoints.down("sm"));
     const isDownXS = useMediaQuery(theme.breakpoints.down("xs"));
+    const [newestProducts, setNewestProducts] = useState([]);
 
     const handleSelect = (selectedIndex, e) => {
         setIndex(selectedIndex);
     };
+
+    const fetchNewestProduct = async () => {
+        const res = await axios.get('http://localhost:3001');
+
+        setNewestProducts(res.data.newestProducts);
+    }
+
+    useEffect(() => {
+        fetchNewestProduct();
+    }, [])
 
     return (
         <div className={classes.root}>
@@ -77,67 +109,102 @@ export default function NewestProductCarousel() {
                 <Grid container justifyContent="center">
                     <Grid item xs={12}>
                         <Carousel controls={isDownXS ? false : true} activeIndex={index} onSelect={handleSelect} className={classes.carousel}>
-                            <Carousel.Item>
-                                <Grid container item justifyContent="space-evenly">
-                                    {isDownSM && <>
-                                        <Grid item sm={5} xs={12}>
-                                            <img
-                                                src="https://d19m59y37dris4.cloudfront.net/obaju/2-1-1/img/product1_2.jpg"
-                                                alt="First slide"
-                                                className={isDownXS ? ([classes.image, classes.fixedImg].join(" ")) : (classes.image)}
-                                            />
-                                        </Grid>
-                                        <Grid container item sm={5} xs={12} alignItems="center"
-                                            justifyContent={isDownXS ? "center" : "flex-start"}
-                                        >
-                                            {isDownXS && <Grid item style={{textAlign: "center"}}>
-                                                <Typography variant="h6"><b>Xương rồng tai thỏ</b></Typography>
-                                                <Typography variant="h5">20.000</Typography>
-                                            </Grid>}
-
-                                            {!isDownXS && <Grid item>
-                                                <Typography variant="h5"><b>Xương rồng tai thỏ</b></Typography>
-                                                <Typography variant="h4">20.000</Typography>
-                                            </Grid>}
-                                            
-                                            <Grid item xs={12}>
-                                                <Typography variant="body1" style={{padding: 5}}>
-                                                    Với sự hiểu biết
-                                                    về dinh dưỡng, xương rồng được trồng và chế biến ra những món “đặc sản”.
-                                                    Trong đó, xương rồng tai thỏ được ưa chuộng không chỉ bởi vẻ đẹp
-                                                    bên ngoài mà còn có công dụng tuyệt vời với sức khỏe.
-                                                </Typography>
+                            {newestProducts.map(product => (
+                                <Carousel.Item key={product._id}>
+                                    <Grid container item justifyContent="space-evenly">
+                                        {isDownSM && <>
+                                            <Grid item sm={5} xs={12}>
+                                                <img
+                                                    src={product.primaryImg}
+                                                    alt={product.name}
+                                                    className={classes.image}
+                                                />
                                             </Grid>
+                                            <Grid container item sm={5} xs={12} alignItems="center"
+                                                justifyContent={isDownXS ? "center" : "flex-start"}
+                                            >
+                                                {isDownXS && <><Grid item style={{ textAlign: "center" }}>
+                                                    <Typography
+                                                        variant="h6"
+                                                        className={classes.name}
+                                                        component={Link}
+                                                        to={product.path}
+                                                    >
+                                                        <b>{product.name}</b>
+                                                    </Typography>
+                                                    <Typography variant="h5">{product.price}₫</Typography>
+                                                </Grid>
+                                                    <Typography variant="body1" className={classes.detail}>
+                                                        Với sự hiểu biết
+                                                        về dinh dưỡng, xương rồng được trồng và chế biến ra những món “đặc sản”.
+                                                        Trong đó, xương rồng tai thỏ được ưa chuộng không chỉ bởi vẻ đẹp
+                                                        bên ngoài mà còn có công dụng tuyệt vời với sức khỏe.
+                                                    </Typography>
+                                                </>}
 
-                                        </Grid>
-                                    </>}
+                                                {!isDownXS && <Grid item>
+                                                    <Typography
+                                                        variant="h6"
+                                                        className={classes.name}
+                                                        component={Link}
+                                                        to={product.path}
+                                                    >
+                                                        <b>{product.name}</b>
+                                                    </Typography>
+                                                    <Typography variant="h5">{product.price}₫</Typography>
+                                                </Grid>}
 
-                                    {(!isDownSM) && <>
-                                        <Grid item xs={3} className={classes.product}>
-                                            <Typography variant="h5"><b>Xương rồng tai thỏ</b></Typography>
-                                            <Typography variant="h4">20.000</Typography>
-                                        </Grid>
-                                        <Grid item md={3} sm={4}>
-                                            <img
-                                                src="https://d19m59y37dris4.cloudfront.net/obaju/2-1-1/img/product1_2.jpg"
-                                                alt="First slide"
-                                                className={classes.image}
-                                            />
-                                        </Grid>
-                                        <Grid container item xs={3} alignItems="flex-end" className={classes.detail}>
-                                            <Grid item>
-                                                <Typography variant="body1">
-                                                    Với sự hiểu biết
-                                                    về dinh dưỡng, xương rồng được trồng và chế biến ra những món “đặc sản”.
-                                                    Trong đó, xương rồng tai thỏ được ưa chuộng không chỉ bởi vẻ đẹp
-                                                    bên ngoài mà còn có công dụng tuyệt vời với sức khỏe.
-                                                </Typography>
                                             </Grid>
+                                            {!isDownXS &&
+                                                <Grid container>
+                                                    <Grid item xs={1}></Grid>
+                                                    <Grid item xs={10}>
+                                                        <Typography variant="body1" className={classes.detail}>
+                                                            Với sự hiểu biết
+                                                            về dinh dưỡng, xương rồng được trồng và chế biến ra những món “đặc sản”.
+                                                            Trong đó, xương rồng tai thỏ được ưa chuộng không chỉ bởi vẻ đẹp
+                                                            bên ngoài mà còn có công dụng tuyệt vời với sức khỏe.
+                                                        </Typography>
+                                                    </Grid>
+                                                    <Grid item xs={1}></Grid>
+                                                </Grid>
+                                            }
+                                        </>}
 
-                                        </Grid>
-                                    </>}
-                                </Grid>
-                            </Carousel.Item>
+                                        {(!isDownSM) && <>
+                                            <Grid item xs={3} className={classes.product}>
+                                                <Typography
+                                                    variant="h5"
+                                                    className={classes.name}
+                                                    component={Link}
+                                                    to={product.path}
+                                                >
+                                                    <b>{product.name}</b>
+                                                </Typography>
+                                                <Typography variant="h4">{product.price}₫</Typography>
+                                            </Grid>
+                                            <Grid item md={3} sm={4}>
+                                                <img
+                                                    src={product.primaryImg}
+                                                    alt={product.name}
+                                                    className={classes.image}
+                                                />
+                                            </Grid>
+                                            <Grid container item xs={3} alignItems="flex-end" className={classes.detail}>
+                                                <Grid item>
+                                                    <Typography variant="body1">
+                                                        Với sự hiểu biết
+                                                        về dinh dưỡng, xương rồng được trồng và chế biến ra những món “đặc sản”.
+                                                        Trong đó, xương rồng tai thỏ được ưa chuộng không chỉ bởi vẻ đẹp
+                                                        bên ngoài mà còn có công dụng tuyệt vời với sức khỏe.
+                                                    </Typography>
+                                                </Grid>
+
+                                            </Grid>
+                                        </>}
+                                    </Grid>
+                                </Carousel.Item>
+                            ))}
 
                         </Carousel>
                     </Grid>

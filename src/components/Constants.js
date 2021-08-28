@@ -6,6 +6,7 @@ export default Object.freeze({
         backgroundColor: "#4fbfa8",
         '&:hover': {
             backgroundColor: "#03A685",
+            color: "#fff"
         },
         '&:active': {
             backgroundColor: "#01755D",

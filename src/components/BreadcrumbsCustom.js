@@ -12,73 +12,91 @@ const convert = (path) => {
   let newPath = [];
   path.forEach(element => {
     switch (element) {
-      case "list-of-cactus":
+      case "cactus":
         newPath.push({
           name: "Tất cả xương rồng",
-          url: "/list-of-cactus",
+          url: "/products/cactus",
         });
         break;
 
       case "large-cactus":
         newPath.push({
           name: "Cỡ lớn",
-          url: "/list-of-cactus/large-cactus",
+          url: "/products/cactus/large-cactus",
         });
         break;
 
       case "medium-cactus":
         newPath.push({
           name: "Cỡ vừa",
-          url: "/list-of-cactus/medium-cactus",
+          url: "/products/cactus/medium-cactus",
         });
         break;
 
       case "small-cactus":
         newPath.push({
           name: "Cỡ nhỏ",
-          url: "/list-of-cactus/small-cactus",
+          url: "/products/cactus/small-cactus",
         });
         break;
 
       case "mix-cactus":
         newPath.push({
           name: "Mix",
-          url: "/list-of-cactus/mix-cactus",
+          url: "/products/cactus/mix-cactus",
         });
         break;
       //Lotus
-      case "list-of-lotus":
+      case "stone-lotus":
         newPath.push({
           name: "Tất cả sen đá",
-          url: "/list-of-lotus",
+          url: "/products/stone-lotus",
         });
         break;
 
-      case "large-lotus":
+      case "large-stone-lotus":
         newPath.push({
           name: "Cỡ lớn",
-          url: "/list-of-lotus/large-lotus",
+          url: "/products/stone-lotus/large-stone-lotus",
         });
         break;
 
-      case "medium-lotus":
+      case "mediume-stone-lotus":
         newPath.push({
           name: "Cỡ vừa",
-          url: "/list-of-lotus/medium-lotus",
+          url: "/products/stone-lotus/medium-stone-lotus",
         });
         break;
 
-      case "small-lotus":
+      case "smalle-stone-lotus":
         newPath.push({
           name: "Cỡ nhỏ",
-          url: "/list-of-lotus/small-lotus",
+          url: "/products/stone-lotus/small-stone-lotus",
         });
         break;
 
-      case "mix-lotus":
+      case "mix-stone-lotus":
         newPath.push({
           name: "Mix",
-          url: "/list-of-lotus/mix-lotus",
+          url: "/products/stone-lotus/mix-stone-lotus",
+        });
+        break;
+      case "pots":
+        newPath.push({
+          name: "Tất cả chậu",
+          url: "/products/pots",
+        });
+        break;
+      case "ceramic-pots":
+        newPath.push({
+          name: "Chậu sứ",
+          url: "/products/pot/ceramic-pots",
+        });
+        break;
+      case "terracotta-pots":
+        newPath.push({
+          name: "Chậu đất nung",
+          url: "/products/pot/terracotta-pots",
         });
         break;
       //Cart

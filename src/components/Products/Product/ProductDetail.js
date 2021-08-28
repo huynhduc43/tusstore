@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 
 import { Button, Grid, Paper, Typography } from '@material-ui/core';
 import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart';
@@ -7,6 +8,8 @@ import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
 import { makeStyles } from '@material-ui/core';
 
 import { useSnackbar } from 'notistack';
+
+import { useLocation } from 'react-router';
 
 //My components
 import Constants from '../../Constants';
@@ -48,6 +51,7 @@ export default function ProductDetail(props) {
 
     const [product, setProduct] = useState({});
     const [isExistInWishlist, setIsExistInWishlist] = useState(false);
+    const location = useLocation();
 
     //const removeProduct
 
@@ -73,23 +77,21 @@ export default function ProductDetail(props) {
     };
 
     const fetchData = async (url) => {
-        const data = await fetch(url);
-        const items = await data.json();
-        console.log(items);
-        setProduct(items);
+        const res = await axios.get(url);
+        setProduct(res.data);
     }
 
     useEffect(() => {
-        fetchData("https://random-data-api.com/api/food/random_food");
-        //fetchData(location.pathname);
-    }, []);
+        fetchData("http://localhost:3001" + location.pathname);
+        window.scroll(0, 0);
+    }, [location.pathname]);
 
     return (
         <Grid container item spacing={3} justifyContent="center">
 
             <Grid item md={6} sm={7} xs={12}>
-                <img src="https://d19m59y37dris4.cloudfront.net/obaju/2-1-1/img/product1_2.jpg"
-                    alt="product"
+                <img src={product.primaryImg}
+                    alt={product.name}
                     className={classes.image}
                 />
             </Grid>
@@ -98,11 +100,11 @@ export default function ProductDetail(props) {
                 <Grid container spacing={3} justifyContent="flex-start">
                     <Grid item xs={12}>
                         <Paper className={classes.paper}>
-                            <Typography variant="h5" align="center">
-                                {product.dish}
-                            </Typography>
                             <Typography variant="h6" align="center">
-                                {product.measurement}
+                                {product.name}
+                            </Typography>
+                            <Typography variant="h5" align="center">
+                                {product.price}₫
                             </Typography>
                             <Grid container spacing={3} justifyContent="center">
                                 <Grid item>
@@ -137,14 +139,14 @@ export default function ProductDetail(props) {
 
                     <Grid item xs={12}>
                         <Paper className={classes.paper}>
-                            <CustomRating />
+                            <CustomRating rating={product.rating} sold={product.sold}/>
                         </Paper>
                     </Grid>
                 </Grid>
 
             </Grid>
 
-            <Grid item md={12} >
+            <Grid item xs={12} >
                 <Paper className={classes.paper}>
                     <Typography variant="h6"><b>Thông tin sản phẩm</b></Typography>
                     <Typography variant="body1">

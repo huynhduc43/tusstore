@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { makeStyles } from '@material-ui/core/styles';
-import { Grid,Paper } from '@material-ui/core';
+import { Grid, Paper } from '@material-ui/core';
 import { useTheme } from '@material-ui/core';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 
@@ -9,43 +9,10 @@ import useMediaQuery from '@material-ui/core/useMediaQuery';
 import Carousel from 'react-bootstrap/Carousel';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
+import axios from 'axios';
+
 //My components
 import HotProduct from './HotProduct';
-
-const products = [
-    {
-        id: "1",
-        name: "Xương rồng bánh sinh nhật",
-    },
-    {
-        id: "2",
-        name: "Product 2",
-    },
-    {
-        id: "3",
-        name: "Product 3",
-    },
-    {
-        id: "4",
-        name: "Product 4",
-    },
-    {
-        id: "5",
-        name: "Xương rồng bánh sinh nhật",
-    },
-    {
-        id: "6",
-        name: "Product 2",
-    },
-    {
-        id: "7",
-        name: "Product 3",
-    },
-    {
-        id: "8",
-        name: "Product 4",
-    },
-];
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -85,33 +52,40 @@ const chunk = (array, chunkVal) => {
 export default function HotProductCarousel() {
     const classes = useStyles();
     const theme = useTheme();
-    const isDownXS = useMediaQuery(theme.breakpoints.down("xs"));
+    const isDownXS = useMediaQuery(theme.breakpoints.down("sm"));
     const [index, setIndex] = useState(0);
+    const [hotProducts,setHotProducts] = useState([]);
 
     const handleSelect = (selectedIndex, e) => {
         setIndex(selectedIndex);
     };
 
-    let chunkProducts;
-    if (isDownXS) {
-        chunkProducts = chunk(products, 2);
-    } else {
-        chunkProducts = chunk(products, 4);
+    const fetchHotProducts = async () => {
+        const response = await axios.get('http://localhost:3001');
+
+        setHotProducts(response.data.hotProducts);
     }
+
+    useEffect(() => {
+        fetchHotProducts();
+    }, []);
 
     return (
         <div className={classes.root}>
             <Carousel controls={false} className={classes.carousel} activeIndex={index} onSelect={handleSelect}>
                 {isDownXS ? (
-                    chunkProducts.map((array, i) => (
+                    chunk(hotProducts, 2).map((array, i) => (
                         <Carousel.Item key={i}>
                             <Grid container spacing={1}>
                                 {array.map(product => (
-                                    <Grid key={product.id} item xs={6}>
+                                    <Grid key={product._id} item xs={6}>
                                         <Paper className={classes.paper}>
                                             <HotProduct
-                                                productId={product.id}
-                                                productName={product.name}
+                                                _id={product._id}
+                                                name={product.name}
+                                                price={product.price}
+                                                primaryImg={product.primaryImg}
+                                                path={product.path}
                                             />
                                         </Paper>
 
@@ -121,18 +95,20 @@ export default function HotProductCarousel() {
                         </Carousel.Item>
                     ))
                 ) : (
-                    chunkProducts.map((array, i) => (
+                    chunk(hotProducts, 4).map((array, i) => (
                         <Carousel.Item key={i}>
                             <Grid container spacing={3}>
                                 {array.map(product => (
-                                    <Grid key={product.id} item xs={3}>
+                                    <Grid key={product._id} item xs={3}>
                                         <Paper className={classes.paper}>
                                             <HotProduct
-                                                productId={product.id}
-                                                productName={product.name}
+                                                _id={product._id}
+                                                name={product.name}
+                                                price={product.price}
+                                                primaryImg={product.primaryImg}
+                                                path={product.path}
                                             />
                                         </Paper>
-
                                     </Grid>
                                 ))}
                             </Grid>

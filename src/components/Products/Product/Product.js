@@ -1,12 +1,13 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
-import { 
+import {
     Link,
 } from 'react-router-dom';
 
 import { useSnackbar } from 'notistack';
 
-import { Grid, Paper, Button } from "@material-ui/core";
+import { Grid, Paper, Button, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core";
 import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart';
 import VisibilityIcon from '@material-ui/icons/Visibility';
@@ -24,9 +25,22 @@ const useStyles = makeStyles((theme) => ({
         color: theme.palette.text.secondary,
     },
     viewBtn: {
-        
+
     },
     addToCartBtn: Constants.BUTTON_CONTAINED,
+    img: {
+        width: '100%',
+        height: 220,
+        [theme.breakpoints.down("md")]: {
+            height: 160,
+        }
+    },
+    productName: {
+        minHeight: 65,
+        [theme.breakpoints.down(505)]: {
+            height: 80,
+        }
+    }
 }));
 
 export default function Product(props) {
@@ -44,18 +58,16 @@ export default function Product(props) {
             <Paper className={classes.paper}>
                 <Grid container spacing={1} justifyContent="space-evenly">
                     <Grid item xs={12}>
-                        <img src="https://d19m59y37dris4.cloudfront.net/obaju/2-1-1/img/product1_2.jpg"
-                            style={{
-                                width: '100%',
-                            }}
-                            alt="product"
+                        <img src={props.primaryImg}
+                            alt={props.name}
+                            className={classes.img}
                         />
                     </Grid>
-                    <Grid item xs={12}>
-                        <b>{props.productName}</b>
+                    <Grid item xs={12} className={classes.productName}>
+                        <b>{props.name}</b>
                     </Grid>
                     <Grid item xs={12}>
-                        <p>Giá san pham</p>
+                        <Typography variant="h6">{props.price}₫</Typography>
                     </Grid>
                     <Grid item sm={6} xs={12}>
                         <Button
@@ -63,7 +75,6 @@ export default function Product(props) {
                             fullWidth
                             className={classes.viewBtn}
                             startIcon={<VisibilityIcon />}
-                            style={{ width: '100%' }}
                             component={Link}
                             to={`${props.link}`}
                         >
@@ -86,4 +97,10 @@ export default function Product(props) {
             </Paper>
         </Grid>
     )
+}
+
+Product.propTypes = {
+    primaryImg: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    price: PropTypes.number.isRequired,
 }

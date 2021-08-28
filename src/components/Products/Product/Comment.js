@@ -195,7 +195,9 @@ export default function Comment() {
         <Grid container item xs={12}
             justifyContent={isDownXS ? "center" : "flex-end"}
         >
-            <PaginationCustom />
+            <PaginationCustom pagination={{
+                total_pages: 1,
+            }}/>
         </Grid>
     </Grid>);
 }

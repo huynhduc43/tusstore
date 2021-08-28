@@ -58,12 +58,13 @@ export default function NavItem(props) {
         setOpen((prevOpen) => !prevOpen);
     };
 
-    const handleClose = (event) => {
+    const handleClose = (event, url) => {
         if (anchorRef.current && anchorRef.current.contains(event.target)) {
             return;
         }
 
         setOpen(false);
+        //console.log(url);
     };
 
     function handleListKeyDown(event) {
@@ -108,7 +109,7 @@ export default function NavItem(props) {
                                             <MenuItem
                                                 key={i}
                                                 component={Links} to={item.itemUrl}
-                                                onClick={handleClose}
+                                                onClick={(e) => handleClose(e, item.itemUrl)}
                                                 className={classes.menuItem}
                                             >
                                                 {item.itemName}

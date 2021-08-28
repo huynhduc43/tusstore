@@ -15,13 +15,18 @@ const useStyles = makeStyles((theme) => ({
     root: Constants.RADIO_GROUP,
 }));
 
-export default function BasicButtonGroup() {
+export default function Show(props) {
     const classes = useStyles();
-    const [value, setValue] = React.useState('12');
+    const [value, setValue] = React.useState(props.perPage);
 
   const handleChange = (event) => {
     setValue(event.target.value);
+    props.onChangePerPage(event.target.value);
+
+    
   };
+
+  //console.log("show: " + value);
 
   return (
     <FormControl component="fieldset" className={classes.root}>
@@ -29,7 +34,7 @@ export default function BasicButtonGroup() {
       <RadioGroup row aria-label="show" name="show" value={value} onChange={handleChange}>
         <FormControlLabel value="12" control={<Radio />} label="12" />
         <FormControlLabel value="24" control={<Radio />} label="24" />
-        <FormControlLabel value="all" control={<Radio />} label="All" />
+        <FormControlLabel value="All" control={<Radio />} label="All" />
       </RadioGroup>
     </FormControl>
   );

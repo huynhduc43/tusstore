@@ -20,6 +20,13 @@ const useStyles = makeStyles((theme) => ({
     },
     image: {
         width: '100%',
+        minHeight: 230,
+        [theme.breakpoints.down("sm")]: {
+            minHeight: 350,
+        },
+        [theme.breakpoints.down("xs")]: {
+            minHeight: 220,
+        },
     },
     productName: {
         color: "#000",
@@ -31,7 +38,18 @@ const useStyles = makeStyles((theme) => ({
         },
     },
     name: {
-        minHeight: 60,
+        minHeight: 80,
+        textDecoration: "none",
+        color: "#000",
+        [theme.breakpoints.down("md")]: {
+            minHeight: 80,
+        },
+        [theme.breakpoints.down("sm")]: {
+            minHeight: 60,
+        },
+        [theme.breakpoints.down(345)]: {
+            minHeight: 105,
+        },
     },
     price: {
 
@@ -46,22 +64,22 @@ export default function Product(props) {
         <Grid item xs={12}>
             <Grid container spacing={1} justifyContent="space-evenly">
                 <Grid item xs={12}>
-                    <img src="https://d19m59y37dris4.cloudfront.net/obaju/2-1-1/img/product1_2.jpg"
-                        alt="product"
+                    <img src={props.primaryImg}
+                        alt={props.name}
                         className={classes.image}
                     />
                 </Grid>
                 <Grid item xs={12} className={classes.name}>
                     <Typography variant="body1"
                         component={Links}
-                        to="/1"
-                        className={classes.productName}
+                        to={`/${props.path}`}
+                        className={classes.name}
                     >
-                        {props.productName}
+                        {props.name}
                     </Typography>
                 </Grid>
                 <Grid item xs={12} className={classes.price}>
-                    <Typography variant="h6">20.000</Typography>
+                    <Typography variant="h6">{props.price}₫</Typography>
                 </Grid>
             </Grid>
 

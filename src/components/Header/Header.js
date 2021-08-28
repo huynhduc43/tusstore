@@ -311,7 +311,7 @@ const NavBar = (props) => {
                                                     {props.data.map((data, i) => {
                                                         return (
                                                             <ListItemCustom key={i}
-                                                                nameListItem={data.nameNavItem}
+                                                                nameListItem={data.navItemName}
                                                                 nestedList={data.list}
                                                                 onClickClose={handleClose1}
                                                             />
@@ -327,7 +327,7 @@ const NavBar = (props) => {
                         </>) : (<>
                             {props.data.map((data, i) => {
                                 return (
-                                    <NavItem key={i} name={data.nameNavItem} items={data.list} />
+                                    <NavItem key={i} name={data.navItemName} items={data.list} />
                                 );
                             })}
                         </>)}
@@ -383,69 +383,82 @@ const NavBar = (props) => {
 export default function Header() {
     const data = [
         {
-            nameNavItem: "Xương rồng",
+            navItemName: "Xương rồng",
             list: [
                 {
                     itemName: "Tất cả",
-                    itemUrl: '/list-of-cactus',
+                    itemUrl: '/products/cactus',
+                    path: /,Cactus,/,
                 },
                 {
                     itemName: "Cỡ lớn",
-                    itemUrl: '/list-of-cactus/large-cactus',
+                    itemUrl: '/products/cactus/large-cactus',
+                    path: /,Cactus,LargeCactus/,
                 },
                 {
                     itemName: "Cỡ vừa",
-                    itemUrl: '/list-of-cactus/medium-cactus',
+                    itemUrl: '/products/cactus/medium-cactus',
+                    path: /,Cactus,MediumCactus/,
                 },
                 {
                     itemName: "Cỡ nhỏ",
-                    itemUrl: '/list-of-cactus/small-cactus',
+                    itemUrl: '/products/cactus/small-cactus',
+                    path: /,Cactus,SmallCactus/,
                 },
                 {
                     itemName: "Mix",
-                    itemUrl: '/list-of-cactus/mix-cactus',
+                    itemUrl: '/products/cactus/mix-cactus',
+                    path: /,Cactus,MixCactus/,
                 }
             ]
         },
         {
-            nameNavItem: "Sen đá",
+            navItemName: "Sen đá",
             list: [
                 {
                     itemName: "Tất cả",
-                    itemUrl: '/list-of-lotus',
+                    itemUrl: '/products/stone-lotus',
+                    path: /,StoneLotus,/,
                 },
                 {
                     itemName: "Cỡ lớn",
-                    itemUrl: '/list-of-lotus/large-lotus',
+                    itemUrl: '/products/stone-lotus/large-stone-lotus',
+                    path: /,StoneLotus,LargeStoneLotus,/,
                 },
                 {
                     itemName: "Cỡ vừa",
-                    itemUrl: '/list-of-lotus/medium-lotus',
+                    itemUrl: '/products/stone-lotus/medium-stone-lotus',
+                    path: /,StoneLotus,MediumStoneLotus,/,
                 },
                 {
                     itemName: "Cỡ nhỏ",
-                    itemUrl: '/list-of-lotus/small-lotus',
+                    itemUrl: '/products/stone-lotus/small-stone-lotus',
+                    path: /,StoneLotus,SmallStoneLotus,/,
                 },
                 {
                     itemName: "Mix",
-                    itemUrl: '/list-of-lotus/mix-lotus',
-                }
+                    itemUrl: '/products/stone-lotus/mix-stone-lotus',
+                    path: /,StoneLotus,MixStoneLotus,/,
+                },
             ]
         },
         {
-            nameNavItem: "Chậu",
+            navItemName: "Chậu",
             list: [
                 {
                     itemName: "Tất cả",
-                    itemUrl: '/list-of-pots/ceramic-pots',
+                    itemUrl: '/products/pots',
+                    path: /,Pots,/,
                 },
                 {
                     itemName: "Chậu sứ",
-                    itemUrl: '/list-of-pots/ceramic-pots',
+                    itemUrl: '/products/pots/ceramic-pots',
+                    path: /,Pots,CeramicPots,/,
                 },
                 {
                     itemName: "Chậu đất nung",
-                    itemUrl: '/list-of-pots/terracotta-pots',
+                    itemUrl: '/products/pots/terracotta-pots',
+                    path: /,Pots,TerracottaPots,/,
                 },
             ]
         }

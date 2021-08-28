@@ -3,7 +3,7 @@ import Rating from '@material-ui/lab/Rating';
 import Typography from '@material-ui/core/Typography';
 import { Grid } from '@material-ui/core';
 
-export default function SimpleRating() {
+export default function SimpleRating(props) {
 
     return (
         <Grid container justifyContent="center" spacing={2}>
@@ -13,16 +13,13 @@ export default function SimpleRating() {
             <Grid item>
                 <Grid container spacing={3} alignItems="center" justifyContent="center">
                     <Grid item>
-                        <Rating name="read-only" defaultValue={4} readOnly />
+                        <Rating name="read-only" value={props.rating ? props.rating : 0} readOnly />
                     </Grid>
                     <Grid item>
-                        <Typography variant="subtitle2">Đã bán 10</Typography>
+                        <Typography variant="subtitle2">Đã bán {props.sold}</Typography>
                     </Grid>
                 </Grid>
             </Grid>
-
-
-
         </Grid>
     );
 }

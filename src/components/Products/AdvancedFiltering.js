@@ -91,6 +91,17 @@ export default function SelectType() {
                         <br />
                     </Grid>
                     <Grid container item xs={12} spacing={3} justifyContent="center">
+                    <Grid item md={6} sm={3} xs={6}>
+                            <Button
+                                variant="contained"
+                                startIcon={<HighlightOffIcon />}
+                                color="secondary"
+                                fullWidth
+                                onClick={handleReset}
+                            >
+                                Xóa
+                            </Button>
+                        </Grid>
                         <Grid item md={6} sm={3} xs={6}>
                             <Button
                                 type="submit"
@@ -100,17 +111,6 @@ export default function SelectType() {
                                 className={classes.button}
                             >
                                 Lọc
-                            </Button>
-                        </Grid>
-                        <Grid item md={6} sm={3} xs={6}>
-                            <Button
-                                variant="contained"
-                                startIcon={<HighlightOffIcon />}
-                                color="secondary"
-                                fullWidth
-                                onClick={handleReset}
-                            >
-                                Xóa
                             </Button>
                         </Grid>
                     </Grid>
