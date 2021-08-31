@@ -273,7 +273,7 @@ const NavBar = (props) => {
                             component={Links}
                             to="/"
                         >
-                            <img src="../../logoTD.svg"
+                            <img src="/logoTD.svg"
                                 style={{
                                     width: 24,
                                     height: auto,

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
@@ -8,6 +8,8 @@ import { Divider } from '@material-ui/core';
 import { Typography } from '@material-ui/core';
 import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 import FilterListOutlinedIcon from '@material-ui/icons/FilterListOutlined';
+
+import {useHistory} from 'react-router';
 
 //My components
 import Constants from "../Constants";
@@ -19,18 +21,19 @@ const useStyles = makeStyles((theme) => ({
     button: Constants.BUTTON_CONTAINED
 }));
 
-export default function SelectType() {
+export default function SelectType(props) {
     const classes = useStyles();
     const [type, setType] = React.useState({
         flower: false,
         nonflower: false,
     });
-
     const [color, setColor] = React.useState({
         greenPlant: false,
         yellowPlant: false,
-        redPlant: false,
     });
+    const [pathname] = React.useState(props.pathname)
+
+    const history = useHistory();
 
     const handleReset = () => {
         setType({
@@ -41,7 +44,6 @@ export default function SelectType() {
         setColor({
             greenPlant: false,
             yellowPlant: false,
-            redPlant: false,
         });
     }
 
@@ -52,6 +54,20 @@ export default function SelectType() {
     const handleChangeColor = (event) => {
         setColor({ ...color, [event.target.name]: event.target.checked });
     };
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        let filter = `${type.flower ? 'type=flower&' : ''}${type.nonflower ? 'type=nonFlower&' : ''}${color.greenPlant ? 'color=green&' : ''}${color.yellowPlant ? 'color=yellow&' : ''}`;
+        filter = filter.slice(0, filter.length - 1);
+        history.replace(`?` + filter);
+        props.onHandleFilter(filter);
+    }
+
+    useEffect(() => {
+        if (pathname !== props.pathname){
+            handleReset();
+        }
+    }, [pathname, props.pathname]);
 
     return (
         <>
@@ -83,10 +99,6 @@ export default function SelectType() {
                                 control={<Checkbox checked={color.yellowPlant} onChange={handleChangeColor} name="yellowPlant" />}
                                 label="Vàng"
                             />
-                            <FormControlLabel
-                                control={<Checkbox checked={color.redPlant} onChange={handleChangeColor} name="redPlant" />}
-                                label="Đỏ"
-                            />
                         </FormGroup>
                         <br />
                     </Grid>
@@ -109,6 +121,7 @@ export default function SelectType() {
                                 fullWidth
                                 startIcon={<FilterListOutlinedIcon />}
                                 className={classes.button}
+                                onClick={handleSubmit}
                             >
                                 Lọc
                             </Button>

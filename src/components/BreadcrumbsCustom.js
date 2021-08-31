@@ -8,10 +8,12 @@ import {
 import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 import Link from '@material-ui/core/Link';
 
-const convert = (path) => {
+const convert = (path, breadCrumb, productUrl) => {
   let newPath = [];
   path.forEach(element => {
     switch (element) {
+      case "products":
+        break;
       case "cactus":
         newPath.push({
           name: "Tất cả xương rồng",
@@ -90,13 +92,13 @@ const convert = (path) => {
       case "ceramic-pots":
         newPath.push({
           name: "Chậu sứ",
-          url: "/products/pot/ceramic-pots",
+          url: "/products/pots/ceramic-pots",
         });
         break;
       case "terracotta-pots":
         newPath.push({
           name: "Chậu đất nung",
-          url: "/products/pot/terracotta-pots",
+          url: "/products/pots/terracotta-pots",
         });
         break;
       //Cart
@@ -142,8 +144,11 @@ const convert = (path) => {
         });
         break;
 
-
       default:
+        newPath.push({
+          name: breadCrumb,
+          url: productUrl,
+        });
     }
   });
   return newPath;
@@ -153,7 +158,7 @@ export default function SimpleBreadcrumbs(props) {
   const location = useLocation();
   let path = location.pathname.split('/');
   path.shift();
-  const newpath = convert(path);
+  const newpath = convert(path, props.breadCrumb, location.pathname);
 
   return (
     <Breadcrumbs aria-label="breadcrumb">

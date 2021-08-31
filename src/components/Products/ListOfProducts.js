@@ -16,7 +16,7 @@ import Product from "./Product/Product";
 import BreadcrumbsCustom from '../BreadcrumbsCustom';
 import SortBy from "./SortBy";
 //import Show from './Show';
-import AdvancedFiltering from './AdvancedFiltering';
+import AdvancedFilteringCactus from './AdvancedFilteringCactus';
 import PaginationCustom from "./PaginationCustom";
 import ProductDetail from "./Product/ProductDetail";
 
@@ -61,12 +61,12 @@ export default function ListOfProducts(props) {
   const isDownXS = useMediaQuery(theme.breakpoints.down("xs"));
   const [products, setProducts] = useState([]);
   const [pagination, setPagination] = useState({});
-
-
+  const [productDetail, setProductDetail] = useState({});
+  const [filter, setFilter] = useState('');
 
   React.useEffect(() => {
     const fetchData = async () => {
-      const response = await axios.get('http://localhost:3001' + location.pathname + location.search);
+      const response = await axios.get('http://localhost:3001' + location.pathname + location.search );
 
       if (Array.isArray(response.data.productList)) {
         setProducts(response.data.productList);
@@ -74,12 +74,19 @@ export default function ListOfProducts(props) {
       }
     }
 
+    const fetchProductDetail = async () => {
+      const response = await axios.get('http://localhost:3001' + location.pathname + location.search);
+      setProductDetail(response.data);
+    }
+
     if (pathnameList.indexOf(location.pathname) !== -1) {
       fetchData();
       window.scroll(0, 0);
+    } else {
+      fetchProductDetail();
     }
 
-  }, [location.pathname, location.search]);
+  }, [location.pathname, location.search, filter]);
 
   return (
     <>
@@ -89,7 +96,11 @@ export default function ListOfProducts(props) {
 
             <Grid item xs={12}>
               <Paper className={classes.paper}>
-                <BreadcrumbsCustom path={location.pathname} />
+                <BreadcrumbsCustom
+                  path={location.pathname}
+                  breadCrumb={productDetail.name}
+                  productUrl={productDetail._id}
+                />
               </Paper>
             </Grid>
 
@@ -102,7 +113,11 @@ export default function ListOfProducts(props) {
             <Grid container item xs={isDownSM ? 12 : 3} >
               <Grid item xs={12}>
                 <Paper className={[classes.paper, classes.sticky].join(" ")}>
-                  <AdvancedFiltering />
+                  <AdvancedFilteringCactus 
+                  onHandleFilter={setFilter}
+                   page={pagination.current_page}
+                   pathname={location.pathname}
+                   />
                 </Paper>
               </Grid>
             </Grid>
@@ -110,7 +125,7 @@ export default function ListOfProducts(props) {
             <Grid container item md={9} xs={12} direction="column">
               <Grid container spacing={3}>
 
-                {pathnameList.indexOf(location.pathname) === -1 ? <ProductDetail />
+                {pathnameList.indexOf(location.pathname) === -1 ? <ProductDetail product={productDetail} />
                   :
                   (<>
                     {/* {!isDownSM &&
@@ -150,6 +165,8 @@ export default function ListOfProducts(props) {
                               name={product.name}
                               price={product.price}
                               primaryImg={product.primaryImg}
+                              view={product.view}
+                              rating={product.rating}
                             />
                           ))
                         }
@@ -157,7 +174,7 @@ export default function ListOfProducts(props) {
                     </Grid>
                     {pagination.total_results !== 0 &&
                       <Grid container item xs={12} justifyContent="center" style={{ marginBottom: 10, }}>
-                        <PaginationCustom pagination={pagination} />
+                        <PaginationCustom pagination={pagination} filter={filter}/>
                       </Grid>
                     }
                   </>)}

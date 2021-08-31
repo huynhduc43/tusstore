@@ -143,7 +143,6 @@ export default function SignIn() {
           </Grid>
         </form>
         <Links to="/">Homepage</Links>
-        <Links to="/react-router-demo">React router demo</Links>
       </div>
       <Box mt={8}>
       </Box>

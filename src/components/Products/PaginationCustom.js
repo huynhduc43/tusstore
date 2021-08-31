@@ -50,14 +50,16 @@ export default function PaginationCustom(props) {
 
     useEffect(() => {
         let tmp = [];
+
         for (let i = props.pagination.first_page; i <= props.pagination.last_page; i++) {
             tmp.push({
                 pageNumber: i,
-                pageUrl: location.pathname + "?page=" + i,
+                pageUrl: location.pathname + "?page=" + i + `${props.filter === '' ? '' : '&' + props.filter}`,
             })
         }
+
         setPageItem(tmp);
-    }, [location.pathname, props.pagination.first_page, props.pagination.last_page])
+    }, [location.pathname, props.pagination.first_page, props.pagination.last_page, props.filter])
 
     return (
         <Grid item className={classes.root}>
@@ -66,14 +68,14 @@ export default function PaginationCustom(props) {
                     <Button
                         className={classes.button}
                         component={Link}
-                        to={`${location.pathname}`}
+                        to={`${location.pathname}${props.filter === '' ? '' : '?' + props.filter}`}
                     >
                         <ArrowBackIcon />
                     </Button>
                     <Button
                         className={classes.button}
                         component={Link}
-                        to={`${location.pathname}?page=${props.pagination.previous_page}`}
+                        to={`${location.pathname}?page=${props.pagination.previous_page}${props.filter === '' ? '' : '&' + props.filter}`}
                     >
                         <ChevronLeftIcon />
                     </Button>
@@ -89,7 +91,7 @@ export default function PaginationCustom(props) {
                     <Button
                         disabled className={classes.button}
                         component={Link}
-                        to={`${location.pathname}?page=${props.pagination.previous_page}`}
+                        to={`${location.pathname}?page=${props.pagination.previous_page}${props.filter === '' ? '' : '&' + props.filter}`}
                     >
                         <ChevronLeftIcon />
                     </Button>
@@ -111,28 +113,28 @@ export default function PaginationCustom(props) {
                 <><Button
                     className={classes.button}
                     component={Link}
-                    to={`${location.pathname}?page=${props.pagination.next_page}`}
+                    to={`${location.pathname}?page=${props.pagination.next_page}${props.filter === '' ? '' : '&' + props.filter}`}
                 >
                     <ChevronRightIcon />
                 </Button>
                     <Button
                         className={classes.button}
                         component={Link}
-                        to={`${location.pathname}?page=${props.pagination.total_pages}`}
+                        to={`${location.pathname}?page=${props.pagination.total_pages}${props.filter === '' ? '' : '&' + props.filter}`}
                     >
                         <ArrowForwardIcon />
                     </Button>
                 </>
                 : <><Button
                     disabled className={classes.button}
-                    to={`${location.pathname}?page=${props.pagination.next_page}`}
+                    to={`${location.pathname}?page=${props.pagination.next_page}${props.filter === '' ? '' : '&' + props.filter}`}
                 >
                     <ChevronRightIcon />
                 </Button>
                     <Button
                         disabled className={classes.button}
                         component={Link}
-                        to={`${location.pathname}?page=${props.pagination.total_pages}`}
+                        to={`${location.pathname}?page=${props.pagination.total_pages}${props.filter === '' ? '' : '&' + props.filter}`}
                     >
                         <ArrowForwardIcon />
                     </Button>

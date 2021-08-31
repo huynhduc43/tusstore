@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+//import axios from 'axios';
 
 import { Button, Grid, Paper, Typography } from '@material-ui/core';
 import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart';
@@ -76,15 +76,17 @@ export default function ProductDetail(props) {
         });
     };
 
-    const fetchData = async (url) => {
-        const res = await axios.get(url);
-        setProduct(res.data);
-    }
+    // const fetchData = async (url) => {
+    //     const res = await axios.get(url);
+    //     setProduct(res.data);
+    // }
 
     useEffect(() => {
-        fetchData("http://localhost:3001" + location.pathname);
+        //fetchData("http://localhost:3001" + location.pathname);
+        setProduct(props.product)
         window.scroll(0, 0);
-    }, [location.pathname]);
+
+    }, [location.pathname, props.product]);
 
     return (
         <Grid container item spacing={3} justifyContent="center">
@@ -139,7 +141,7 @@ export default function ProductDetail(props) {
 
                     <Grid item xs={12}>
                         <Paper className={classes.paper}>
-                            <CustomRating rating={product.rating} sold={product.sold}/>
+                            <CustomRating rating={product.rating} sold={product.sold} />
                         </Paper>
                     </Grid>
                 </Grid>

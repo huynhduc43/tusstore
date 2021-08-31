@@ -7,10 +7,11 @@ import {
 
 import { useSnackbar } from 'notistack';
 
-import { Grid, Paper, Button, Typography } from "@material-ui/core";
+import { Grid, Paper, Button, Typography, IconButton } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core";
 import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart';
 import VisibilityIcon from '@material-ui/icons/Visibility';
+import StarIcon from '@material-ui/icons/Star';
 
 //My component
 import Constants from '../../Constants.js'
@@ -24,23 +25,40 @@ const useStyles = makeStyles((theme) => ({
         textAlign: 'center',
         color: theme.palette.text.secondary,
     },
-    viewBtn: {
-
-    },
     addToCartBtn: Constants.BUTTON_CONTAINED,
     img: {
         width: '100%',
         height: 220,
         [theme.breakpoints.down("md")]: {
             height: 160,
-        }
+        },
+        position: "relative",
+        top: -44,
     },
     productName: {
         minHeight: 65,
         [theme.breakpoints.down(505)]: {
             height: 80,
-        }
-    }
+        },
+        position: "relative",
+        top: -44,
+    },
+    productPrice: {
+        position: "relative",
+        top: -44,
+        height: 0,
+    },
+    view: {
+        position: "relative",
+        left: 0,
+        zIndex: 9999,
+        height: 36,
+        borderRadius: 0,
+        opacity: 0.7,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "space-around"
+    },
 }));
 
 export default function Product(props) {
@@ -58,6 +76,31 @@ export default function Product(props) {
             <Paper className={classes.paper}>
                 <Grid container spacing={1} justifyContent="space-evenly">
                     <Grid item xs={12}>
+                        <Paper
+                            className={classes.view} style={{
+                                visibility: "show",
+                            }}
+                        >
+                            <span >
+                                <IconButton style={{ padding: 6, color: "#FFCC00" }} disabled>
+                                    <StarIcon />
+                                </IconButton>
+                                <IconButton style={{ padding: 6, color: "#000" }} disabled>
+                                    <Typography variant="h6">{props.rating}</Typography>
+                                </IconButton>
+                            </span>
+                            <span >
+                                <IconButton style={{ padding: 6, color: "#000" }} disabled>
+                                    <VisibilityIcon />
+                                </IconButton>
+                                <IconButton style={{ padding: 6, color: "#000" }} disabled>
+                                    <Typography variant="h6">{props.view}</Typography>
+                                </IconButton>
+                            </span>
+                        </Paper>
+                    </Grid>
+
+                    <Grid item xs={12} >
                         <img src={props.primaryImg}
                             alt={props.name}
                             className={classes.img}
@@ -67,7 +110,7 @@ export default function Product(props) {
                         <b>{props.name}</b>
                     </Grid>
                     <Grid item xs={12}>
-                        <Typography variant="h6">{props.price}₫</Typography>
+                        <Typography variant="h6" className={classes.productPrice}>{props.price}₫</Typography>
                     </Grid>
                     <Grid item sm={6} xs={12}>
                         <Button
