@@ -51,7 +51,7 @@ const useStyles = makeStyles((theme) => ({
     view: {
         position: "relative",
         left: 0,
-        zIndex: 9999,
+        zIndex: 99,
         height: 36,
         borderRadius: 0,
         opacity: 0.7,

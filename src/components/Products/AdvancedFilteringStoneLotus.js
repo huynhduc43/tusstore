@@ -9,7 +9,7 @@ import { Typography } from '@material-ui/core';
 import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 import FilterListOutlinedIcon from '@material-ui/icons/FilterListOutlined';
 
-import {useHistory, useLocation} from 'react-router';
+import { useHistory } from 'react-router';
 
 //My components
 import Constants from "../Constants";
@@ -28,32 +28,37 @@ export default function SelectType(props) {
         nonflower: false,
     });
     const [color, setColor] = React.useState({
+        colorful: false,
         greenPlant: false,
         yellowPlant: false,
+        purplePlant: false,
+        orangePlant: false,
+        bluePlant: false,
     });
-    //const [pathname] = React.useState(props.pathname);
-    const history = useHistory();
-    const location = useLocation();
+    const [pathname] = React.useState(props.pathname)
 
-    const handleReset = React.useCallback(() => {
+    const history = useHistory();
+
+    const handleReset = () => {
         setType({
             flower: false,
             nonflower: false,
         });
 
         setColor({
+            colorful: false,
             greenPlant: false,
             yellowPlant: false,
+            purplePlant: false,
+            orangePlant: false,
+            bluePlant: false,
         });
-
-        //history.replace(`?sort=${props.sort}`);
-        props.onHandleFilter('');
-        console.log("filter");
-    }, [props]);
+    }
 
     const handleChangeType = (event) => {
         setType({ ...type, [event.target.name]: event.target.checked });
     };
+
 
     const handleChangeColor = (event) => {
         setColor({ ...color, [event.target.name]: event.target.checked });
@@ -61,24 +66,17 @@ export default function SelectType(props) {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        let filter = `${type.flower ? 'type=flower&' : ''}${type.nonflower ? 'type=non-flower&' : ''}${color.greenPlant ? 'color=green&' : ''}${color.yellowPlant ? 'color=yellow&' : ''}`;
+        let filter = `${color.greenPlant ? 'color=green&' : ''}${color.yellowPlant ? 'color=yellow&' : ''}`;
         filter = filter.slice(0, filter.length - 1);
-        history.replace(`?sort=${props.sort}${filter ? `&${filter}` : ''}`);
+        history.replace(`?` + filter);
         props.onHandleFilter(filter);
     }
 
     useEffect(() => {
-        if (location.pathname !== props.pathname){
+        if (pathname !== props.pathname) {
             handleReset();
         }
-        //console.log(location.pathname + ' - ' + props.pathname);
-    }, [location.pathname, props.pathname, handleReset]);
-
-    useEffect(() => {
-        if (props.filterParent === '') {
-            history.replace(`?sort=${props.sort}`);
-        }
-    }, [props.filterParent, history, props.sort])
+    }, [pathname, props.pathname]);
 
     return (
         <>
@@ -103,6 +101,10 @@ export default function SelectType(props) {
                         <Divider />
                         <FormGroup>
                             <FormControlLabel
+                                control={<Checkbox checked={color.colorful} onChange={handleChangeColor} name="colorful" />}
+                                label="Nhiều màu"
+                            />
+                            <FormControlLabel
                                 control={<Checkbox checked={color.greenPlant} onChange={handleChangeColor} name="greenPlant" />}
                                 label="Xanh lá"
                             />
@@ -110,11 +112,23 @@ export default function SelectType(props) {
                                 control={<Checkbox checked={color.yellowPlant} onChange={handleChangeColor} name="yellowPlant" />}
                                 label="Vàng"
                             />
+                            <FormControlLabel
+                                control={<Checkbox checked={color.purplePlant} onChange={handleChangeColor} name="purplePlant" />}
+                                label="Tím"
+                            />
+                            <FormControlLabel
+                                control={<Checkbox checked={color.orangePlant} onChange={handleChangeColor} name="orangePlant" />}
+                                label="Cam"
+                            />
+                            <FormControlLabel
+                                control={<Checkbox checked={color.bluePlant} onChange={handleChangeColor} name="bluePlant" />}
+                                label="Xanh lam"
+                            />
                         </FormGroup>
                         <br />
                     </Grid>
                     <Grid container item xs={12} spacing={3} justifyContent="center">
-                    <Grid item md={6} sm={3} xs={6}>
+                        <Grid item md={6} sm={3} xs={6}>
                             <Button
                                 variant="contained"
                                 startIcon={<HighlightOffIcon />}

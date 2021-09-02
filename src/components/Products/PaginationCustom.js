@@ -54,12 +54,12 @@ export default function PaginationCustom(props) {
         for (let i = props.pagination.first_page; i <= props.pagination.last_page; i++) {
             tmp.push({
                 pageNumber: i,
-                pageUrl: location.pathname + "?page=" + i + `${props.filter === '' ? '' : '&' + props.filter}`,
+                pageUrl: location.pathname +"?sort=" + props.sort + "&page=" + i + `${props.filter === '' ? '' : '&' + props.filter}`,
             })
         }
 
         setPageItem(tmp);
-    }, [location.pathname, props.pagination.first_page, props.pagination.last_page, props.filter])
+    }, [location.pathname, props.pagination.first_page, props.pagination.last_page, props.filter, props.sort])
 
     return (
         <Grid item className={classes.root}>

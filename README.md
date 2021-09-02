@@ -20,7 +20,16 @@ TusStore is an e-commerce website specializing in selling desktop plants. This i
 # IV. Features
 - Homepage with hot products and newest products
 - Display product list by category with pagination
-- Advanced filter
+- Advanced filtering
+    - Cactus: Done
+    - Stone lotus: Doing (UI)
+    - Pots: Doing (UI)
+- Sort by:
+    - Newest
+    - Most viewst
+    - High rated
+    - Ascending price
+    - Descending price
 
 # V. Installation
 You need more install [TusStore-BackEnd](https://github.com/huynhduc43/TusStore-BackEnd.git) project.

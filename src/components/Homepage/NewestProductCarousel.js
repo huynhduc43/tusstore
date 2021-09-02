@@ -12,6 +12,7 @@ import { useMediaQuery } from '@material-ui/core';
 //react-bootstrap
 import Carousel from 'react-bootstrap/Carousel';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import Constants from '../Constants';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -72,6 +73,9 @@ const useStyles = makeStyles((theme) => ({
     name: {
         textDecoration: "none",
         color: "#000",
+        '&:hover': {
+            color: Constants.GREEN,
+        },
         [theme.breakpoints.down("xs")]: {
             minHeight: 70,
         },

@@ -41,6 +41,10 @@ const useStyles = makeStyles((theme) => ({
         minHeight: 80,
         textDecoration: "none",
         color: "#000",
+        fontWeight: 'bold',
+        '&:hover': {
+            color: Constants.GREEN,
+        },
         [theme.breakpoints.down("md")]: {
             minHeight: 80,
         },

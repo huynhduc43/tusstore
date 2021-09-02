@@ -9,7 +9,7 @@ import { makeStyles } from '@material-ui/core';
 
 import { useSnackbar } from 'notistack';
 
-import { useLocation } from 'react-router';
+//import { useLocation } from 'react-router';
 
 //My components
 import Constants from '../../Constants';
@@ -51,7 +51,7 @@ export default function ProductDetail(props) {
 
     const [product, setProduct] = useState({});
     const [isExistInWishlist, setIsExistInWishlist] = useState(false);
-    const location = useLocation();
+    //const location = useLocation();
 
     //const removeProduct
 
@@ -86,7 +86,7 @@ export default function ProductDetail(props) {
         setProduct(props.product)
         window.scroll(0, 0);
 
-    }, [location.pathname, props.product]);
+    }, [props.product]);
 
     return (
         <Grid container item spacing={3} justifyContent="center">
@@ -102,10 +102,10 @@ export default function ProductDetail(props) {
                 <Grid container spacing={3} justifyContent="flex-start">
                     <Grid item xs={12}>
                         <Paper className={classes.paper}>
-                            <Typography variant="h6" align="center">
+                            <Typography variant="h5" align="left">
                                 {product.name}
                             </Typography>
-                            <Typography variant="h5" align="center">
+                            <Typography variant="h4" align="center">
                                 {product.price}₫
                             </Typography>
                             <Grid container spacing={3} justifyContent="center">

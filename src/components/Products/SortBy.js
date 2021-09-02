@@ -5,6 +5,10 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import InputBase from '@material-ui/core/InputBase';
 
+import {
+    useHistory,
+} from 'react-router-dom';
+
 const BootstrapInput = withStyles((theme) => ({
     root: {
         'label + &': {
@@ -46,14 +50,19 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function SortBy() {
+export default function SortBy(props) {
     const classes = useStyles();
-    const [value, setValue] = React.useState('newest');
+    const [value, setValue] = React.useState(props.sort);
+    let history = useHistory();
+
     const handleChange = (event) => {
         setValue(event.target.value);
+        props.onChangeSortValue(event.target.value);
+        history.replace(`?sort=${event.target.value}${props.filter ? `&${props.filter}` : ''}`);
     };
+
     return (
-        <FormControl className={classes.margin}>        
+        <FormControl className={classes.margin}>
             <Select
                 size="small"
                 labelId="demo-customized-select-label"
@@ -63,8 +72,11 @@ export default function SortBy() {
                 input={<BootstrapInput />}
             >
                 <MenuItem value="newest" >Mới nhất</MenuItem>
-                <MenuItem value="name" >Tên</MenuItem>
-                <MenuItem value="price">Giá</MenuItem>
+                <MenuItem value="most-viewed">Xem nhiều nhất</MenuItem>
+                <MenuItem value="high-rated">Đánh giá cao nhất</MenuItem>
+                <MenuItem value="asc-price" >Giá tăng dần</MenuItem>
+                <MenuItem value="desc-price">Giá giảm dần</MenuItem>
+
             </Select>
         </FormControl>
     );
