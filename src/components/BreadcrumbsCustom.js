@@ -162,12 +162,13 @@ export default function SimpleBreadcrumbs(props) {
 
   return (
     <Breadcrumbs aria-label="breadcrumb">
-      {location !== "/" && <Link color="inherit" component={Links} to="/">
+      {location.pathname !== "/" && <Link color="inherit" component={Links} to="/">
         Home
       </Link>}
       {newpath.map((item, i) => (
         <Link key={i} color="inherit" component={Links} to={item.url}>
           {item.name}
+          <span hidden>{item.url}</span> {/* ??? Fix: Warning: Failed prop type: The prop `children` is marked as required in `ForwardRef(Link)`, but its value is `undefined`. */}
         </Link>
       ))}
     </Breadcrumbs>

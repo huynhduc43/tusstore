@@ -23,45 +23,37 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SelectType(props) {
     const classes = useStyles();
-    const [type, setType] = React.useState({
-        flower: false,
-        nonflower: false,
-    });
-    const [color, setColor] = React.useState({
-        greenPlant: false,
-        yellowPlant: false,
-    });
+   
     //const [pathname] = React.useState(props.pathname);
     const history = useHistory();
     const location = useLocation();
 
     const handleReset = React.useCallback(() => {
-        setType({
-            flower: false,
-            nonflower: false,
+        props.setType({
+            flower: props.type.flower,
+            nonflower: props.type.nonflower,
         });
 
-        setColor({
-            greenPlant: false,
-            yellowPlant: false,
+        props.setColor({
+            greenPlant: props.color.greenPlant,
+            yellowPlant: props.color.yellowPlant,
         });
 
         //history.replace(`?sort=${props.sort}`);
         props.onHandleFilter('');
-        console.log("filter");
     }, [props]);
 
     const handleChangeType = (event) => {
-        setType({ ...type, [event.target.name]: event.target.checked });
+        props.setType({ ...props.type, [event.target.name]: event.target.checked });
     };
 
     const handleChangeColor = (event) => {
-        setColor({ ...color, [event.target.name]: event.target.checked });
+        props.setColor({ ...props.color, [event.target.name]: event.target.checked });
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        let filter = `${type.flower ? 'type=flower&' : ''}${type.nonflower ? 'type=non-flower&' : ''}${color.greenPlant ? 'color=green&' : ''}${color.yellowPlant ? 'color=yellow&' : ''}`;
+        let filter = `${props.type.flower ? 'type=flower&' : ''}${props.type.nonflower ? 'type=non-flower&' : ''}${props.color.greenPlant ? 'color=green&' : ''}${props.color.yellowPlant ? 'color=yellow&' : ''}`;
         filter = filter.slice(0, filter.length - 1);
         history.replace(`?sort=${props.sort}${filter ? `&${filter}` : ''}`);
         props.onHandleFilter(filter);
@@ -89,11 +81,11 @@ export default function SelectType(props) {
                         <Divider />
                         <FormGroup>
                             <FormControlLabel
-                                control={<Checkbox checked={type.flower} onChange={handleChangeType} name="flower" />}
+                                control={<Checkbox checked={props.type.flower} onChange={handleChangeType} name="flower" />}
                                 label="Có hoa"
                             />
                             <FormControlLabel
-                                control={<Checkbox checked={type.nonflower} onChange={handleChangeType} name="nonflower" />}
+                                control={<Checkbox checked={props.type.nonflower} onChange={handleChangeType} name="nonflower" />}
                                 label="Không có hoa"
                             />
                         </FormGroup>
@@ -103,11 +95,11 @@ export default function SelectType(props) {
                         <Divider />
                         <FormGroup>
                             <FormControlLabel
-                                control={<Checkbox checked={color.greenPlant} onChange={handleChangeColor} name="greenPlant" />}
+                                control={<Checkbox checked={props.color.greenPlant} onChange={handleChangeColor} name="greenPlant" />}
                                 label="Xanh lá"
                             />
                             <FormControlLabel
-                                control={<Checkbox checked={color.yellowPlant} onChange={handleChangeColor} name="yellowPlant" />}
+                                control={<Checkbox checked={props.color.yellowPlant} onChange={handleChangeColor} name="yellowPlant" />}
                                 label="Vàng"
                             />
                         </FormGroup>

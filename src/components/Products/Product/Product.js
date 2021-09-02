@@ -146,4 +146,8 @@ Product.propTypes = {
     primaryImg: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
     price: PropTypes.number.isRequired,
+    link: PropTypes.string.isRequired,
+    _id: PropTypes.string.isRequired,
+    view: PropTypes.number.isRequired,
+    rating: PropTypes.number.isRequired,
 }

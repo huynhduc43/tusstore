@@ -6,6 +6,8 @@ import { useMediaQuery } from '@material-ui/core';
 import { useTheme } from '@material-ui/core/styles';
 
 import {
+  Redirect,
+  Route,
   useLocation,
 } from "react-router-dom";
 
@@ -18,10 +20,9 @@ import SortBy from "./SortBy";
 //import Show from './Show';
 import AdvancedFilteringCactus from './AdvancedFilteringCactus';
 import PaginationCustom from "./PaginationCustom";
-import ProductDetail from "./Product/ProductDetail";
 import AdvancedFilteringStoneLotus from './AdvancedFilteringStoneLotus';
 import AdvancedFilteringPots from './AdvancedFilteringPots';
-
+import ProductDetail from './Product/ProductDetail';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -73,11 +74,17 @@ export default function ListOfProducts(props) {
   });
   const [sort, setSort] = useState('newest');
   const [pathname, setPathname] = React.useState(props.pathname);
+  const [type, setType] = React.useState({
+    flower: false,
+    nonflower: false,
+  });
+  const [color, setColor] = React.useState({
+    greenPlant: false,
+    yellowPlant: false,
+  });
 
   React.useEffect(() => {
-    console.log(location);
     const fetchData = async () => {
-      console.log("filter: " + filter);
       let response;
       if (filter === '') {
         response = await axios.get('http://localhost:3001' + location.pathname + `${`?sort=${sort}` === location.search ? `?sort=${sort}` : `${location.search}`}`);
@@ -131,116 +138,131 @@ export default function ListOfProducts(props) {
   return (
     <Container maxWidth="lg">
       <div className={classes.root}>
-        <Grid container spacing={3}>
+        <Route exact to={location.pathname}>
+          {pathnameList.indexOf(location.pathname) === -1 ? <ProductDetail product={productDetail} /> :
+            <Grid container spacing={3}>
+              <Grid item xs={12}>
+                <Paper className={classes.paper}>
+                  <BreadcrumbsCustom
+                    path={location.pathname}
+                    breadCrumb={productDetail.name}
+                    productUrl={productDetail._id}
+                  />
+                </Paper>
+              </Grid>
 
-          <Grid item xs={12}>
-            <Paper className={classes.paper}>
-              <BreadcrumbsCustom
-                path={location.pathname}
-                breadCrumb={productDetail.name}
-                productUrl={productDetail._id}
-              />
-            </Paper>
-          </Grid>
-
-          {/* {isDownSM &&
+              {/* {isDownSM &&
               <Grid item xs={12}>
                 <Paper className={classes.paper}>xs=12</Paper>
               </Grid>
             } */}
 
-          <Grid container item xs={isDownSM ? 12 : 3} >
-            <Grid item xs={12}>
-              <Paper className={[classes.paper, classes.sticky].join(" ")}>
-                {filterType.cactus && <AdvancedFilteringCactus
-                  filterParent={filter}
-                  onHandleFilter={setFilter}
-                  page={pagination.current_page}
-                  pathname={pathname}
-                  sort={sort}
-                />}
-                {filterType.stoneLotus && <AdvancedFilteringStoneLotus
-                  onHandleFilter={setFilter}
-                  page={pagination.current_page}
-                  pathname={location.pathname}
-                />}
-                {filterType.pots && <AdvancedFilteringPots
-                  onHandleFilter={setFilter}
-                  page={pagination.current_page}
-                  pathname={location.pathname}
-                />}
-              </Paper>
-            </Grid>
-          </Grid>
+              <Grid container item xs={isDownSM ? 12 : 3} >
+                <Grid item xs={12}>
+                  <Paper className={[classes.paper, classes.sticky].join(" ")}>
+                    {filterType.cactus && <AdvancedFilteringCactus
+                      filterParent={filter}
+                      onHandleFilter={setFilter}
+                      page={pagination.current_page}
+                      pathname={pathname}
+                      sort={sort}
+                      type={type}
+                      color={color}
+                      setColor={setColor}
+                      setType={setType}
+                    />}
 
-          <Grid container item md={9} xs={12} direction="column">
-            <Grid container spacing={3}>
+                    {/* Demo */}
+                    {filterType.stoneLotus && <AdvancedFilteringStoneLotus
+                      onHandleFilter={setFilter}
+                      page={pagination.current_page}
+                      pathname={location.pathname}
+                    />}
 
-              {pathnameList.indexOf(location.pathname) === -1 ? <ProductDetail product={productDetail} />
-                :
-                (<>
-                  {/* {!isDownSM &&
+                    {/* Demo */}
+                    {filterType.pots && <AdvancedFilteringPots
+                      onHandleFilter={setFilter}
+                      page={pagination.current_page}
+                      pathname={location.pathname}
+                    />}
+                  </Paper>
+                </Grid>
+              </Grid>
+
+              <Grid container item md={9} xs={12} direction="column">
+                <Grid container spacing={3}>
+
+                  {pathnameList.indexOf(location.pathname) === -1 ?
+                    <Redirect to={location.pathname}>
+                      <ProductDetail product={productDetail} />
+                    </Redirect>
+                    :
+                    (<>
+                      {/* {!isDownSM &&
                       <Grid item xs={12}>
                         <Paper className={classes.paper}>xs=12</Paper>
                       </Grid>
                     } */}
 
-                  <Grid item xs={12}>
-                    <Paper className={classes.paper}>
-                      {pagination.total_results === 0 ? <>
-                        <img src='/search.svg' width="20%" alt="not-found" />
-                        <Typography variant="h6" color="secondary">Không có sản phẩm!</Typography>
-                      </> : (
-                        <Grid container item xs={12} spacing={1} alignItems="center">
-                          <Grid item sm={6} xs={12}>
-                            {/* <Show perPage={perPage} onChangePerPage={setPerPage} /> */}
-                            <Typography variant="body2">
-                              Hiển thị <b>{pagination.first_result + 1} - {pagination.last_result + 1} / {pagination.total_results}</b> sản phẩm
-                            </Typography>
-                          </Grid>
-                          <Grid container item sm={6} xs={12} alignItems="center" justifyContent="center">
-                            <Grid item>Sắp xếp theo&nbsp;</Grid>
-                            <Grid item>
-                              <SortBy
-                                filter={filter}
-                                onChangeSortValue={setSort}
-                                sort={sort}
-                              />
+                      <Grid item xs={12}>
+                        <Paper className={classes.paper}>
+                          {pagination.total_results === 0 ? <>
+                            <img src='/search.svg' width="20%" alt="not-found" />
+                            <Typography variant="h6" color="secondary">Không có sản phẩm!</Typography>
+                          </> : (
+                            <Grid container item xs={12} spacing={1} alignItems="center">
+                              <Grid item sm={6} xs={12}>
+                                {/* <Show perPage={perPage} onChangePerPage={setPerPage} /> */}
+                                <Typography variant="body2">
+                                  Hiển thị <b>{pagination.first_result + 1} - {pagination.last_result + 1} / {pagination.total_results}</b> sản phẩm
+                                </Typography>
+                              </Grid>
+                              <Grid container item sm={6} xs={12} alignItems="center" justifyContent="center">
+                                <Grid item>Sắp xếp theo&nbsp;</Grid>
+                                <Grid item>
+                                  <SortBy
+                                    filter={filter}
+                                    onChangeSortValue={setSort}
+                                    sort={sort}
+                                  />
+                                </Grid>
+                              </Grid>
                             </Grid>
-                          </Grid>
+                          )}
+
+                        </Paper>
+                      </Grid>
+
+                      <Grid item xs={12}>
+                        <Grid container spacing={isDownXS ? 1 : 3}>
+                          {
+                            products.map((product) => (
+                              <Product
+                                key={product._id}
+                                link={`${location.pathname}/${product._id}`}
+                                _id={product._id}
+                                name={product.name}
+                                price={product.price}
+                                primaryImg={product.primaryImg}
+                                view={product.view}
+                                rating={product.rating || 0}
+                              />
+                            ))
+                          }
                         </Grid>
-                      )}
-
-                    </Paper>
-                  </Grid>
-
-                  <Grid item xs={12}>
-                    <Grid container spacing={isDownXS ? 1 : 3}>
-                      {
-                        products.map((product) => (
-                          <Product
-                            key={product._id}
-                            link={`${location.pathname}/${product._id}`}
-                            _id={product._id}
-                            name={product.name}
-                            price={product.price}
-                            primaryImg={product.primaryImg}
-                            view={product.view}
-                            rating={product.rating}
-                          />
-                        ))
+                      </Grid>
+                      {pagination.total_results !== 0 &&
+                        <Grid container item xs={12} justifyContent="center" style={{ marginBottom: 10, }}>
+                          <PaginationCustom pagination={pagination} filter={filter} sort={sort} />
+                        </Grid>
                       }
-                    </Grid>
-                  </Grid>
-                  {pagination.total_results !== 0 &&
-                    <Grid container item xs={12} justifyContent="center" style={{ marginBottom: 10, }}>
-                      <PaginationCustom pagination={pagination} filter={filter} sort={sort} />
-                    </Grid>
-                  }
-                </>)}
+                    </>)}
+
+                </Grid>
+              </Grid>
             </Grid>
-          </Grid>
-        </Grid>
+          }
+        </Route>
       </div>
     </Container>
   )
