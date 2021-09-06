@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import { Divider, Grid } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core";
@@ -8,7 +8,6 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableRow from '@material-ui/core/TableRow';
-import { Button } from "@material-ui/core";
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
@@ -16,6 +15,7 @@ import Select from '@material-ui/core/Select';
 
 //My components
 import Constants from "../Constants";
+//import { CartState } from "../../context/Context";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -33,22 +33,62 @@ const useStyles = makeStyles((theme) => ({
     },
     divider: {
         padding: 5,
-        margin: "30px 0",
+        margin: "10px 0",
         backgroundColor: Constants.GREEN,
+        opacity: 1,
     },
     total: {
         fontSize: 25,
     }
 }));
 
-export default function CurrentOrder() {
+const codeList = [
+    {
+        name: 'AAAAAAAAA',
+        value: `10000`,
+    },
+    {
+        name: 'BBBBBBBBB',
+        value: `15000`,
+    },
+    {
+        name: 'CCCCCCCCC',
+        value: `20000`,
+    }
+]
+
+export default function CurrentOrder(props) {
     const classes = useStyles();
-    const [code, setCode] = React.useState('');
+    const [code, setCode] = useState(0);
+    const [shippingFee, setShippingFee] = useState(20000);
+    const [total, setTotal] = useState(0);
+    const [display, setDisplay] = useState(false);
 
     const handleChangeCode = (event) => {
         setCode(event.target.value);
+        if (event.target.value === '') {
+            setDisplay(false);
+        } else setDisplay(true);
     };
 
+    useEffect(() => {
+        let tmp = 0;
+        props.cart.forEach((product, i) => {
+            if (props.checkStatus[i]) {
+                tmp += product.price * product.qty;
+            }
+
+        });
+        setTotal(tmp);
+
+    }, [props.cart, props.checkStatus]);
+
+    useEffect(() => {
+        //Free ship
+        if (total > 200000) {
+            setShippingFee(0);
+        } else setShippingFee(20000);
+    }, [total]);
 
     return (
         <>
@@ -61,19 +101,22 @@ export default function CurrentOrder() {
                             <TableCell align="left">
                                 <b>Tổng số sản phẩm</b>
                             </TableCell>
-                            <TableCell align="right">2</TableCell>
+                            <TableCell align="right">
+                                {props.count}
+                            </TableCell>
                         </TableRow>
                         <TableRow>
                             <TableCell align="left">
-                                <b>Tổng đơn hàng</b>
+                                <b>Tạm tính</b>
                             </TableCell>
-                            <TableCell align="right">2.000.000</TableCell>
+                            <TableCell align="right">{total}₫</TableCell>
                         </TableRow>
                         <TableRow>
                             <TableCell align="left">
                                 <b>Phí vận chuyển</b>
+                                <Typography variant="subtitle2" color="secondary"><i>Free ship đơn hàng từ 200000₫</i></Typography>
                             </TableCell>
-                            <TableCell align="right">20.000</TableCell>
+                            <TableCell align="right">{shippingFee}₫</TableCell>
                         </TableRow>
                     </TableBody>
                 </Table>
@@ -87,29 +130,37 @@ export default function CurrentOrder() {
                             id="select-code"
                             value={code}
                             onChange={handleChangeCode}
+                            defaultValue="0"
                         >
-                            <MenuItem value="">
+                            <MenuItem value="0">
                                 <em>Không có</em>
                             </MenuItem>
-                            <MenuItem value="AAAAAAAAA">AAAAAAAAA</MenuItem>
-                            <MenuItem value="BBBBBBBBB">BBBBBBBBB</MenuItem>
-                            <MenuItem value="CCCCCCCCC">CCCCCCCCC</MenuItem>
+                            {codeList.map(code => (
+                                <MenuItem key={code.name} value={code.value}>{code.name} - Giảm {code.value}₫</MenuItem>
+                            ))}
                         </Select>
                     </FormControl>
                 </Grid>
-                <Grid item xs={12}>
-                    <Button variant="outlined" className={classes.outlinedBtn}>Xác nhận</Button>
-                </Grid>
             </Grid>
-            <Divider className={classes.divider} />
+
             <TableContainer>
                 <Table>
                     <TableBody>
-                        <TableRow>
+                        {display &&
+                            <TableRow>
+                                <TableCell align="left">
+                                    <b>Khuyến mãi giảm</b>
+                                </TableCell>
+                                <TableCell align="right">{code}₫</TableCell>
+                            </TableRow>
+                        }
+                        <TableRow style={{ borderTop: `10px solid ${Constants.GREEN}` }}>
                             <TableCell align="left">
                                 <b>Tổng cộng</b>
                             </TableCell>
-                            <TableCell align="right" className={classes.total}>2.020.000</TableCell>
+                            <TableCell align="right" className={classes.total}>
+                                {props.count === 0 ? 0 : total + shippingFee - parseInt(code)}₫
+                            </TableCell>
                         </TableRow>
                     </TableBody>
                 </Table>

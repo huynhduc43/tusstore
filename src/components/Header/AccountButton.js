@@ -52,7 +52,7 @@ export default function MouseOverPopover() {
     };
 
     const open = Boolean(anchorEl);
-    const id = open ? 'simple-popover' : undefined;
+    const id = open ? 'account-popover' : undefined;
 
     return (
         <div>

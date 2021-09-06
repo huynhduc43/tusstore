@@ -8,5 +8,6 @@
             // "editor.selectionHighlightBackground": "#ffffff33",
             "editor.selectionBackground": "#4D5656",
         },
-    }
+    },
+    "editor.bracketPairColorization.enabled": true,
 }

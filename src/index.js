@@ -9,14 +9,17 @@ import {
 
 import theme from './components/Theme';
 import { ThemeProvider } from '@material-ui/core';
+import Context from './context/Context';
 
 ReactDOM.render(
   <React.StrictMode>
+    <Context>
     <Router>
       <ThemeProvider theme={theme}>
         <App />
       </ThemeProvider>
     </Router>
+    </Context>
   </React.StrictMode>,
   document.getElementById('root')
 );

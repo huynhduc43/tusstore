@@ -14,7 +14,8 @@ import VisibilityIcon from '@material-ui/icons/Visibility';
 import StarIcon from '@material-ui/icons/Star';
 
 //My component
-import Constants from '../../Constants.js'
+import Constants from '../../Constants.js';
+import { CartState } from "../../../context/Context";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -51,7 +52,7 @@ const useStyles = makeStyles((theme) => ({
     view: {
         position: "relative",
         left: 0,
-        zIndex: 99,
+        zIndex: 1,
         height: 36,
         borderRadius: 0,
         opacity: 0.7,
@@ -59,20 +60,33 @@ const useStyles = makeStyles((theme) => ({
         alignItems: "center",
         justifyContent: "space-around"
     },
+    button: {
+        "& .Mui-disabled": {
+            backgroundColor: "#8CE0CE",
+        },
+    },
 }));
 
 export default function Product(props) {
     const classes = useStyles();
+    const {
+        dispatch,
+      } = CartState();
     const { enqueueSnackbar } = useSnackbar();
 
     const handleClickAddToCartBtn = () => {
+        dispatch({
+            type: "ADD_TO_CART",
+            payload: props,
+        });
+        
         enqueueSnackbar('Đã thêm vào giỏ hàng!', {
             variant: 'success'
         });
     };
 
     return (
-        <Grid item sm={4} xs={6}>
+        <Grid item sm={4} xs={6} className={classes.root}>
             <Paper className={classes.paper}>
                 <Grid container spacing={1} justifyContent="space-evenly">
                     <Grid item xs={12}>
@@ -124,17 +138,28 @@ export default function Product(props) {
                             Xem
                         </Button>
                     </Grid>
-                    <Grid item sm={6} xs={12}>
-                        <Button
-                            variant="contained"
-                            fullWidth
-                            className={classes.addToCartBtn}
-                            startIcon={<AddShoppingCartIcon />}
-                            style={{ width: '100%' }}
-                            onClick={handleClickAddToCartBtn}
-                        >
-                            Thêm
-                        </Button>
+                    <Grid item sm={6} xs={12} className={classes.button}>
+                        {props.quantity === 0 ?
+                            <Button
+                                variant="contained"
+                                fullWidth
+                                className={classes.addToCartBtn}
+                                startIcon={<AddShoppingCartIcon />}
+                                style={{ width: '100%' }}
+                                disabled
+                            >
+                                Hết
+                            </Button>
+                            : <Button
+                                variant="contained"
+                                fullWidth
+                                className={classes.addToCartBtn}
+                                startIcon={<AddShoppingCartIcon />}
+                                style={{ width: '100%' }}
+                                onClick={handleClickAddToCartBtn}
+                            >
+                                Thêm
+                            </Button>}
                     </Grid>
                 </Grid>
             </Paper>

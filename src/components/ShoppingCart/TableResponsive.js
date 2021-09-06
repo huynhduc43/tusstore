@@ -1,6 +1,8 @@
 import React from 'react';
 
-import { Link, TableBody, ThemeProvider, Typography } from '@material-ui/core';
+import { Link } from 'react-router-dom';
+
+import { TableBody, ThemeProvider, Typography } from '@material-ui/core';
 import { TableCell, TableContainer, TableRow, Table, Grid } from '@material-ui/core';
 import { Paper } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core';
@@ -14,6 +16,7 @@ import { createTheme } from '@material-ui/core';
 
 //My components
 import Constants from '../Constants';
+import { CartState } from "../../context/Context";
 
 const theme = createTheme({
     breakpoints: {
@@ -40,8 +43,8 @@ const useStyles = makeStyles(theme => ({
         }
     },
     img: {
-        width: 60,
-        height: 80,
+        width: 80,
+        height: 60,
     },
     icon: {
 
@@ -53,28 +56,119 @@ const useStyles = makeStyles(theme => ({
     },
     delete: {
     },
+    cell: {
+        padding: 0,
+        fontWeight: "bold",
+    },
+    infoCell: {
+        padding: 4,
+    }
 }))
 
-export default function TableResponsive(props) {
+const TableBodyCustom = (props) => {
     const classes = useStyles();
+    const {
+        dispatch
+    } = CartState();
 
     const handleClickIncreaseBtn = () => {
         props.onChangeQuantity(prevState => {
-            return { ...prevState, [props.data.id]: prevState[props.data.id] + 1 }
-        })
+            return { ...prevState, [props.id]: prevState[props.id] + 1 }
+        });
+
+        dispatch({
+            type: "INCREASE_QTY",
+            payload: { _id: props.product._id },
+        });
     }
 
     const handleClickDecreaseBtn = () => {
         props.onChangeQuantity(prevState => {
-            if (prevState[props.data.id] <= 1) {
+            if (prevState[props.id] <= 1) {
                 props.onOpenDialog(true);
-                props.onAddDialogContent(props.data.name);
+                props.onAddDialogContent(props.product.name);
+                props.onAddProductId(props.product._id);
+                props.onSetIndex(props.id);
                 return prevState;
             } else {
-                return { ...prevState, [props.data.id]: prevState[props.data.id] - 1 }
+                return { ...prevState, [props.id]: prevState[props.id] - 1 }
             }
-        })
+        });
+
+        dispatch({
+            type: "DECREASE_QTY",
+            payload: { _id: props.product._id },
+        });
     }
+
+    return (
+        <TableBody key={props.product._id}>
+            <TableRow style={{ borderTop: "5px solid #4fbfa8" }}>
+                <TableCell className={classes.cell}>Ảnh</TableCell>
+                <TableCell className={classes.infoCell}>
+                    <img src={props.product.primaryImg}
+                        alt={props.product.name}
+                        className={classes.img}
+                    />
+                </TableCell>
+                <TableCell rowSpan={2} padding="none"
+                    style={{
+                        borderLeft: "1px solid #EAECEE",
+                    }}
+                >
+                    <Checkbox color="primary"
+                        name={String(props.id)}
+                        checked={props.checked ? props.checked : false}
+                        onClick={props.onClickCheckBoxItem}
+
+                    />
+                </TableCell>
+
+            </TableRow>
+            <TableRow>
+                <TableCell className={classes.cell}>Sản phẩm</TableCell>
+                <TableCell className={classes.infoCell}>
+                    <Link className={classes.name} to={`/products/${props.product._id}`}>{props.product.name}</Link>
+                </TableCell>
+            </TableRow>
+            <TableRow>
+                <TableCell className={classes.cell}>Số lượng</TableCell>
+                <TableCell className={classes.infoCell}>
+                    <IconButton color="secondary" className={classes.icon}
+                        onClick={handleClickDecreaseBtn}
+                    >
+                        <RemoveCircleIcon />
+                    </IconButton>
+                    {props.product.qty}
+
+                    <IconButton color="primary"
+                        onClick={handleClickIncreaseBtn}
+                    >
+                        <AddCircleIcon color="primary" />
+                    </IconButton>
+                </TableCell>
+                <TableCell rowSpan={2} padding="none" style={{ borderLeft: "1px solid #EAECEE" }}>
+                    <IconButton color="secondary"
+                        onClick={() => props.onDeleteProduct(props.product.name, props.product._id, props.id)}>
+                        <DeleteOutlinedIcon
+                            className={classes.delete}
+                        />
+                    </IconButton>
+                </TableCell>
+            </TableRow>
+            <TableRow>
+                <TableCell className={classes.cell}>Giá</TableCell>
+                <TableCell className={classes.infoCell}>{props.product.price * props.product.qty}₫</TableCell>
+            </TableRow>
+        </TableBody>
+    )
+}
+
+export default function TableResponsive(props) {
+    const classes = useStyles();
+    const {
+        state: { cart },
+    } = CartState();
 
     return (<>
         <Grid item xs={12}>
@@ -82,94 +176,75 @@ export default function TableResponsive(props) {
                 <Grid item xs={12}>
                     <Paper className={classes.paper}>
                         <Grid container>
-                            <Grid container alignItems="center" justifyContent="space-between">
-                                <Grid item>
-                                    <Typography variant="h5">Giỏ hàng của bạn</Typography>
-                                </Grid>
-                                <Grid item>
-                                    Tất cả
-                                    <Checkbox color="primary"
-                                        checked={props.checkedAll}
-                                        onClick={props.onClickCheckAll}
-                                    />
-                                </Grid>
+                            <Grid container alignItems="center" justifyContent="flex-end">
+                                {cart.length === 0 ? (
+                                    <><Grid item xs={12}><Typography variant="h4">Giỏ hàng của bạn trống!</Typography></Grid>
+                                        <Grid item>
+                                            <img src="/empty-cart.png" alt="empty-cart.png" width="50%" />
+                                        </Grid></>)
+                                    : (<>
+                                        <Grid item xs={12}>
+                                            <Typography variant="h5">Giỏ hàng của bạn</Typography>
+                                        </Grid>
+                                    </>)}
                             </Grid>
-
-                            <Grid item xs={12}>
+                            {cart.length !== 0 && <Grid item xs={12}>
                                 <TableContainer>
                                     <Table>
-                                        {props.data.map((product, i) => {
-                                            return (
-                                                <TableBody key={product.id}>
-                                                    <TableRow style={{ borderTop: "10px solid #4fbfa8" }}>
-                                                        <TableCell>Sản phẩm</TableCell>
-                                                        <TableCell>
-                                                            <img src={product.url}
-                                                                alt={product.name}
-                                                                className={classes.img}
-                                                            />
-                                                        </TableCell>
-                                                        <TableCell rowSpan={2} padding="none"
-                                                            style={{
-                                                                borderLeft: "1px solid #EAECEE",
-                                                                paddingLeft: 8,
-                                                            }}
-                                                        >
-                                                            <Checkbox color="primary"
-
-                                                                name={product.id}
-                                                                checked={props.checked[i]}
-                                                                onClick={props.onClickCheckBoxItem}
-                                                            />
-                                                        </TableCell>
-
-                                                    </TableRow>
-                                                    <TableRow>
-                                                        <TableCell>Tên sản phẩm</TableCell>
-                                                        <TableCell>
-                                                            <Link className={classes.name} to={`/${product.id}`}>{product.name}</Link>
-                                                        </TableCell>
-                                                    </TableRow>
-                                                    <TableRow>
-                                                        <TableCell>Số lượng</TableCell>
-                                                        <TableCell>
-                                                            <IconButton color="secondary" className={classes.icon}
-                                                                onClick={handleClickDecreaseBtn}
-                                                            ><RemoveCircleIcon /></IconButton>
-                                                            {product.quantity}
-                                                            <IconButton color="primary"
-                                                                onClick={handleClickIncreaseBtn}
-                                                            ><AddCircleIcon color="primary" /></IconButton>
-                                                        </TableCell>
-                                                        <TableCell rowSpan={2} padding="none" style={{ borderLeft: "1px solid #EAECEE" }}>
-                                                            <IconButton color="secondary">
-                                                                <DeleteOutlinedIcon className={classes.delete} />
-                                                            </IconButton>
-                                                        </TableCell>
-                                                    </TableRow>
-                                                    <TableRow>
-                                                        <TableCell>Giá</TableCell>
-                                                        <TableCell>{product.price}</TableCell>
-                                                    </TableRow>
-                                                </TableBody>)
-                                        })}
+                                        <TableBody>
+                                            <TableRow>
+                                                <TableCell colSpan={2} align="right" style={{ padding: 0 }}>
+                                                    Tất cả
+                                                </TableCell>
+                                                <TableCell style={{ padding: 0 }}>
+                                                    <Checkbox color="primary"
+                                                        checked={props.checkedAll ? props.checkedAll : false}
+                                                        onClick={props.onClickCheckAll}
+                                                    />
+                                                </TableCell>
+                                            </TableRow>
+                                        </TableBody>
+                                        {props.product.map((product, i) => (
+                                            <TableBodyCustom
+                                                key={product._id}
+                                                product={product}
+                                                id={i}
+                                                checked={props.checked[i]}
+                                                onClickCheckBoxItem={props.onClickCheckBoxItem}
+                                                onRemove={props.onRemove}
+                                                onClickCheckAll={props.onClickCheckAll}
+                                                checkedAll={props.checkAll}
+                                                onHandleClickOpen={props.onHandleClickOpen}
+                                                onOpenDialog={props.onOpenDialog}
+                                                onAddDialogContent={props.onAddDialogContent}
+                                                onAddProductId={props.onAddProductId}
+                                                onDeleteProduct={props.onDeleteProduct}
+                                                onSetIndex={props.onSetIndex}
+                                                onChangeQuantity={props.onChangeQuantity}
+                                            />))}
                                     </Table>
                                 </TableContainer>
-                            </Grid>
+                            </Grid>}
 
                             <ThemeProvider theme={theme}>
-                                <Grid container spacing={2} justifyContent="center" style={{ paddingTop: 30 }}>
+                                {cart.length === 0 ? (<Grid container spacing={2} justifyContent="center" style={{ paddingTop: 30 }}>
                                     <Grid item sm={6} xs={12}>
                                         <Button variant="contained" fullWidth>Tiếp tục mua</Button>
                                     </Grid>
-                                    <Grid item sm={6} xs={12}>
-                                        <Button variant="outlined" fullWidth className={classes.outlinedBtn} onClick={props.onHandleClickOpen}>Xem đơn hàng</Button>
-                                    </Grid>
-                                    <Grid item sm={6} xs={12}>
-                                        <Button variant="contained" fullWidth className={classes.checkoutBtn}>Thanh toán</Button>
-                                    </Grid>
-                                </Grid>
+                                </Grid>)
+                                    : (<Grid container spacing={2} justifyContent="center" style={{ paddingTop: 30 }}>
+                                        <Grid item sm={6} xs={12}>
+                                            <Button variant="contained" fullWidth>Tiếp tục mua</Button>
+                                        </Grid>
+                                        <Grid item sm={6} xs={12}>
+                                            <Button variant="outlined" fullWidth className={classes.outlinedBtn} onClick={props.onHandleClickOpen}>Xem đơn hàng</Button>
+                                        </Grid>
+                                        <Grid item sm={6} xs={12}>
+                                            <Button variant="contained" fullWidth className={classes.checkoutBtn}>Thanh toán</Button>
+                                        </Grid>
+                                    </Grid>)}
                             </ThemeProvider>
+
                         </Grid>
                     </Paper>
                 </Grid>

@@ -34,11 +34,11 @@ export default function Footer() {
               <Typography variant="body2">TusStore là website thương mại điện tử chuyên cung cấp các loại cây cảnh cảnh về xương rồng và sen đá, góp phần giúp mọi người tô điểm cho không gian cá nhân.</Typography>
             </Grid>
 
-            <Grid container item md={3} sm={6} xs={12}>
+            <Grid container item md={3} sm={6} xs={12} justifyContent="flex-start">
               <Grid item xs={12}>
                 <Typography variant="h6">Liên hệ</Typography>
               </Grid>
-              <address>
+       
                 <Grid item xs={12}>
                   <Typography variant="body2"><LocationOnIcon />&nbsp;Dương Minh Châu, Tây Ninh</Typography>
                 </Grid>
@@ -50,14 +50,14 @@ export default function Footer() {
                     <Typography variant="body2"><EmailIcon />&nbsp;thanhduc4320@gmail.com</Typography>
                   </a>
                 </Grid>
-              </address>
+              
 
             </Grid>
 
             <Grid container item md={3} sm={6} xs={12} alignItems="flex-start">
               <Grid item xs={12}>
                 <Typography variant="h6">Liên kết với chúng tôi</Typography>
-                <Grid container spacing={1}>
+                <Grid container spacing={1} justifyContent="flex-start">
                   <Grid item>
                     <a href="https://www.facebook.com" target="_blank" rel="noreferrer">
                       <FacebookIcon style={{ color: "#4267B2", }} />

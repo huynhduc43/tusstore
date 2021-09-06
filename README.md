@@ -72,3 +72,10 @@ npm start
 ```
 
 # VI. Resources
+- Icons, images: 
+    - [Freepik](https://www.freepik.com)
+    - [Kiranshastry](https://www.flaticon.com/authors/kiranshastry)
+    - [mashicons](https://smashicons.com/)
+    - [Flaticon](https://www.flaticon.com/)
+- Youtube:
+    - [React Shopping Cart Tutorial | Context API with useReducer Hook in React JS](https://www.youtube.com/watch?v=HptuMAUaNGk&t=2581s)

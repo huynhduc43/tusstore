@@ -13,7 +13,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
-import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import { Container, Grid } from "@material-ui/core";
 import { List } from "@material-ui/core";
 import useMediaQuery from '@material-ui/core/useMediaQuery';
@@ -22,7 +21,6 @@ import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import Grow from '@material-ui/core/Grow';
 import Paper from '@material-ui/core/Paper';
 import Popper from '@material-ui/core/Popper';
-import { Badge } from "@material-ui/core";
 import NotificationsIcon from '@material-ui/icons/Notifications';
 
 //My components
@@ -34,6 +32,8 @@ import NavItem from './NavItem';
 import InputBase from '@material-ui/core/InputBase';
 import SearchDialog from './SearchDialog';
 import AccountButton from './AccountButton';
+import CartButton from '../ShoppingCart/CartButton';
+
 
 const useStyles = makeStyles((theme) => ({
     icon: {
@@ -79,6 +79,7 @@ const useStyles = makeStyles((theme) => ({
     },
     appBar: {
         boxShadow: "0 0px 2px 0px #000",
+        zIndex: 1,
     },
     appBar1: {
         backgroundColor: "#000",
@@ -166,36 +167,35 @@ const useStyles = makeStyles((theme) => ({
 
 const NavBar = (props) => {
     const classes = useStyles();
-    const [open1, setOpen1] = React.useState(false);
-    const anchorRef1 = useRef(null);
+    const [menu, setMenu] = React.useState(false);
+    const anchorRefMenu = useRef(null);
     const [openSearchDialog, setOpenSearchDialog] = React.useState(false);
-
     const theme = useTheme();
     const isDownXS = useMediaQuery(theme.breakpoints.down("xs"));
     const isDownSM = useMediaQuery(theme.breakpoints.down("sm"));
     //console.log(isMedium);
 
     const handleToggle1 = () => {
-        setOpen1((prevOpen) => !prevOpen);
+        setMenu((prevOpen) => !prevOpen);
     };
 
     const handleClose1 = (event) => {
-        if (anchorRef1.current && anchorRef1.current.contains(event.target)) {
+        if (anchorRefMenu.current && anchorRefMenu.current.contains(event.target)) {
             return;
         }
 
-        setOpen1(false);
+        setMenu(false);
     };
 
     // return focus to the button when we transitioned from !open -> open
-    const prevOpen1 = React.useRef(open1);
+    const prevMenu = React.useRef(menu);
     React.useEffect(() => {
-        if (prevOpen1.current === true && open1 === false) {
-            anchorRef1.current.focus();
+        if (prevMenu.current === true && menu === false) {
+            anchorRefMenu.current.focus();
         }
 
-        prevOpen1.current = open1;
-    }, [open1]);
+        prevMenu.current = menu;
+    }, [menu]);
 
     const handleClickOpenSearchDialog = () => {
         setOpenSearchDialog(true);
@@ -234,7 +234,7 @@ const NavBar = (props) => {
                                     </Button> */}
 
                                     {/* Login */}
-                                    <AccountButton/>
+                                    <AccountButton />
                                 </Grid>
                             </Grid>
                         ) : (
@@ -257,7 +257,7 @@ const NavBar = (props) => {
                                         <NotificationsIcon className={classes.notificationIcon} />
                                     </IconButton>
                                     |
-                                    <AccountButton/>
+                                    <AccountButton />
                                 </div>
 
                             </>
@@ -288,15 +288,15 @@ const NavBar = (props) => {
 
                         {isDownXS ? (<>
                             <IconButton
-                                ref={anchorRef1}
-                                aria-controls={open1 ? 'menu-list-grow' : undefined}
+                                ref={anchorRefMenu}
+                                aria-controls={menu ? 'menu-list-grow' : undefined}
                                 aria-haspopup="true"
                                 onClick={handleToggle1}
                                 className={classes.circleBtn}
                             >
                                 <MenuIcon />
                             </IconButton>
-                            <Popper open={open1} anchorEl={anchorRef1.current} role={undefined} transition disablePortal>
+                            <Popper open={menu} anchorEl={anchorRefMenu.current} role={undefined} transition disablePortal>
                                 {({ TransitionProps, placement }) => (
                                     <Grow
                                         {...TransitionProps}
@@ -364,14 +364,8 @@ const NavBar = (props) => {
                             >
                                 <Favorite />
                             </IconButton>
-
-                            <IconButton color="inherit" className={classes.circleBtn}
-                                component={Links} to="/cart"
-                            >
-                                <Badge badgeContent={4} max={9} color="secondary">
-                                    <ShoppingCartIcon />
-                                </Badge>
-                            </IconButton>
+                    
+                            <CartButton/>
                         </div>
                     </Toolbar>
                 </Container>

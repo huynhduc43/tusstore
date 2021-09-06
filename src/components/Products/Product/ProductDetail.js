@@ -13,7 +13,7 @@ import {
     useLocation,
 } from "react-router-dom";
 
-//import axios from 'axios';
+import axios from 'axios';
 
 //My components
 import Constants from "../../Constants";
@@ -24,6 +24,7 @@ import FavoriteIcon from '@material-ui/icons/Favorite';
 import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
 import Comment from './Comment';
 import HotProductCarousel from '../../Homepage/HotProductCarousel';
+import { CartState } from "../../../context/Context";
 
 const useStyles = makeStyles((theme) => ({
     sticky: {
@@ -90,13 +91,14 @@ const useStyles = makeStyles((theme) => ({
 
 export default function ProductDetail(props) {
     const classes = useStyles();
+    const {
+        dispatch
+    } = CartState();
     const location = useLocation();
     const { enqueueSnackbar } = useSnackbar();
     const [product, setProduct] = useState({});
     const [quantity, setQuantity] = useState(1);
     const [isExistInWishlist, setIsExistInWishlist] = useState(false);
-
-    //const removeProduct
 
     const handleClickWishlistBtn = () => {
         if (isExistInWishlist) {
@@ -114,15 +116,18 @@ export default function ProductDetail(props) {
     };
 
     const handleClickAddToCartBtn = () => {
+        dispatch({
+            type: "ADD_TO_CART_WITH_QTY",
+            payload: {
+                product: product,
+                quantity: quantity,
+            },
+        });
+
         enqueueSnackbar('Đã thêm vào giỏ hàng!', {
             variant: 'success'
         });
     };
-
-    // const fetchData = async (url) => {
-    //     const res = await axios.get(url);
-    //     setProduct(res.data);
-    // }
 
     useEffect(() => {
         setProduct(props.product)
@@ -134,7 +139,6 @@ export default function ProductDetail(props) {
     }
 
     const handleClickDecreaseBtn = () => {
-
         setQuantity(prevState => {
             if (parseInt(prevState) !== 1) {
                 return parseInt(prevState) - 1;
@@ -150,6 +154,21 @@ export default function ProductDetail(props) {
         }
     }
 
+    useEffect(() => {
+        const fetchData = async () => {
+            let path = location.pathname.split('/');
+
+            if (path.length === 3 && path[1] === "products") {
+                console.log(location.pathname);
+                let res = await axios.get('http://localhost:3001' + location.pathname);
+                setProduct(res.data);
+                console.log(res.data);
+            }
+        }
+
+        fetchData();
+    }, [location.pathname]);
+
     return (
         <>
             <Grid container spacing={3}>
@@ -157,8 +176,8 @@ export default function ProductDetail(props) {
                     <Paper className={classes.paper}>
                         <BreadcrumbsCustom
                             path={location.pathname}
-                            breadCrumb={props.product.name}
-                            productUrl={props.product._id}
+                            breadCrumb={product.name}
+                            productUrl={product._id}
                         />
                     </Paper>
                 </Grid>
@@ -168,13 +187,13 @@ export default function ProductDetail(props) {
                         top: 0,
                         left: 0,
                     }}>
-                        <img src={props.product.primaryImg}
-                            alt={props.product.name}
-                            className={props.product.quantity === 0 ? classes.opacity : classes.image}
+                        <img src={product.primaryImg}
+                            alt={product.name}
+                            className={product.quantity === 0 ? classes.opacity : classes.image}
                         />
-                        {props.product.quantity === 0 &&
+                        {product.quantity === 0 &&
                             <img src="/out-of-stock.png"
-                                alt={props.product.name}
+                                alt={product.name}
                                 className={classes.sold}
                             />
                         }
@@ -190,10 +209,10 @@ export default function ProductDetail(props) {
                             <Grid item>
                                 <Grid container spacing={3} alignItems="center" justifyContent="center">
                                     <Grid item>
-                                        <Rating name="read-only" value={props.product.rating ? props.product.rating : 0} readOnly />
+                                        <Rating name="read-only" value={product.rating ? product.rating : 0} readOnly />
                                     </Grid>
                                     <Grid item>
-                                        <Typography variant="subtitle2">Đã bán {props.product.sold}</Typography>
+                                        <Typography variant="subtitle2">Đã bán {product.sold}</Typography>
                                     </Grid>
                                 </Grid>
                             </Grid>
@@ -217,7 +236,7 @@ export default function ProductDetail(props) {
                         ><AddCircleIcon /></IconButton>
                         <Grid container spacing={3}>
                             <Grid item>
-                                {props.product.quantity === 0 ?
+                                {product.quantity === 0 ?
                                     <Button
                                         variant="contained"
                                         startIcon={<AddShoppingCartIcon />}

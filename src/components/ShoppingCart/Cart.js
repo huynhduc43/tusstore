@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { Container, Grid, Paper } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core";
@@ -23,6 +23,7 @@ import Constants from "../Constants";
 import AlertDialog from "./AlertDialog";
 import CurrentOrder from './CurrentOrder';
 import TableResponsive from "./TableResponsive";
+import { CartState } from "../../context/Context";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -43,50 +44,40 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-function createData(id, url, name, quantity, price) {
-    return { id, url, name, quantity, price };
-}
-
-const rows = [
-    createData("0", "https://d19m59y37dris4.cloudfront.net/obaju/2-1-1/img/product1_2.jpg", 'Frozen yoghurt Frozen yoghurt Frozen yoghurt', 1, 6.0),
-    createData("1", "https://d19m59y37dris4.cloudfront.net/obaju/2-1-1/img/product1_2.jpg", 'Ice cream sandwich', 2, 9.0),
-    createData("2", "https://d19m59y37dris4.cloudfront.net/obaju/2-1-1/img/product1_2.jpg", 'Eclair', 2, 16.0),
-    createData("3", "https://d19m59y37dris4.cloudfront.net/obaju/2-1-1/img/product1_2.jpg", 'Cupcake', 3, 37),
-    createData("4", "https://d19m59y37dris4.cloudfront.net/obaju/2-1-1/img/product1_2.jpg", 'Gingerbread', 3, 16.0),
-];
-
-
 export default function ListOfProducts(props) {
     const classes = useStyles();
-    let checkStatusState = Array(rows.length).fill(false);
+    const {
+        state: { cart },
+        dispatch
+    } = CartState();
+    let checkStatusState = Array(cart.length).fill(false);
     let quantityState = [];
 
-    rows.forEach(element => {
-        quantityState.push(element.quantity);
+    cart.forEach(element => {
+        quantityState.push(element.qty);
     });
 
     const [checkStatus, setCheckStatus] = useState(checkStatusState);
+    const [count, setCount] = useState(0);
     const [checkAll, setCheckAll] = useState(false);
     const [quantity, setQuantity] = useState(quantityState);
     const [open, setOpen] = useState(false);
     const [removeProduct, setRemoveProduct] = useState(false);
+    const [index, setIndex] = useState(-1);//Vi tri phan tu can xoa trong checkStatus
+    const [productId, setProductId] = useState('');
     const [dialogContent, setDialogContent] = useState('');
     const [openCurrentOrder, setOpenCurrentOrder] = React.useState(false);
     const theme = useTheme();
     const isDownSM = useMediaQuery(theme.breakpoints.down("sm"));
     const isDownXS = useMediaQuery(theme.breakpoints.down("xs"));
 
-    if (removeProduct) {
-        console.log("da xoa san pham");
-    }
-
     const hanleClickCheckBoxItem = (e) => {
-        setCheckStatus({ ...checkStatus, [e.target.name]: e.target.checked });
+        setCheckStatus([...checkStatus.slice(0, parseInt(e.target.name)), e.target.checked, ...checkStatus.slice(parseInt(e.target.name) + 1)]);
     }
 
     const handleClickCheckAll = (e) => {
         if (e.target.checked) {
-            setCheckStatus(Array(rows.length).fill(true));
+            setCheckStatus(Array(cart.length).fill(true));
         } else {
             setCheckStatus(checkStatusState);
         }
@@ -101,6 +92,42 @@ export default function ListOfProducts(props) {
         setOpenCurrentOrder(false);
     };
 
+    const handleDeleteProduct = (content, productId, index) => {
+        setProductId(productId);
+        setDialogContent(content);
+        setIndex(index);
+        setOpen(true);
+    }
+
+    useEffect(() => {
+        if (removeProduct) {
+            dispatch({
+                type: "REMOVE_PRODUCT",
+                payload: { _id: productId }
+            });
+
+            if (index !== -1) {
+                let tmp = [...checkStatus];
+                tmp.splice(index, 1);
+                setCheckStatus(tmp);
+                setIndex(-1);
+            }
+
+            setRemoveProduct(false);
+        }
+    }, [removeProduct, productId, dispatch, checkStatus, index]);
+
+    useEffect(() => {
+        setCount(Object.values(checkStatus).filter(element => element).length);
+    }, [checkStatus, removeProduct]);
+
+    useEffect(() => {
+        //console.log("cart.length - count: " + cart.length + " - " + count);
+        if (count === cart.length && cart.length !== 0) {
+            setCheckAll(true);
+        } else setCheckAll(false);
+    }, [cart.length, count]);
+
     return (
         <>
             <AlertDialog
@@ -108,6 +135,8 @@ export default function ListOfProducts(props) {
                 setDialogStatus={setOpen}
                 setRemove={setRemoveProduct}
                 content={dialogContent}
+                checkAll={checkAll}
+                onHandleCheckAll={setCheckAll}
             />
             <Dialog
                 open={openCurrentOrder}
@@ -116,7 +145,7 @@ export default function ListOfProducts(props) {
                 aria-describedby="current-order-description"
             >
                 <DialogContent>
-                    <CurrentOrder />
+                    <CurrentOrder cart={cart} checkStatus={checkStatus} count={count} />
                     <br />
                 </DialogContent>
                 <DialogActions>
@@ -139,52 +168,57 @@ export default function ListOfProducts(props) {
                         </Grid>
 
                         {!isDownXS ? (
-                            <Grid item xs={isDownSM ? 12 : 9} >
-                                <Grid container spacing={3}>
-                                    <Grid item xs={12}>
-                                        <Paper className={classes.paper}>
-                                            <Grid container spacing={3}>
-                                                <Grid item xs={12}><Typography variant="h4">Giỏ hàng của bạn</Typography></Grid>
+                            <Grid item xs={(isDownSM || cart.length === 0) ? 12 : 9} >
+                                <Paper className={classes.paper}>
+                                    <Grid container spacing={3} justifyContent="center">
+                                        {cart.length === 0 ? (<>
+                                            <Grid item xs={12}><Typography variant="h4">Giỏ hàng của bạn trống!</Typography></Grid>
+                                            <Grid item>
+                                                <img src="/empty-cart.png" alt="empty-cart.png" width="50%" />
+                                            </Grid>
+                                            <Grid item xs={12}>
+                                                <Button variant="contained">Mua hàng ngay</Button>
+                                            </Grid></>)
+                                            : (<><Grid item xs={12}><Typography variant="h4">Giỏ hàng của bạn</Typography></Grid>
                                                 <Grid item xs={12}>
                                                     <TableContainer>
                                                         <Table className={classes.table} aria-label="simple table">
                                                             <TableHead>
                                                                 <TableRow>
-                                                                    <TableCell align="left" padding="none">
-                                                                        <Checkbox
+                                                                    <TableCell align="left" padding="none" colSpan={2}>
+                                                                        <Checkbox color="primary"
                                                                             onClick={handleClickCheckAll}
                                                                             checked={checkAll}
                                                                         />Tất cả
                                                                     </TableCell>
-                                                                    <TableCell>Sản phẩm</TableCell>
                                                                     <TableCell align="right"></TableCell>
-                                                                    <TableCell align="right"></TableCell>
-                                                                    <TableCell align="center" padding="none">Số lượng</TableCell>
-                                                                    <TableCell align="right"></TableCell>
+                                                                    <TableCell align="center" colSpan={3}>Số lượng</TableCell>
                                                                     <TableCell align="right" style={{ paddingLeft: 50, paddingRight: 0, }}>Giá</TableCell>
                                                                     <TableCell align="center"></TableCell>
                                                                 </TableRow>
                                                             </TableHead>
                                                             <TableBody>
-                                                                {rows.map((row, i) => (
+                                                                {cart.map((row, i) => (
                                                                     <TableRowCustom
-                                                                        key={row.id}
-                                                                        row={row}
+                                                                        key={row._id}
+                                                                        id={i}
+                                                                        product={row}
                                                                         onClickCheckBoxItem={hanleClickCheckBoxItem}
                                                                         checked={checkStatus[i]}
                                                                         quantity={quantity[i]}
                                                                         onChange={setQuantity}
                                                                         onOpenDialog={setOpen}
                                                                         onRemove={removeProduct}
-                                                                        //setRemove={setRemoveProduct}
                                                                         onAddDialogContent={setDialogContent}
+                                                                        onAddProductId={setProductId}
+                                                                        onDeleteProduct={handleDeleteProduct}
+                                                                        onSetIndex={setIndex}
                                                                     />
                                                                 ))}
                                                             </TableBody>
                                                         </Table>
                                                     </TableContainer>
                                                 </Grid>
-
                                                 <Grid item xs={12} container alignItems="center" justifyContent="space-between">
                                                     <Grid container item xs={5}>
                                                         <Button variant="contained">Tiếp tục mua</Button>
@@ -204,16 +238,15 @@ export default function ListOfProducts(props) {
                                                             </Grid>
                                                         )
                                                     }
-                                                </Grid>
-                                            </Grid>
-                                        </Paper>
+                                                </Grid></>
+                                            )}
                                     </Grid>
-                                </Grid>
+                                </Paper>
                             </Grid>
 
                         )
                             : <TableResponsive
-                                data={rows}
+                                product={cart}
                                 onChangeQuantity={setQuantity}
                                 onClickCheckBoxItem={hanleClickCheckBoxItem}
                                 checked={checkStatus}
@@ -222,12 +255,17 @@ export default function ListOfProducts(props) {
                                 checkedAll={checkAll}
                                 onHandleClickOpen={handleClickOpen}
                                 onhandleClose={handleClose}
+                                onOpenDialog={setOpen}
+                                onAddDialogContent={setDialogContent}
+                                onAddProductId={setProductId}
+                                onDeleteProduct={handleDeleteProduct}
+                                onSetIndex={setIndex}
                             />}
-                        {!isDownSM &&
+                        {(!isDownSM && cart.length > 0) &&
                             <Grid container item xs={3}>
                                 <Grid item xs={12} >
                                     <Paper className={[classes.paper, classes.sticky].join(" ")}>
-                                        <CurrentOrder />
+                                        <CurrentOrder cart={cart} checkStatus={checkStatus} count={count} />
                                     </Paper>
                                 </Grid>
                             </Grid>

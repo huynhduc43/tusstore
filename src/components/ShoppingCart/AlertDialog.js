@@ -25,7 +25,7 @@ export default function AlertDialog(props) {
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogTitle id="alert-dialog-title">{"Bạm chắc chắn muốn bỏ sản phẩm này?"}</DialogTitle>
+        <DialogTitle id="alert-dialog-title">{"Bạn chắc chắn muốn bỏ sản phẩm này?"}</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
             {props.content}

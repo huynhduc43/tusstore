@@ -94,7 +94,6 @@ export default function ListOfProducts(props) {
 
       setProducts(response.data.productList);
       setPagination(response.data.paginationInfo);
-
     }
 
     const fetchProductDetail = async () => {
@@ -106,7 +105,11 @@ export default function ListOfProducts(props) {
       fetchData();
       window.scroll(0, 0);
     } else {
-      fetchProductDetail();
+      let path = location.pathname.split('/');
+
+      if (path.length !== 3) {// /products/:id
+        fetchProductDetail();
+      }
     }
 
     //console.log(filter);
@@ -246,6 +249,7 @@ export default function ListOfProducts(props) {
                                 primaryImg={product.primaryImg}
                                 view={product.view}
                                 rating={product.rating || 0}
+                                quantity={product.quantity}
                               />
                             ))
                           }
