@@ -5,6 +5,7 @@ import React from 'react';
 import {
   Route,
   Switch,
+  useLocation,
 } from "react-router-dom";
 
 import { SnackbarProvider } from 'notistack';
@@ -19,41 +20,50 @@ import ListOfProducts from './components/Products/ListOfProducts';
 import Cart from './components/ShoppingCart/Cart';
 import Account from './components/Account/Account';
 import Constants from './components/Constants';
+import PrivateRoute from './components/PrivateRoute';
+import { ProvideAuth } from './context/AuthContext';
 
 const Main = () => {
 
   return (
     <div style={{
-      minHeight: 'calc(100vh - 306px)',
-      backgroundColor: Constants.GRAY,
-      paddingTop: 48,
-      paddingBottom: 48,
+      paddingTop: 24,
+      paddingBottom: 24,
     }}>
       <Switch>
         <Route exact path="/" component={Homepage}></Route>
-        <Route path='/products' component={ListOfProducts}/>
+        <Route path='/products' component={ListOfProducts} />
         <Route path="/cart" component={Cart} />
-        <Route path='/account' component={Account} />
         <Route path="/sign-up">
           <SignUp />
         </Route>
         <Route path="/sign-in">
           <SignIn />
         </Route>
+        <PrivateRoute path="/account">
+          <Account />
+        </PrivateRoute>
+        <PrivateRoute path="/checkout">
+          <Account />
+        </PrivateRoute>
       </Switch>
     </div>)
 }
 
-class App extends React.Component {
-  render() {
-    return (
-      <SnackbarProvider maxSnack={3}>
-        <Header />
-        <Main />
-        <Footer />
-      </SnackbarProvider>
-    );
-  }
-}
+export default function App() {
+  const location = useLocation();
 
-export default App;
+  return (
+    <SnackbarProvider maxSnack={3}>
+      <ProvideAuth>
+        {(location.pathname !== "/sign-in" && location.pathname !== "/sign-up") ? (<>
+          <Header />
+          <div style={{ backgroundColor: Constants.GRAY, }}><Main /></div>
+          <Footer /></>
+        ) : (
+          <Main />
+        )}
+      </ProvideAuth>
+    </SnackbarProvider>
+  );
+}

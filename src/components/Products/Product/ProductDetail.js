@@ -150,7 +150,7 @@ export default function ProductDetail(props) {
         if (e.target.value === '' || isNaN(e.target.value)) {
             setQuantity(1);
         } else {
-            setQuantity(parseInt(e.target.value));
+            setQuantity(parseInt(e.target.value) <= 0 ? 1 : parseInt(e.target.value));
         }
     }
 
@@ -159,10 +159,8 @@ export default function ProductDetail(props) {
             let path = location.pathname.split('/');
 
             if (path.length === 3 && path[1] === "products") {
-                console.log(location.pathname);
                 let res = await axios.get('http://localhost:3001' + location.pathname);
                 setProduct(res.data);
-                console.log(res.data);
             }
         }
 

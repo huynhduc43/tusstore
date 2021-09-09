@@ -132,7 +132,7 @@ export default function NewestProductCarousel() {
                                                         variant="h6"
                                                         className={classes.name}
                                                         component={Link}
-                                                        to={product.path}
+                                                        to={`/products/${product._id}`}
                                                     >
                                                         <b>{product.name}</b>
                                                     </Typography>
@@ -151,7 +151,7 @@ export default function NewestProductCarousel() {
                                                         variant="h6"
                                                         className={classes.name}
                                                         component={Link}
-                                                        to={product.path}
+                                                        to={`/products/${product._id}`}
                                                     >
                                                         <b>{product.name}</b>
                                                     </Typography>
@@ -181,7 +181,7 @@ export default function NewestProductCarousel() {
                                                     variant="h5"
                                                     className={classes.name}
                                                     component={Link}
-                                                    to={product.path}
+                                                    to={`/products/${product._id}`}
                                                 >
                                                     <b>{product.name}</b>
                                                 </Typography>

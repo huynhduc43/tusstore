@@ -113,18 +113,17 @@ export default function MouseOverPopover() {
                             <Typography noWrap >&nbsp;{product.name}&nbsp;&nbsp;</Typography>
                             <Typography variant="h6" color="secondary">{product.price}₫</Typography>
                         </ListItem>
-                    )) )}
+                    )))}
                 </List>
-                {cart.length !== 0 &&
-                    <Grid container justifyContent="flex-end">
-                        <Grid item>
-                            <Button className={classes.viewCart}
-                                component={Link}
-                                to="/cart"
-                            >Xem giỏ hàng</Button>
-                        </Grid>
+                <Grid container justifyContent="flex-end">
+                    <Grid item>
+                        <Button className={classes.viewCart}
+                            component={Link}
+                            to="/cart"
+                        >Xem giỏ hàng</Button>
                     </Grid>
-                }
+                </Grid>
+
             </Paper>
         </Popper>
     </>);

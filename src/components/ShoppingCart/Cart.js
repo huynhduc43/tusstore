@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 
+import {Link} from 'react-router-dom';
+
 import { Container, Grid, Paper } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core";
 import { Typography } from "@material-ui/core";
@@ -16,6 +18,8 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 
+import { useSnackbar } from 'notistack';
+
 //My components
 import BreadcrumbsCustom from '../BreadcrumbsCustom';
 import TableRowCustom from "./TableRowCustom";
@@ -24,6 +28,7 @@ import AlertDialog from "./AlertDialog";
 import CurrentOrder from './CurrentOrder';
 import TableResponsive from "./TableResponsive";
 import { CartState } from "../../context/Context";
+import useAuth from "../../context/AuthContext";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -70,6 +75,8 @@ export default function ListOfProducts(props) {
     const theme = useTheme();
     const isDownSM = useMediaQuery(theme.breakpoints.down("sm"));
     const isDownXS = useMediaQuery(theme.breakpoints.down("xs"));
+    const { enqueueSnackbar } = useSnackbar();
+    const auth = useAuth();
 
     const hanleClickCheckBoxItem = (e) => {
         setCheckStatus([...checkStatus.slice(0, parseInt(e.target.name)), e.target.checked, ...checkStatus.slice(parseInt(e.target.name) + 1)]);
@@ -97,6 +104,16 @@ export default function ListOfProducts(props) {
         setDialogContent(content);
         setIndex(index);
         setOpen(true);
+    }
+
+    const handleClickCheckout = () => {
+        setOpenCurrentOrder(false);
+
+        if (!auth.user) {
+            enqueueSnackbar('Bạn cần đăng nhập để tiếp tục', {
+                variant: 'warning'
+            });
+        } 
     }
 
     useEffect(() => {
@@ -152,7 +169,13 @@ export default function ListOfProducts(props) {
                     <Button onClick={handleClose} variant="outlined" color="secondary">
                         Đóng
                     </Button>
-                    <Button onClick={handleClose} className={classes.checkoutBtn} autoFocus>
+                    <Button
+                    className={classes.checkoutBtn} 
+                    autoFocus
+                    component={Link}
+                    to="/checkout"
+                    onClick={handleClickCheckout}
+                    >
                         Thanh toán
                     </Button>
                 </DialogActions>
@@ -229,12 +252,28 @@ export default function ListOfProducts(props) {
                                                                 <Button variant="outlined" className={classes.outlinedBtn} onClick={handleClickOpen}>Xem đơn hàng</Button>
                                                             </Grid>
                                                             <Grid item>
-                                                                <Button variant="contained" className={classes.checkoutBtn}>Thanh toán</Button>
+                                                                <Button 
+                                                                variant="contained" 
+                                                                className={classes.checkoutBtn}
+                                                                component={Link}
+                                                                to="/checkout"
+                                                                onClick={handleClickCheckout}
+                                                                >
+                                                                    Thanh toán
+                                                                </Button>
                                                             </Grid>
                                                         </Grid>)
                                                         : (
                                                             <Grid item>
-                                                                <Button variant="contained" className={classes.checkoutBtn}>Thanh toán</Button>
+                                                                <Button 
+                                                                variant="contained" 
+                                                                className={classes.checkoutBtn}
+                                                                component={Link}
+                                                                to="/checkout"
+                                                                onClick={handleClickCheckout}
+                                                                >
+                                                                    Thanh toán
+                                                                </Button>
                                                             </Grid>
                                                         )
                                                     }
@@ -260,6 +299,7 @@ export default function ListOfProducts(props) {
                                 onAddProductId={setProductId}
                                 onDeleteProduct={handleDeleteProduct}
                                 onSetIndex={setIndex}
+                                onClickCheckout={handleClickCheckout}
                             />}
                         {(!isDownSM && cart.length > 0) &&
                             <Grid container item xs={3}>

@@ -85,7 +85,6 @@ export default function HotProductCarousel() {
                                                 name={product.name}
                                                 price={product.price}
                                                 primaryImg={product.primaryImg}
-                                                path={product.path}
                                             />
                                         </Paper>
 

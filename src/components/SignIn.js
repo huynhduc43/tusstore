@@ -1,22 +1,27 @@
 import {
-    Link as Links,
-    useHistory
-  } from "react-router-dom";
+  Link,
+  useHistory,
+  useLocation,
+} from "react-router-dom";
+
 import axios from 'axios';
+
 import React, { useState } from 'react';
+
+import { useSnackbar } from 'notistack';
+
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
-import Link from '@material-ui/core/Link';
+//import FormControlLabel from '@material-ui/core/FormControlLabel';
+//import Checkbox from '@material-ui/core/Checkbox';
 import Grid from '@material-ui/core/Grid';
-import Box from '@material-ui/core/Box';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+import Constants from "./Constants";
+import useAuth from "../context/AuthContext";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -27,14 +32,19 @@ const useStyles = makeStyles((theme) => ({
   },
   avatar: {
     margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main,
+    backgroundColor: "#fff",
+    border: `4px solid ${Constants.GREEN}`,
   },
   form: {
     width: '100%', // Fix IE 11 issue.
     marginTop: theme.spacing(1),
   },
   submit: {
+    ...Constants.BUTTON_CONTAINED,
     margin: theme.spacing(3, 0, 2),
+  },
+  link: {
+    textDecoration: "none",
   },
 }));
 
@@ -44,6 +54,11 @@ export default function SignIn() {
   const [password, setPassword] = useState("");
   const [errMsg, setErrMsg] = useState("");
   let history = useHistory();
+  let location = useLocation();
+  const { enqueueSnackbar } = useSnackbar();
+  const auth = useAuth();
+
+  let { from } = location.state || { from: { pathname: "/" } };
 
   const handleChangeEmail = (e) => {
     setEmail(e.target.value);
@@ -61,16 +76,21 @@ export default function SignIn() {
         password: password,
         email: email,
       });
-      console.log(response.data);
 
-      if (response.data.isLogged){
-        history.push(response.data.url, {
-          data: response.data
+      if (response.data.isLogged) {
+        auth.signin({
+          email: response.data.email,
+          avatar: response.data.avatar,
+        });
+        history.replace(from);
+
+        enqueueSnackbar('Đã đăng nhập thành công!', {
+          variant: 'success'
         });
       } else {
         setErrMsg(response.data.errMsg);
       }
-      
+
     } catch (error) {
       console.error(error);
     }
@@ -78,75 +98,71 @@ export default function SignIn() {
 
   return (
     <>
-    <Container component="main" maxWidth="xs">
-      <CssBaseline />
-      <div className={classes.paper}>
-        <Avatar className={classes.avatar}>
-          <LockOutlinedIcon />
-        </Avatar>
-        <Typography component="h1" variant="h5">
-          Sign in
-        </Typography>
-        <Typography component="h6" variant="h6">
-          {errMsg}
-        </Typography>
-        <form className={classes.form} onSubmit={handleSubmit}>
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            id="email"
-            label="Email Address"
-            name="email"
-            autoComplete="email"
-            autoFocus
-            // value={location.state != undefined ? location.state.data.email : ""}
-            onChange={handleChangeEmail}
-          />
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            name="password"
-            label="Password"
-            type="password"
-            id="password"
-            autoComplete="current-password"
-            onChange={handleChangePassword}
-          />
-          <FormControlLabel
-            control={<Checkbox value="remember" color="primary" />}
-            label="Remember me"
-          />
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            className={classes.submit}
-          >
-            Sign In
-          </Button>
-          <Grid container>
-            <Grid item xs>
-              <Link href="#" variant="body2">
-                Forgot password?
-              </Link>
+      <Container component="main" maxWidth="xs" style={{ height: "100%" }}>
+        <CssBaseline />
+        <div className={classes.paper}>
+          <Avatar className={classes.avatar}>
+            <img src="/logoTD.svg" width="40%" alt="logo" />
+          </Avatar>
+          <Typography component="h1" variant="h5">
+            Đăng nhập
+          </Typography>
+          <form className={classes.form} onSubmit={handleSubmit}>
+            <TextField
+              variant="filled"
+              margin="normal"
+              required
+              fullWidth
+              id="email"
+              label="Địa chỉ email"
+              name="email"
+              autoComplete="email"
+              autoFocus
+              // value={location.state != undefined ? location.state.data.email : ""}
+              onChange={handleChangeEmail}
+            />
+            <TextField
+              variant="filled"
+              margin="normal"
+              required
+              fullWidth
+              name="password"
+              label="Mật khẩu"
+              type="password"
+              id="password"
+              autoComplete="password"
+              onChange={handleChangePassword}
+              helperText={errMsg}
+              error={errMsg === '' ? false : true}
+            />
+            {/* <FormControlLabel
+              control={<Checkbox value="remember" color="primary" />}
+              label="Remember me"
+            /> */}
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              color="primary"
+              className={classes.submit}
+            >
+              Đăng nhập
+            </Button>
+            <Grid container>
+              <Grid item xs >
+                <Link to="/" variant="body2" className={classes.link}>
+                  Quên mật khẩu?
+                </Link>
+              </Grid>
+              <Grid item>
+                <Link to="/sign-up" variant="body2" className={classes.link}>
+                  {"Chưa có tài khoản? Đăng ký"}
+                </Link>
+              </Grid>
             </Grid>
-            <Grid item>
-              <Link href="#" variant="body2">
-                {"Don't have an account? Sign Up"}
-              </Link>
-            </Grid>
-          </Grid>
-        </form>
-        <Links to="/">Homepage</Links>
-      </div>
-      <Box mt={8}>
-      </Box>
-    </Container>
+          </form>
+        </div>
+      </Container>
     </>
   );
 }

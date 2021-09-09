@@ -23,6 +23,8 @@ import Paper from '@material-ui/core/Paper';
 import Popper from '@material-ui/core/Popper';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 
+import { useSnackbar } from 'notistack';
+
 //My components
 import Constants from "../Constants";
 import { auto } from "async";
@@ -33,6 +35,7 @@ import InputBase from '@material-ui/core/InputBase';
 import SearchDialog from './SearchDialog';
 import AccountButton from './AccountButton';
 import CartButton from '../ShoppingCart/CartButton';
+import useAuth from '../../context/AuthContext';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -101,6 +104,7 @@ const useStyles = makeStyles((theme) => ({
     button: {
         '&:hover': {
             backgroundColor: Constants.GREEN,
+            color: "#fff",
         }
     },
     navItemBtn: {
@@ -173,6 +177,8 @@ const NavBar = (props) => {
     const theme = useTheme();
     const isDownXS = useMediaQuery(theme.breakpoints.down("xs"));
     const isDownSM = useMediaQuery(theme.breakpoints.down("sm"));
+    const { enqueueSnackbar } = useSnackbar();
+    const auth = useAuth();
     //console.log(isMedium);
 
     const handleToggle1 = () => {
@@ -201,6 +207,14 @@ const NavBar = (props) => {
         setOpenSearchDialog(true);
     }
 
+    const handleDisplayNotification = () => {
+        if (!auth.user) {
+            enqueueSnackbar('Bạn cần đăng nhập để tiếp tục', {
+                variant: 'warning'
+            });
+        } 
+    }
+
     return (
         <>
             <SearchDialog status={openSearchDialog} onClickOpenSearch={setOpenSearchDialog} />
@@ -226,15 +240,16 @@ const NavBar = (props) => {
                                     }}
                                     justifyContent="center"
                                 >
-                                    {/* <Button component={Links} to="/sign-in" className={classes.button} color="inherit">
-                                        Đăng nhập
-                                    </Button>
-                                    <Button component={Links} to="/sign-up" className={classes.button} color="inherit">
-                                        Đăng ký
-                                    </Button> */}
-
-                                    {/* Login */}
-                                    <AccountButton />
+                                    {auth.user ? (
+                                        <AccountButton email={auth.user.email} />
+                                    ) : (<>
+                                        <Button component={Links} to="/sign-in" className={classes.button} color="inherit">
+                                            Đăng nhập
+                                        </Button>
+                                        <Button component={Links} to="/sign-up" className={classes.button} color="inherit">
+                                            Đăng ký
+                                        </Button>
+                                    </>)}
                                 </Grid>
                             </Grid>
                         ) : (
@@ -245,19 +260,20 @@ const NavBar = (props) => {
                                     Get flat 35% off on orders over $50!
                                 </Button>
                                 <div className={classes.toolbarButtons}>
-                                    {/* <Button component={Links} to="/sign-in" className={classes.button} color="inherit">
-                                        Đăng nhập
-                                    </Button>
-                                    <Button component={Links} to="/sign-up" className={classes.button} color="inherit">
-                                        Đăng ký
-                                    </Button> */}
-
-                                    {/* Login */}
-                                    <IconButton>
-                                        <NotificationsIcon className={classes.notificationIcon} />
-                                    </IconButton>
-                                    |
-                                    <AccountButton />
+                                    {auth.user ? (<>
+                                        <IconButton>
+                                            <NotificationsIcon className={classes.notificationIcon} />
+                                        </IconButton>
+                                        |
+                                        <AccountButton email={auth.user.email} />
+                                    </>) : (<>
+                                        <Button component={Links} to="/sign-in" className={classes.button} color="inherit">
+                                            Đăng nhập
+                                        </Button>
+                                        <Button component={Links} to="/sign-up" className={classes.button} color="inherit">
+                                            Đăng ký
+                                        </Button>
+                                    </>)}
                                 </div>
 
                             </>
@@ -361,11 +377,13 @@ const NavBar = (props) => {
                             }
                             <IconButton color="inherit" className={classes.circleBtn}
                                 component={Links} to='/account/wishlist'
+                                onClick={handleDisplayNotification}
+
                             >
                                 <Favorite />
                             </IconButton>
-                    
-                            <CartButton/>
+
+                            <CartButton />
                         </div>
                     </Toolbar>
                 </Container>

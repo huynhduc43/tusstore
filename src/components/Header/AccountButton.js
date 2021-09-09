@@ -1,17 +1,19 @@
 import React from 'react';
 
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useHistory } from 'react-router-dom';
 
 import Popover from '@material-ui/core/Popover';
 import { makeStyles } from '@material-ui/core/styles';
-import { Button, Paper } from '@material-ui/core';
-import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import { Button, Paper, Typography } from '@material-ui/core';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 
+import { useSnackbar } from 'notistack';
+
 //My components
 import Constants from '../Constants';
+import useAuth from '../../context/AuthContext';
 
 const useStyles = makeStyles((theme) => ({
     popover: {
@@ -22,6 +24,7 @@ const useStyles = makeStyles((theme) => ({
     },
     accountBtn: {
         margin: theme.spacing(1),
+        maxWidth: 200,
         color: "#fff",
         '&:hover': {
             backgroundColor: "#ABB2B9",
@@ -39,9 +42,13 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-export default function MouseOverPopover() {
+export default function MouseOverPopover(props) {
     const classes = useStyles();
     const [anchorEl, setAnchorEl] = React.useState(null);
+    const { enqueueSnackbar } = useSnackbar();
+    let location = useLocation();
+    let history = useHistory();
+    const auth = useAuth();
 
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
@@ -51,6 +58,22 @@ export default function MouseOverPopover() {
         setAnchorEl(null);
     };
 
+    const handleSignOut = () => {
+        handleClose();
+        const path = location.pathname.split("/");
+
+        if (path.length >= 2) {
+            if (path[1] === "account") history.replace("");
+            if (path[1] === "checkout") history.replace("/cart");
+        }
+
+        auth.signout();
+        
+        enqueueSnackbar('Đã đăng xuất tài khoản!', {
+            variant: 'error'
+        });
+    }
+
     const open = Boolean(anchorEl);
     const id = open ? 'account-popover' : undefined;
 
@@ -58,10 +81,9 @@ export default function MouseOverPopover() {
         <div>
             <Button
                 className={classes.accountBtn}
-                endIcon={<AccountCircleIcon />}
                 onClick={handleClick}
             >
-                my_account
+                <Typography noWrap>{props.email + props.email}</Typography>
             </Button>
             <Popover
                 id={id}
@@ -98,8 +120,7 @@ export default function MouseOverPopover() {
                         </ListItem>
                         <ListItem
                             button
-                            component={Link} to="/sign-in"
-                            onClick={handleClose}
+                            onClick={handleSignOut}
                             className={classes.listItem}
                         >
                             <ListItemText primary="Đăng xuất" />

@@ -237,10 +237,25 @@ export default function TableResponsive(props) {
                                             <Button variant="contained" fullWidth>Tiếp tục mua</Button>
                                         </Grid>
                                         <Grid item sm={6} xs={12}>
-                                            <Button variant="outlined" fullWidth className={classes.outlinedBtn} onClick={props.onHandleClickOpen}>Xem đơn hàng</Button>
+                                            <Button
+                                                variant="outlined"
+                                                fullWidth
+                                                className={classes.outlinedBtn}
+                                                onClick={props.onHandleClickOpen}
+                                            >
+                                                Xem đơn hàng
+                                            </Button>
                                         </Grid>
                                         <Grid item sm={6} xs={12}>
-                                            <Button variant="contained" fullWidth className={classes.checkoutBtn}>Thanh toán</Button>
+                                            <Button
+                                                variant="contained"
+                                                fullWidth className={classes.checkoutBtn}
+                                                component={Link}
+                                                to="/checkout"
+                                                onClick={props.onClickCheckout}
+                                            >
+                                                Thanh toán
+                                            </Button>
                                         </Grid>
                                     </Grid>)}
                             </ThemeProvider>

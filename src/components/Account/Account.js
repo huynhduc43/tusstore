@@ -20,6 +20,7 @@ import ChangePassword from './ChangePassword';
 import Notifications from './Notifications';
 import Profile from './Profile';
 import Wishlist from './Wishlist';
+import useAuth from '../../context/AuthContext';
 
 const useStyles = makeStyles((theme) => ({
     list: {
@@ -57,6 +58,7 @@ export default function Account() {
     const classes = useStyles();
     const [open, setOpen] = useState(true);
     let location = useLocation();
+    const auth = useAuth();
 
     const handleClick = () => {
         setOpen(!open);
@@ -81,13 +83,18 @@ export default function Account() {
                         <Grid container justifyContent="center" alignItems="center"
                             style={{
                                 backgroundColor: "#f5f5f5",
+                                padding: 8,
                             }}
                         >
                             <Grid item>
-                                <Avatar alt="avatar" src="https://picsum.photos/200" className={classes.avatar} />
+                                <Avatar 
+                                alt="avatar"
+                                 src={auth.user.avatar ? auth.user.avatar 
+                                    : "https://res.cloudinary.com/dnbjep0mp/image/upload/v1631088180/user_hkinox.svg"}
+                                 className={classes.avatar} />
                             </Grid>
-                            <Grid item>
-                                <Typography>Người dùng</Typography>
+                            <Grid item style={{overflow: "hidden", textOverflow: "ellipsis"}}>
+                                <Typography noWrap>{auth.user.email}</Typography>
                             </Grid>
                         </Grid>
 

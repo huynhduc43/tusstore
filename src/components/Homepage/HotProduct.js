@@ -76,7 +76,7 @@ export default function Product(props) {
                 <Grid item xs={12} className={classes.name}>
                     <Typography variant="body1"
                         component={Links}
-                        to={`/${props.path}`}
+                        to={`/products/${props._id}`}
                         className={classes.name}
                     >
                         {props.name}

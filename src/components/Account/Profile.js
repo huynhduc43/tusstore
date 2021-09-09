@@ -20,6 +20,7 @@ import { useTheme } from '@material-ui/core/styles';
 //My components
 import Constants from '../Constants';
 import ChangeAvatar from './ChangeAvatar';
+import useAuth from '../../context/AuthContext';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -53,12 +54,12 @@ const useStyles = makeStyles(theme => ({
 
 export default function Profile() {
     const classes = useStyles();
-    const [gender, setGender] = React.useState('female');
+    const auth = useAuth();
+    const [gender, setGender] = React.useState(auth.user.avatar);
     const [selectedDate, setSelectedDate] = React.useState();
     const theme = useTheme();
     const isDownXS = useMediaQuery(theme.breakpoints.down("xs"));
-
-
+    
     const handleChange = (event) => {
         setGender(event.target.value);
     };
@@ -77,17 +78,33 @@ export default function Profile() {
                     <Grid container item sm={4} xs={12} alignItems="flex-start" justifyContent="center"
                         style={{ paddingBottom: 20 }}
                     >
-                        <ChangeAvatar />
+                        <ChangeAvatar avatar={auth.user.avatar}/>
                     </Grid>
                 }
                 <Grid container item sm={8} xs={12} alignItems="center" >
+                    <Grid item sm={3} xs={12} className={classes.title}>
+                        Email
+                    </Grid>
+                    <Grid item sm={9} xs={12} className={classes.textfield}>
+                        <TextField
+                            variant="outlined"
+                            fullWidth
+                            name="password"
+                            type="text"
+                            id="username"
+                            
+                            size="small"
+                            className={classes.input}
+                            value={auth.user.email}
+                            disabled
+                        />
+                    </Grid>
                     <Grid item sm={3} xs={12} className={classes.title}>
                         Tên đăng nhập
                     </Grid>
                     <Grid item sm={9} xs={12} className={classes.textfield}>
                         <TextField
                             variant="outlined"
-                            required
                             fullWidth
                             name="password"
                             type="text"
@@ -99,15 +116,14 @@ export default function Profile() {
                     </Grid>
 
                     <Grid item sm={3} xs={12} className={classes.title}>
-                        Tên
+                        Họ tên
                     </Grid>
                     <Grid item sm={9} xs={12} className={classes.textfield}>
                         <TextField
                             variant="outlined"
-                            required
                             fullWidth
-                            name="password"
-                            type="password"
+                            name="name"
+                            type="text"
                             id="name"
                             autoComplete="name"
                             size="small"
@@ -121,7 +137,6 @@ export default function Profile() {
                         <Grid item sm={5} xs={12} className={classes.textfield}>
                             <TextField
                                 variant="outlined"
-                                required
                                 fullWidth
                                 name="password"
                                 type="text"
