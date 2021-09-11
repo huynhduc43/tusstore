@@ -7,6 +7,8 @@ import {
 import { Grid, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core";
 
+import NumberFormat from 'react-number-format';
+
 //My component
 import Constants from '../Constants';
 
@@ -83,7 +85,15 @@ export default function Product(props) {
                     </Typography>
                 </Grid>
                 <Grid item xs={12} className={classes.price}>
-                    <Typography variant="h6">{props.price}₫</Typography>
+                    <Typography variant="h5" color="secondary">
+                        <NumberFormat
+                            value={props.price}
+                            displayType={'text'}
+                            thousandSeparator={true}
+                            suffix={'₫'}
+                            renderText={(value, props) => <div {...props}>{value}</div>}
+                        />
+                    </Typography>
                 </Grid>
             </Grid>
 

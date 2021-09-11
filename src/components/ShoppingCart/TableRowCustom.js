@@ -10,6 +10,8 @@ import RemoveCircleIcon from '@material-ui/icons/RemoveCircle';
 import { IconButton } from "@material-ui/core";
 import { Link } from "react-router-dom";
 
+import NumberFormat from 'react-number-format';
+
 import Constants from "../Constants";
 import { CartState } from "../../context/Context";
 
@@ -99,8 +101,14 @@ export default function TableRowCustom(props) {
                     onClick={handleClickIncreaseBtn}
                 ><AddCircleIcon color="primary" /></IconButton>
             </TableCell>
-            <TableCell align="right" style={{ paddingLeft: 50, paddingRight: 0, }}>
-                {props.product.price * props.product.qty}₫
+            <TableCell align="right" style={{ paddingLeft: 50, paddingRight: 0, fontSize: 18}}>
+                <NumberFormat
+                    value={props.product.price * props.product.qty}
+                    displayType={'text'}
+                    thousandSeparator={true}
+                    suffix={'₫'}
+                    renderText={(value, props) => <div {...props}>{value}</div>}
+                />
             </TableCell>
             <TableCell align="right">
                 <IconButton color="secondary"

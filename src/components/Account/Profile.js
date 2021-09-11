@@ -127,6 +127,7 @@ export default function Profile() {
                             id="name"
                             autoComplete="name"
                             size="small"
+                            value={auth.user.name}
                         />
                     </Grid>
 

@@ -7,8 +7,8 @@ const authContext = createContext();
 function useProvideAuth() {
     const [user, setUser] = useState(null);
 
-    const signin = (email) => {
-        setUser(email);
+    const signin = (data) => {
+        setUser(data);
     };
 
     const signout = () => {

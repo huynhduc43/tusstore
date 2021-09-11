@@ -13,6 +13,8 @@ import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import StarIcon from '@material-ui/icons/Star';
 
+import NumberFormat from 'react-number-format';
+
 //My component
 import Constants from '../../Constants.js';
 import { CartState } from "../../../context/Context";
@@ -71,7 +73,7 @@ export default function Product(props) {
     const classes = useStyles();
     const {
         dispatch,
-      } = CartState();
+    } = CartState();
     const { enqueueSnackbar } = useSnackbar();
 
     const handleClickAddToCartBtn = () => {
@@ -79,7 +81,7 @@ export default function Product(props) {
             type: "ADD_TO_CART",
             payload: props,
         });
-        
+
         enqueueSnackbar('Đã thêm vào giỏ hàng!', {
             variant: 'success'
         });
@@ -124,7 +126,15 @@ export default function Product(props) {
                         <b>{props.name}</b>
                     </Grid>
                     <Grid item xs={12}>
-                        <Typography variant="h6" className={classes.productPrice}>{props.price}₫</Typography>
+                        <Typography variant="h6" color="secondary" className={classes.productPrice}>
+                            <NumberFormat
+                                value={props.price}
+                                displayType={'text'}
+                                thousandSeparator={true}
+                                suffix={'₫'}
+                                renderText={(value, props) => <div {...props}>{value}</div>}
+                            />
+                        </Typography>
                     </Grid>
                     <Grid item sm={6} xs={12}>
                         <Button

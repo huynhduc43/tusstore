@@ -61,7 +61,7 @@ export default function Homepage() {
                     <Grid item xs={12}>
                         <HotProductCarousel />
                     </Grid>
-                    <Grid container item xs={12} style={{ paddingTop: 48 }} direction="row"
+                    <Grid container item xs={12} style={{ paddingTop: 16 }} direction="row"
                         justifyContent="center"
                         alignItems="stretch">
                         {isDownXS ? (<>

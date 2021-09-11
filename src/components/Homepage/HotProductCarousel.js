@@ -17,6 +17,7 @@ import HotProduct from './HotProduct';
 const useStyles = makeStyles((theme) => ({
     root: {
         flexGrow: 1,
+        paddingBottom: 24,
     },
     paper: {
         textAlign: 'center',

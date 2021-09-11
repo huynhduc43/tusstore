@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import {Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 import { Container, Grid, Paper } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core";
@@ -113,7 +113,7 @@ export default function ListOfProducts(props) {
             enqueueSnackbar('Bạn cần đăng nhập để tiếp tục', {
                 variant: 'warning'
             });
-        } 
+        }
     }
 
     useEffect(() => {
@@ -170,11 +170,11 @@ export default function ListOfProducts(props) {
                         Đóng
                     </Button>
                     <Button
-                    className={classes.checkoutBtn} 
-                    autoFocus
-                    component={Link}
-                    to="/checkout"
-                    onClick={handleClickCheckout}
+                        className={classes.checkoutBtn}
+                        autoFocus
+                        component={Link}
+                        to="/checkout"
+                        onClick={handleClickCheckout}
                     >
                         Thanh toán
                     </Button>
@@ -252,12 +252,12 @@ export default function ListOfProducts(props) {
                                                                 <Button variant="outlined" className={classes.outlinedBtn} onClick={handleClickOpen}>Xem đơn hàng</Button>
                                                             </Grid>
                                                             <Grid item>
-                                                                <Button 
-                                                                variant="contained" 
-                                                                className={classes.checkoutBtn}
-                                                                component={Link}
-                                                                to="/checkout"
-                                                                onClick={handleClickCheckout}
+                                                                <Button
+                                                                    variant="contained"
+                                                                    className={classes.checkoutBtn}
+                                                                    component={Link}
+                                                                    to="/checkout"
+                                                                    onClick={handleClickCheckout}
                                                                 >
                                                                     Thanh toán
                                                                 </Button>
@@ -265,12 +265,12 @@ export default function ListOfProducts(props) {
                                                         </Grid>)
                                                         : (
                                                             <Grid item>
-                                                                <Button 
-                                                                variant="contained" 
-                                                                className={classes.checkoutBtn}
-                                                                component={Link}
-                                                                to="/checkout"
-                                                                onClick={handleClickCheckout}
+                                                                <Button
+                                                                    variant="contained"
+                                                                    className={classes.checkoutBtn}
+                                                                    component={Link}
+                                                                    to="/checkout"
+                                                                    onClick={handleClickCheckout}
                                                                 >
                                                                     Thanh toán
                                                                 </Button>

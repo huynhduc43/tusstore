@@ -13,6 +13,8 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 
+import NumberFormat from 'react-number-format';
+
 //My components
 import Constants from "../Constants";
 //import { CartState } from "../../context/Context";
@@ -109,14 +111,30 @@ export default function CurrentOrder(props) {
                             <TableCell align="left">
                                 <b>Tạm tính</b>
                             </TableCell>
-                            <TableCell align="right">{total}₫</TableCell>
+                            <TableCell align="right">
+                                <NumberFormat
+                                    value={total}
+                                    displayType={'text'}
+                                    thousandSeparator={true}
+                                    suffix={'₫'}
+                                    renderText={(value, props) => <div {...props}>{value}</div>}
+                                />
+                            </TableCell>
                         </TableRow>
                         <TableRow>
                             <TableCell align="left">
                                 <b>Phí vận chuyển</b>
-                                <Typography variant="subtitle2" color="secondary"><i>Free ship đơn hàng từ 200000₫</i></Typography>
+                                <Typography variant="subtitle2" color="secondary"><i>Free ship đơn hàng từ 200,000₫</i></Typography>
                             </TableCell>
-                            <TableCell align="right">{shippingFee}₫</TableCell>
+                            <TableCell align="right">
+                                <NumberFormat
+                                    value={shippingFee}
+                                    displayType={'text'}
+                                    thousandSeparator={true}
+                                    suffix={'₫'}
+                                    renderText={(value, props) => <div {...props}>{value}</div>}
+                                />
+                            </TableCell>
                         </TableRow>
                     </TableBody>
                 </Table>
@@ -136,7 +154,14 @@ export default function CurrentOrder(props) {
                                 <em>Không có</em>
                             </MenuItem>
                             {codeList.map(code => (
-                                <MenuItem key={code.name} value={code.value}>{code.name} - Giảm {code.value}₫</MenuItem>
+                                <MenuItem key={code.name} value={code.value}>{code.name} - Giảm <NumberFormat
+                            value={code.value}
+                            displayType={'text'}
+                            thousandSeparator={true}
+                            suffix={'₫'}
+                            renderText={(value, props) => <div {...props}>{value}</div>}
+                        />
+                        </MenuItem>
                             ))}
                         </Select>
                     </FormControl>
@@ -151,7 +176,15 @@ export default function CurrentOrder(props) {
                                 <TableCell align="left">
                                     <b>Khuyến mãi giảm</b>
                                 </TableCell>
-                                <TableCell align="right">{code}₫</TableCell>
+                                <TableCell align="right">
+                                    <NumberFormat
+                                        value={code}
+                                        displayType={'text'}
+                                        thousandSeparator={true}
+                                        suffix={'₫'}
+                                        renderText={(value, props) => <div {...props}>{value}</div>}
+                                    />
+                                </TableCell>
                             </TableRow>
                         }
                         <TableRow style={{ borderTop: `10px solid ${Constants.GREEN}` }}>
@@ -159,7 +192,13 @@ export default function CurrentOrder(props) {
                                 <b>Tổng cộng</b>
                             </TableCell>
                             <TableCell align="right" className={classes.total}>
-                                {props.count === 0 ? 0 : total + shippingFee - parseInt(code)}₫
+                                <NumberFormat
+                                    value={props.count === 0 ? 0 : total + shippingFee - parseInt(code)}
+                                    displayType={'text'}
+                                    thousandSeparator={true}
+                                    suffix={'₫'}
+                                    renderText={(value, props) => <div {...props}>{value}</div>}
+                                />
                             </TableCell>
                         </TableRow>
                     </TableBody>

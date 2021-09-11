@@ -43,9 +43,6 @@ const Main = () => {
         <PrivateRoute path="/account">
           <Account />
         </PrivateRoute>
-        <PrivateRoute path="/checkout">
-          <Account />
-        </PrivateRoute>
       </Switch>
     </div>)
 }

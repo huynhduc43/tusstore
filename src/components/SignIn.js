@@ -78,10 +78,7 @@ export default function SignIn() {
       });
 
       if (response.data.isLogged) {
-        auth.signin({
-          email: response.data.email,
-          avatar: response.data.avatar,
-        });
+        auth.signin(response.data.user);
         history.replace(from);
 
         enqueueSnackbar('Đã đăng nhập thành công!', {

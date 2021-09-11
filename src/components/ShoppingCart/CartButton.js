@@ -10,6 +10,7 @@ import IconButton from '@material-ui/core/IconButton';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import { Badge } from "@material-ui/core";
 
+import NumberFormat from 'react-number-format';
 
 //My components
 import Constants from '../Constants';
@@ -111,7 +112,15 @@ export default function MouseOverPopover() {
                                 alt={product.name}
                             />
                             <Typography noWrap >&nbsp;{product.name}&nbsp;&nbsp;</Typography>
-                            <Typography variant="h6" color="secondary">{product.price}₫</Typography>
+                            <Typography variant="h6" color="secondary">
+                            <NumberFormat
+                                value={product.price}
+                                displayType={'text'}
+                                thousandSeparator={true}
+                                suffix={'₫'}
+                                renderText={(value, props) => <div {...props}>{value}</div>}
+                            />
+                            </Typography>
                         </ListItem>
                     )))}
                 </List>

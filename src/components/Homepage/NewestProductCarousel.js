@@ -12,6 +12,9 @@ import { useMediaQuery } from '@material-ui/core';
 //react-bootstrap
 import Carousel from 'react-bootstrap/Carousel';
 import 'bootstrap/dist/css/bootstrap.min.css';
+
+import NumberFormat from 'react-number-format';
+
 import Constants from '../Constants';
 
 const useStyles = makeStyles((theme) => ({
@@ -136,13 +139,18 @@ export default function NewestProductCarousel() {
                                                     >
                                                         <b>{product.name}</b>
                                                     </Typography>
-                                                    <Typography variant="h5">{product.price}₫</Typography>
+                                                    <Typography variant="h5" color="secondary">
+                                                        <NumberFormat
+                                                            value={product.price}
+                                                            displayType={'text'}
+                                                            thousandSeparator={true}
+                                                            suffix={'₫'}
+                                                            renderText={(value, props) => <div {...props}>{value}</div>}
+                                                        />
+                                                    </Typography>
                                                 </Grid>
                                                     <Typography variant="body1" className={classes.detail}>
-                                                        Với sự hiểu biết
-                                                        về dinh dưỡng, xương rồng được trồng và chế biến ra những món “đặc sản”.
-                                                        Trong đó, xương rồng tai thỏ được ưa chuộng không chỉ bởi vẻ đẹp
-                                                        bên ngoài mà còn có công dụng tuyệt vời với sức khỏe.
+                                                        {product.description}
                                                     </Typography>
                                                 </>}
 
@@ -155,7 +163,15 @@ export default function NewestProductCarousel() {
                                                     >
                                                         <b>{product.name}</b>
                                                     </Typography>
-                                                    <Typography variant="h5">{product.price}₫</Typography>
+                                                    <Typography variant="h5" color="secondary">
+                                                        <NumberFormat
+                                                            value={product.price}
+                                                            displayType={'text'}
+                                                            thousandSeparator={true}
+                                                            suffix={'₫'}
+                                                            renderText={(value, props) => <div {...props}>{value}</div>}
+                                                        />
+                                                    </Typography>
                                                 </Grid>}
 
                                             </Grid>
@@ -164,10 +180,7 @@ export default function NewestProductCarousel() {
                                                     <Grid item xs={1}></Grid>
                                                     <Grid item xs={10}>
                                                         <Typography variant="body1" className={classes.detail}>
-                                                            Với sự hiểu biết
-                                                            về dinh dưỡng, xương rồng được trồng và chế biến ra những món “đặc sản”.
-                                                            Trong đó, xương rồng tai thỏ được ưa chuộng không chỉ bởi vẻ đẹp
-                                                            bên ngoài mà còn có công dụng tuyệt vời với sức khỏe.
+                                                            {product.description}
                                                         </Typography>
                                                     </Grid>
                                                     <Grid item xs={1}></Grid>
@@ -185,7 +198,15 @@ export default function NewestProductCarousel() {
                                                 >
                                                     <b>{product.name}</b>
                                                 </Typography>
-                                                <Typography variant="h4">{product.price}₫</Typography>
+                                                <Typography variant="h4" color="secondary">
+                                                    <NumberFormat
+                                                        value={product.price}
+                                                        displayType={'text'}
+                                                        thousandSeparator={true}
+                                                        suffix={'₫'}
+                                                        renderText={(value, props) => <div {...props}>{value}</div>}
+                                                    />
+                                                </Typography>
                                             </Grid>
                                             <Grid item md={3} sm={4}>
                                                 <img
@@ -197,10 +218,7 @@ export default function NewestProductCarousel() {
                                             <Grid container item xs={3} alignItems="flex-end" className={classes.detail}>
                                                 <Grid item>
                                                     <Typography variant="body1">
-                                                        Với sự hiểu biết
-                                                        về dinh dưỡng, xương rồng được trồng và chế biến ra những món “đặc sản”.
-                                                        Trong đó, xương rồng tai thỏ được ưa chuộng không chỉ bởi vẻ đẹp
-                                                        bên ngoài mà còn có công dụng tuyệt vời với sức khỏe.
+                                                        {product.description}
                                                     </Typography>
                                                 </Grid>
 

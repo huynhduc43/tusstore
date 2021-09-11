@@ -14,6 +14,8 @@ import { Checkbox } from "@material-ui/core";
 import { Button } from '@material-ui/core';
 import { createTheme } from '@material-ui/core';
 
+import NumberFormat from 'react-number-format';
+
 //My components
 import Constants from '../Constants';
 import { CartState } from "../../context/Context";
@@ -158,7 +160,15 @@ const TableBodyCustom = (props) => {
             </TableRow>
             <TableRow>
                 <TableCell className={classes.cell}>Giá</TableCell>
-                <TableCell className={classes.infoCell}>{props.product.price * props.product.qty}₫</TableCell>
+                <TableCell className={classes.infoCell}>
+                    <NumberFormat
+                        value={props.product.price * props.product.qty}
+                        displayType={'text'}
+                        thousandSeparator={true}
+                        suffix={'₫'}
+                        renderText={(value, props) => <div {...props}>{value}</div>}
+                    />
+                </TableCell>
             </TableRow>
         </TableBody>
     )
