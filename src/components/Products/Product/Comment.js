@@ -29,6 +29,14 @@ import Constants from '../../Constants';
 import CommentPagination from '../Product/CommentPaginaion';
 import useAuth from '../../../context/AuthContext';
 
+import {
+    initiateSocketConnection,
+    disconnectSocket,
+    subscribeToChat,
+    sendComment,
+    displayComment,
+} from '../../../socketio.serivce';
+
 const useStyles = makeStyles((theme) => ({
     root: {
         width: '100%',
@@ -44,39 +52,49 @@ const Like = (props) => {
     let history = useHistory();
     let location = useLocation();
     const [like, setLike] = useState(false);
+    const [isClicked, setIsClicked] = useState(false);
     const { enqueueSnackbar } = useSnackbar();
 
     const handleLikeComment = () => {
         setLike(prevState => !prevState);
+        setIsClicked(true);
     }
 
-    // const postLike = useCallback((async () => {
-    //     if (auth.user) {
-    //         console.log("a");
-    //         try {
-    //             await axios.put('http://localhost:3001/comments/' + props.productId, {
-    //                 userId: auth.user._id,
-    //                 commentId: props.commentId,
-    //             });
-    //         } catch (error) {
-    //             console.error(error);
-    //         }
-    //     } else {
-    //         enqueueSnackbar('Bạn cần đăng nhập để tiếp tục', {
-    //             variant: 'warning'
-    //         });
+    const postLike = useCallback((async () => {
+        setIsClicked(false);
+        if (auth.user) {
+            const likeRes = await axios.put('http://localhost:3001/comments/' + props.productId, {
+                userId: auth.user._id,
+                commentId: props.commentId,
+            });
+            console.log("likeRes = ", likeRes.data);
+            auth.setCommentPage("/comments/" + props.productId + "?page=" + props.page);
+            sendComment(likeRes.data);
+            props.onHandleLikeRes(likeRes.data);
+        } else {
+            enqueueSnackbar('Bạn cần đăng nhập để tiếp tục', {
+                variant: 'warning'
+            });
 
-    //         history.push({
-    //             pathname: "/sign-in",
-    //             state: { from: location }
-    //         });
-    //     }
+            history.push({
+                pathname: "/sign-in",
+                state: { from: location }
+            });
+        }
 
-    // }), [auth, enqueueSnackbar, history, location, props.productId, props.commentId ]);
+    }), [auth, enqueueSnackbar, history, location, props]);
 
-    // useEffect(() => {
-    //     postLike();
-    // }, [like, postLike]);
+    useEffect(() => {
+        if (isClicked) {
+            postLike();
+        }
+    }, [isClicked, postLike]);
+
+    useEffect(() => {
+        if (props.authUserId !== -1) {
+            setLike(true);
+        }
+    }, [props.authUserId]);
 
     return (
         <IconButton edge="end" aria-label="like"
@@ -95,6 +113,11 @@ export default function Comment(props) {
     const theme = useTheme();
     const isDownXS = useMediaQuery(theme.breakpoints.down("xs"));
     const [content, setContent] = useState("");
+    const [submit, setSubmit] = useState("");
+    const [comments, setComments] = useState([]);
+    const [cmtPagination, setCmtPagination] = useState({});
+    const [response, setResponse] = useState(null);
+    const [likeRes, setLikeRes] = useState("-1");
     const { enqueueSnackbar } = useSnackbar();
     const auth = useAuth();
     let history = useHistory();
@@ -116,9 +139,10 @@ export default function Comment(props) {
             }
 
             try {
+                sendComment(content);
                 setContent("");
-                props.onPostComment(true); //Re=render
-                await axios.post('http://localhost:3001/comments', {
+
+                const res = await axios.post('http://localhost:3001/comments', {
                     userId: auth.user._id,
                     avatar: auth.user.avatar,
                     name: auth.user.name,
@@ -126,6 +150,7 @@ export default function Comment(props) {
                     content: content,
                     postDate: new Date(),
                 });
+                setResponse(res.data);
             } catch (error) {
                 console.error(error);
             }
@@ -140,6 +165,47 @@ export default function Comment(props) {
             });
         }
     }
+
+    const handleChangeCmtPage = async (url) => {
+        const res = await axios.get('http://localhost:3001' + url);
+        setCmtPagination(res.data.paginationInfo);
+        setComments(res.data.comments);
+    }
+
+    //setState in useEffect => infinity loop
+
+    useEffect(() => {
+        const fetchComment = async (productId) => {
+            const url = auth.commentPage ? `http://localhost:3001${auth.commentPage}`
+                : `http://localhost:3001/comments/${productId}`;
+            const res = await axios.get(url);
+
+            setCmtPagination(res.data.paginationInfo);
+            setComments(res.data.comments);
+        }
+
+        if (props.productId) {
+            fetchComment(props.productId);
+        }
+    }, [props.productId, submit, response, likeRes, auth.commentPage]);
+
+    useEffect(() => {
+        initiateSocketConnection();
+
+        subscribeToChat((err, data) => {
+            console.log(data);
+        });
+
+        return () => {
+            disconnectSocket();
+        }
+    }, []);
+
+    useEffect(() => {
+        displayComment((err, comment) => {
+            setSubmit(comment);
+        });
+    }, []);
 
     return (<Grid container>
         <Grid item xs={12}>
@@ -166,14 +232,14 @@ export default function Comment(props) {
         </Grid>
         <Grid item xs={12}>
             <Typography variant="body1">
-                {props.pagination.total_results === 0 ? 'Chưa có bình luận về sản phẩm này.'
-                    : `${props.pagination.total_results} bình luận`}
+                {cmtPagination.total_results === 0 ? 'Chưa có bình luận về sản phẩm này.'
+                    : `${cmtPagination.total_results} bình luận`}
             </Typography>
         </Grid>
 
-        {props.pagination.total_results !== 0 && <>
+        {cmtPagination.total_results !== 0 && <>
             <List className={classes.root}>
-                {props.comments.map(comment => (
+                {comments.map(comment => (
                     <div key={comment._id}>
                         <Divider variant="inset" component="li" />
                         <ListItem alignItems="flex-start" style={{
@@ -218,7 +284,11 @@ export default function Comment(props) {
                                 <Like
                                     productId={props.productId}
                                     commentId={comment._id}
-                                    userId={comment.userId} />
+                                    userId={comment.userId}
+                                    onHandleLikeRes={setLikeRes}
+                                    authUserId={comment.like.indexOf(auth.user ? auth.user._id : "")}
+                                    page={cmtPagination.current_page}
+                                />
                             </ListItemSecondaryAction>
                         </ListItem>
                     </div>))}
@@ -228,8 +298,8 @@ export default function Comment(props) {
             >
                 <CommentPagination
                     productId={props.productId}
-                    pagination={props.pagination}
-                    onChangeCmtPage={props.onChangeCmtPage}
+                    pagination={cmtPagination}
+                    onChangeCmtPage={handleChangeCmtPage}
                 />
             </Grid>
         </>}

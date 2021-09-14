@@ -16,7 +16,6 @@ const useStyles = makeStyles((theme) => ({
         '& .Mui-disabled': {
             borderColor: "#808B96",
             backgroundColor: "#F8F9F9",
-
         }
     },
     button: {
@@ -62,7 +61,6 @@ export default function CommentPagination(props) {
 
     return (
         <Grid item className={classes.root}>
-
             <Button
                 className={classes.button}
                 component={Link}

@@ -135,7 +135,7 @@ export default function NewestProductCarousel() {
                                                         variant="h6"
                                                         className={classes.name}
                                                         component={Link}
-                                                        to={`/products/${product._id}`}
+                                                        to={product._id ? `/products/${product._id}` : ''}
                                                     >
                                                         <b>{product.name}</b>
                                                     </Typography>
@@ -159,7 +159,7 @@ export default function NewestProductCarousel() {
                                                         variant="h6"
                                                         className={classes.name}
                                                         component={Link}
-                                                        to={`/products/${product._id}`}
+                                                        to={product._id ? `/products/${product._id}` : ''}
                                                     >
                                                         <b>{product.name}</b>
                                                     </Typography>
@@ -194,7 +194,7 @@ export default function NewestProductCarousel() {
                                                     variant="h5"
                                                     className={classes.name}
                                                     component={Link}
-                                                    to={`/products/${product._id}`}
+                                                    to={product._id ? `/products/${product._id}` : ''}
                                                 >
                                                     <b>{product.name}</b>
                                                 </Typography>

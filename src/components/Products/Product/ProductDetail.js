@@ -98,11 +98,8 @@ export default function ProductDetail(props) {
     const location = useLocation();
     const { enqueueSnackbar } = useSnackbar();
     const [product, setProduct] = useState(props.product);
-    const [comments, setComments] = useState([]);
-    const [cmtPagination, setCmtPagination] = useState({})
     const [quantity, setQuantity] = useState(1);
     const [isExistInWishlist, setIsExistInWishlist] = useState(false);
-    const [postComment, setPostComment] = useState(false);
 
     const handleClickWishlistBtn = () => {
         if (isExistInWishlist) {
@@ -134,8 +131,10 @@ export default function ProductDetail(props) {
     };
 
     useEffect(() => {
-        setProduct(props.product);
-        window.scroll(0, 0);
+        if (Object.keys(props.product).length !== 0) {
+            setProduct(props.product);
+            window.scroll(0, 0);
+        }
     }, [props.product]);
 
     const handleClickIncreaseBtn = (e) => {
@@ -158,13 +157,6 @@ export default function ProductDetail(props) {
         }
     }
 
-    const handleChangeCmtPage = async (url) => {
-        const res = await axios.get('http://localhost:3001' + url);
-        console.log(res.data);
-        setCmtPagination(res.data.paginationInfo);
-        setComments(res.data.comments);
-    }
-
     useEffect(() => {
         const fetchData = async () => {
             let path = location.pathname.split('/');
@@ -178,22 +170,6 @@ export default function ProductDetail(props) {
         fetchData();
         window.scroll(0, 0);
     }, [location.pathname]);
-
-    useEffect(() => {
-        const fetchComment = async (productId) => {
-            const res = await axios.get('http://localhost:3001/comments/' + productId);
-            console.log(res.data);
-            setCmtPagination(res.data.paginationInfo);
-            setComments(res.data.comments);
-        }
-
-        console.log(product);
-        if (product._id) {
-            fetchComment(product._id);
-            console.log(postComment);
-            setPostComment(false);
-        }
-    }, [product, postComment]);
 
     return (
         <>
@@ -323,10 +299,11 @@ export default function ProductDetail(props) {
                         <Typography variant="h6" style={{ paddingBottom: 5 }}><b>Bình luận</b></Typography>
                         <Comment
                             productId={product._id}
-                            pagination={cmtPagination}
-                            comments={comments}
-                            onChangeCmtPage={handleChangeCmtPage}
-                            onPostComment={setPostComment}
+                            //pagination={cmtPagination}
+                            //comments={comments}
+                            //onChangeCmtPage={handleChangeCmtPage}
+                            //onPostComment={setPostComment}
+                            //onSetCmtPagination={setC}
                         />
                     </Paper>
                 </Grid>

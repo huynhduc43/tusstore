@@ -30,6 +30,9 @@ TusStore is an e-commerce website specializing in selling desktop plants. This i
     - High rated
     - Ascending price
     - Descending price
+- Comment (real time): Require login
+    - Comment pagination
+    - Like and cancel like `(err: auto-refresh comment component in other user's browser => lose comment pagination)`
 
 # V. Installation
 You need more install [TusStore-BackEnd](https://github.com/huynhduc43/TusStore-BackEnd.git) project.

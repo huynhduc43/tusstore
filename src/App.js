@@ -22,6 +22,11 @@ import Account from './components/Account/Account';
 import Constants from './components/Constants';
 import PrivateRoute from './components/PrivateRoute';
 import { ProvideAuth } from './context/AuthContext';
+// import { 
+//   initiateSocketConnection,
+//   disconnectSocket,
+//   subscribeToChat,
+// } from './socketio.serivce';
 
 const Main = () => {
 
@@ -49,6 +54,18 @@ const Main = () => {
 
 export default function App() {
   const location = useLocation();
+
+  // useEffect(() => {
+  //   initiateSocketConnection();
+
+  //   subscribeToChat((err, data) => {
+  //     console.log(data);
+  //   });
+
+  //   return () => {
+  //     disconnectSocket();
+  //   }
+  // }, []);
 
   return (
     <SnackbarProvider maxSnack={3}>

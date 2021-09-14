@@ -6,6 +6,7 @@ const authContext = createContext();
 
 function useProvideAuth() {
     const [user, setUser] = useState(null);
+    const [commentPage, setCommentPage] = useState("");
 
     const signin = (data) => {
         setUser(data);
@@ -17,6 +18,8 @@ function useProvideAuth() {
 
     return {
         user,
+        commentPage,
+        setCommentPage,
         signin,
         signout
     };
