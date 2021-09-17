@@ -9,17 +9,17 @@ import {
 
 import theme from './components/Theme';
 import { ThemeProvider } from '@material-ui/core';
-import Context from './context/Context';
+import CartContext from './context/CartContext';
 
 ReactDOM.render(
   <React.StrictMode>
-    <Context>
-    <Router>
-      <ThemeProvider theme={theme}>
-        <App />
-      </ThemeProvider>
-    </Router>
-    </Context>
+    <CartContext>
+      <Router>
+        <ThemeProvider theme={theme}>
+          <App />
+        </ThemeProvider>
+      </Router>
+    </CartContext>
   </React.StrictMode>,
   document.getElementById('root')
 );

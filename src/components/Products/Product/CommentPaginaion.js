@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-import { Link } from 'react-router-dom';
 
 import { makeStyles } from "@material-ui/core";
 import { Grid, Button } from '@material-ui/core';
@@ -63,7 +62,6 @@ export default function CommentPagination(props) {
         <Grid item className={classes.root}>
             <Button
                 className={classes.button}
-                component={Link}
                 onClick={() => props.onChangeCmtPage("/comments/" + props.productId)}
                 disabled={props.pagination.has_previous_page ? false : true}
             >

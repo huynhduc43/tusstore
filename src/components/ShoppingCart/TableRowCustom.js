@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 
 import { Checkbox } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core";
@@ -13,7 +13,7 @@ import { Link } from "react-router-dom";
 import NumberFormat from 'react-number-format';
 
 import Constants from "../Constants";
-import { CartState } from "../../context/Context";
+import { CartState } from "../../context/CartContext";
 
 const useStyles = makeStyles((theme) => ({
     name: {
@@ -32,7 +32,10 @@ export default function TableRowCustom(props) {
         dispatch,
     } = CartState();
 
+    const [btnStatus, setBtnStatus] = useState(false);
+
     const handleClickIncreaseBtn = () => {
+        setBtnStatus(true);
         props.onChange(prevState => {
             return { ...prevState, [props.id]: prevState[props.id] + 1 }
         });
@@ -40,8 +43,12 @@ export default function TableRowCustom(props) {
         dispatch({
             type: "INCREASE_QTY",
             payload: { _id: props.product._id },
-        });
+        })
     }
+
+    useEffect(() => {
+        setBtnStatus(false);
+    }, [cart]);
 
     const handleClickDecreaseBtn = () => {
         props.onChange(prevState => {
@@ -62,10 +69,6 @@ export default function TableRowCustom(props) {
             payload: { _id: props.product._id },
         });
     }
-
-    useEffect(() => {
-
-    }, [cart]);
 
     return (
         <TableRow>
@@ -90,6 +93,7 @@ export default function TableRowCustom(props) {
             </TableCell>
             <TableCell align="right" width="10" padding="none">
                 <IconButton color="secondary"
+                    disabled={btnStatus}
                     onClick={handleClickDecreaseBtn}
                 ><RemoveCircleIcon /></IconButton>
             </TableCell>
@@ -98,10 +102,11 @@ export default function TableRowCustom(props) {
             </TableCell>
             <TableCell align="left" width="10" padding="none">
                 <IconButton color="primary"
+                    disabled={btnStatus}
                     onClick={handleClickIncreaseBtn}
-                ><AddCircleIcon color="primary" /></IconButton>
+                ><AddCircleIcon /></IconButton>
             </TableCell>
-            <TableCell align="right" style={{ paddingLeft: 50, paddingRight: 0, fontSize: 18}}>
+            <TableCell align="right" style={{ paddingLeft: 50, paddingRight: 0, fontSize: 18 }}>
                 <NumberFormat
                     value={props.product.price * props.product.qty}
                     displayType={'text'}

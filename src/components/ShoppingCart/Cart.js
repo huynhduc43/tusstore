@@ -20,6 +20,8 @@ import DialogContent from '@material-ui/core/DialogContent';
 
 import { useSnackbar } from 'notistack';
 
+import axios from 'axios';
+
 //My components
 import BreadcrumbsCustom from '../BreadcrumbsCustom';
 import TableRowCustom from "./TableRowCustom";
@@ -27,7 +29,7 @@ import Constants from "../Constants";
 import AlertDialog from "./AlertDialog";
 import CurrentOrder from './CurrentOrder';
 import TableResponsive from "./TableResponsive";
-import { CartState } from "../../context/Context";
+import { CartState } from "../../context/CartContext";
 import useAuth from "../../context/AuthContext";
 
 const useStyles = makeStyles((theme) => ({
@@ -130,7 +132,7 @@ export default function ListOfProducts(props) {
                 setIndex(-1);
             }
 
-            setRemoveProduct(false);
+            //setRemoveProduct(false);
         }
     }, [removeProduct, productId, dispatch, checkStatus, index]);
 
@@ -144,6 +146,28 @@ export default function ListOfProducts(props) {
             setCheckAll(true);
         } else setCheckAll(false);
     }, [cart.length, count]);
+
+    useEffect(() => {
+        const updateCart = async () => {
+            if (auth.user) {
+                try {
+                    await axios.put('http://localhost:3001/cart/update', {
+                        userId: auth.user._id,
+                        currentCart: cart,
+                    });
+                    //console.log(res.data);
+                } catch (err) {
+                    console.error(err);
+                }
+                
+            }
+        }
+
+        if(removeProduct){
+            updateCart();
+            setRemoveProduct(false);
+        }
+    }, [cart, auth.user, removeProduct]);
 
     return (
         <>

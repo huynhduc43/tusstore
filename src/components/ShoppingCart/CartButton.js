@@ -12,9 +12,12 @@ import { Badge } from "@material-ui/core";
 
 import NumberFormat from 'react-number-format';
 
+import axios from 'axios';
+
 //My components
 import Constants from '../Constants';
-import { CartState } from "../../context/Context";
+import { CartState } from "../../context/CartContext";
+import useAuth from '../../context/AuthContext.js';
 
 const useStyles = makeStyles((theme) => ({
     popover: {
@@ -52,8 +55,9 @@ export default function MouseOverPopover() {
     const classes = useStyles();
     const {
         state: { cart },
+        dispatch,
     } = CartState();
-    //console.log(cart);
+    const auth = useAuth();
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [placement, setPlacement] = React.useState();
     const location = useLocation();
@@ -73,6 +77,27 @@ export default function MouseOverPopover() {
     useEffect(() => {
         setAnchorEl(null);
     }, [location.pathname]);
+
+    useEffect(() => {
+        const updateCart = async () => {
+            await axios.put('http://localhost:3001/cart/update', {
+                userId: auth.user._id,
+                currentCart: cart,
+            });
+        }
+
+        if (auth.user) {
+            updateCart();
+        }
+    }, [cart, auth.user]);
+
+    useEffect(() => {
+        if (!auth.user) {
+            dispatch({
+                type: "DELETE_CART", 
+            });
+        }
+    }, [auth.user, dispatch]);
 
     return (<>
         <IconButton color="inherit"
@@ -113,13 +138,13 @@ export default function MouseOverPopover() {
                             />
                             <Typography noWrap >&nbsp;{product.name}&nbsp;&nbsp;</Typography>
                             <Typography variant="h6" color="secondary">
-                            <NumberFormat
-                                value={product.price}
-                                displayType={'text'}
-                                thousandSeparator={true}
-                                suffix={'₫'}
-                                renderText={(value, props) => <div {...props}>{value}</div>}
-                            />
+                                <NumberFormat
+                                    value={product.price}
+                                    displayType={'text'}
+                                    thousandSeparator={true}
+                                    suffix={'₫'}
+                                    renderText={(value, props) => <div {...props}>{value}</div>}
+                                />
                             </Typography>
                         </ListItem>
                     )))}

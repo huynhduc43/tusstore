@@ -101,9 +101,8 @@ export default function NewestProductCarousel() {
     };
 
     const fetchNewestProduct = async () => {
-        const res = await axios.get('http://localhost:3001');
-
-        setNewestProducts(res.data.newestProducts);
+        const res = await axios.get('http://localhost:3001/newest-products');
+        setNewestProducts(res.data);
     }
 
     useEffect(() => {
@@ -135,7 +134,7 @@ export default function NewestProductCarousel() {
                                                         variant="h6"
                                                         className={classes.name}
                                                         component={Link}
-                                                        to={product._id ? `/products/${product._id}` : ''}
+                                                        to={product._id ? `/products/${product._id}` : '/#'}
                                                     >
                                                         <b>{product.name}</b>
                                                     </Typography>
@@ -159,7 +158,7 @@ export default function NewestProductCarousel() {
                                                         variant="h6"
                                                         className={classes.name}
                                                         component={Link}
-                                                        to={product._id ? `/products/${product._id}` : ''}
+                                                        to={product._id ? `/products/${product._id}` : '/#'}
                                                     >
                                                         <b>{product.name}</b>
                                                     </Typography>
@@ -194,7 +193,7 @@ export default function NewestProductCarousel() {
                                                     variant="h5"
                                                     className={classes.name}
                                                     component={Link}
-                                                    to={product._id ? `/products/${product._id}` : ''}
+                                                    to={product._id ? `/products/${product._id}` : '/#'}
                                                 >
                                                     <b>{product.name}</b>
                                                 </Typography>

@@ -68,7 +68,7 @@ export default function MouseOverPopover(props) {
         }
 
         auth.signout();
-        
+
         enqueueSnackbar('Đã đăng xuất tài khoản!', {
             variant: 'error'
         });

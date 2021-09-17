@@ -64,6 +64,30 @@ export const cartReduccer = (state, action) => {
                 cart: state.cart,
             }
 
+        case "SYNC_CART":
+            let currentCart = [...state.cart];
+            
+            action.payload.userCart.forEach(element => {   
+                const index3 = state.cart.findIndex(product => product._id === element._id);
+
+                if (index3 !== -1) {
+                    currentCart[index3].qty += element.qty;
+                } else {
+                    currentCart = [...currentCart, element];
+                }
+            });
+
+            return {
+                ...state,
+                cart: [...currentCart],
+            }
+
+        case "DELETE_CART":
+            return {
+                ...state,
+                cart: [],
+            }
+
         default:
             return state;
     }

@@ -25,7 +25,7 @@ import FavoriteIcon from '@material-ui/icons/Favorite';
 import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
 import Comment from './Comment';
 import HotProductCarousel from '../../Homepage/HotProductCarousel';
-import { CartState } from "../../../context/Context";
+import { CartState } from "../../../context/CartContext";
 
 const useStyles = makeStyles((theme) => ({
     sticky: {

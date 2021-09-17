@@ -18,7 +18,7 @@ import NumberFormat from 'react-number-format';
 
 //My components
 import Constants from '../Constants';
-import { CartState } from "../../context/Context";
+import { CartState } from "../../context/CartContext";
 
 const theme = createTheme({
     breakpoints: {

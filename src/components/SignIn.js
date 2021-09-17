@@ -6,7 +6,7 @@ import {
 
 import axios from 'axios';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import { useSnackbar } from 'notistack';
 
@@ -22,6 +22,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Constants from "./Constants";
 import useAuth from "../context/AuthContext";
+import { CartState } from "../context/CartContext";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -57,6 +58,10 @@ export default function SignIn() {
   let location = useLocation();
   const { enqueueSnackbar } = useSnackbar();
   const auth = useAuth();
+  const {
+    state: { cart },
+    dispatch
+  } = CartState();
 
   let { from } = location.state || { from: { pathname: "/" } };
 
@@ -70,7 +75,7 @@ export default function SignIn() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+   
     try {
       const response = await axios.post('http://localhost:3001/sign-in', {
         password: password,
@@ -79,7 +84,17 @@ export default function SignIn() {
 
       if (response.data.isLogged) {
         auth.signin(response.data.user);
+
+        //Redirect
         history.replace(from);
+
+        if (response.data.user.cart.length !== 0) {
+          //handle sync cart in local
+          dispatch({
+            type: "SYNC_CART",
+            payload: { userCart: response.data.user.cart }
+          });
+        }
 
         enqueueSnackbar('Đã đăng nhập thành công!', {
           variant: 'success'
@@ -92,6 +107,20 @@ export default function SignIn() {
       console.error(error);
     }
   }
+
+  useEffect(() => {
+    //handle sync cart in server
+    const updateCart = async () => {
+        await axios.put('http://localhost:3001/cart/update', {
+            userId: auth.user._id,
+            currentCart: cart,
+        });
+    }
+
+    if (auth.user) {
+        updateCart();
+    }
+}, [cart, auth.user]);
 
   return (
     <>

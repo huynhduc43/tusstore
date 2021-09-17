@@ -238,8 +238,7 @@ export default function ListOfProducts(props) {
 
                       <Grid item xs={12}>
                         <Grid container spacing={isDownXS ? 1 : 3}>
-                          {
-                            products.map((product) => (
+                          {products.map((product) => (
                               <Product
                                 key={product._id}
                                 link={`${location.pathname}/${product._id}`}

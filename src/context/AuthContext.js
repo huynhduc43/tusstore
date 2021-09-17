@@ -21,7 +21,7 @@ function useProvideAuth() {
         commentPage,
         setCommentPage,
         signin,
-        signout
+        signout,
     };
 }
 

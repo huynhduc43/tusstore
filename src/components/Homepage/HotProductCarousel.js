@@ -62,9 +62,8 @@ export default function HotProductCarousel() {
     };
 
     const fetchHotProducts = async () => {
-        const response = await axios.get('http://localhost:3001');
-
-        setHotProducts(response.data.hotProducts);
+        const response = await axios.get('http://localhost:3001/hot-products');
+        setHotProducts(response.data);
     }
 
     useEffect(() => {

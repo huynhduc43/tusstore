@@ -17,7 +17,7 @@ import NumberFormat from 'react-number-format';
 
 //My component
 import Constants from '../../Constants.js';
-import { CartState } from "../../../context/Context";
+import { CartState } from "../../../context/CartContext";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -76,7 +76,7 @@ export default function Product(props) {
     } = CartState();
     const { enqueueSnackbar } = useSnackbar();
 
-    const handleClickAddToCartBtn = () => {
+    const handleClickAddToCartBtn = async () => {
         dispatch({
             type: "ADD_TO_CART",
             payload: props,
