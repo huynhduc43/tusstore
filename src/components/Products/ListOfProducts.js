@@ -14,7 +14,7 @@ import {
 import axios from 'axios';
 
 //My components
-import Product from "./Product/Product";
+import Product from "./Product";
 import BreadcrumbsCustom from '../BreadcrumbsCustom';
 import SortBy from "./SortBy";
 //import Show from './Show';
@@ -22,7 +22,7 @@ import AdvancedFilteringCactus from './AdvancedFilteringCactus';
 import PaginationCustom from "./PaginationCustom";
 import AdvancedFilteringStoneLotus from './AdvancedFilteringStoneLotus';
 import AdvancedFilteringPots from './AdvancedFilteringPots';
-import ProductDetail from './Product/ProductDetail';
+import ProductDetail from './ProductDetail';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -57,7 +57,7 @@ const pathnameList = [
   "/products/pots",
 ]
 
-export default function ListOfProducts(props) {
+export default function ListOfProducts({path}) {
   const classes = useStyles();
   const location = useLocation();
   const theme = useTheme();
@@ -73,7 +73,7 @@ export default function ListOfProducts(props) {
     pots: false,
   });
   const [sort, setSort] = useState('newest');
-  const [pathname, setPathname] = React.useState(props.pathname);
+  const [pathname, setPathname] = React.useState(path);
   const [type, setType] = React.useState({
     flower: false,
     nonflower: false,
@@ -112,9 +112,9 @@ export default function ListOfProducts(props) {
       }
     }
 
-    //console.log(filter);
     setPathname(location.pathname);
-  }, [location.pathname, location.search, filter, sort, location]);
+    // eslint-disable-next-line
+  }, [location.pathname, filter, location.search]); //location.search: change page, filter
 
   useEffect(() => {
     if (location.pathname.indexOf("/products/cactus") !== -1) {
@@ -142,7 +142,7 @@ export default function ListOfProducts(props) {
     <Container maxWidth="lg">
       <div className={classes.root}>
         <Route exact to={location.pathname}>
-          {pathnameList.indexOf(location.pathname) === -1 ? <ProductDetail product={productDetail} /> :
+          {pathnameList.indexOf(location.pathname) === -1 ? <ProductDetail productInfo={productDetail} /> :
             <Grid container spacing={3}>
               <Grid item xs={12}>
                 <Paper className={classes.paper}>
@@ -239,18 +239,18 @@ export default function ListOfProducts(props) {
                       <Grid item xs={12}>
                         <Grid container spacing={isDownXS ? 1 : 3}>
                           {products.map((product) => (
-                              <Product
-                                key={product._id}
-                                link={`${location.pathname}/${product._id}`}
-                                _id={product._id}
-                                name={product.name}
-                                price={product.price}
-                                primaryImg={product.primaryImg}
-                                view={product.view}
-                                rating={product.rating || 0}
-                                quantity={product.quantity}
-                              />
-                            ))
+                            <Product
+                              key={product._id}
+                              link={`${location.pathname}/${product._id}`}
+                              _id={product._id}
+                              name={product.name}
+                              price={product.price}
+                              primaryImg={product.primaryImg}
+                              view={product.view}
+                              rating={product.rating || 0}
+                              quantity={product.quantity}
+                            />
+                          ))
                           }
                         </Grid>
                       </Grid>

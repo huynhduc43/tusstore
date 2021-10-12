@@ -16,118 +16,120 @@ import Constants from '../Constants';
 import useAuth from '../../context/AuthContext';
 
 const useStyles = makeStyles((theme) => ({
-    popover: {
+  popover: {
 
-    },
-    paper: {
+  },
+  paper: {
 
-    },
-    accountBtn: {
-        margin: theme.spacing(1),
-        maxWidth: 200,
-        color: "#fff",
-        '&:hover': {
-            backgroundColor: "#ABB2B9",
-        }
-    },
-    listItem: {
-        "&:hover": {
-            color: "#fff",
-            backgroundColor: Constants.GREEN,
-        },
-        "&:active": {
-            color: "#fff",
-            backgroundColor: Constants.GREEN,
-        }
+  },
+  accountBtn: {
+    margin: theme.spacing(1),
+    maxWidth: 200,
+    color: "#fff",
+    '&:hover': {
+      backgroundColor: "#ABB2B9",
     }
+  },
+  listItem: {
+    "&:hover": {
+      color: "#fff",
+      backgroundColor: Constants.GREEN,
+    },
+    "&:active": {
+      color: "#fff",
+      backgroundColor: Constants.GREEN,
+    }
+  }
 }));
 
-export default function MouseOverPopover(props) {
-    const classes = useStyles();
-    const [anchorEl, setAnchorEl] = React.useState(null);
-    const { enqueueSnackbar } = useSnackbar();
-    let location = useLocation();
-    let history = useHistory();
-    const auth = useAuth();
+export default function MouseOverPopover({ email }) {
+  const classes = useStyles();
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const { enqueueSnackbar } = useSnackbar();
+  let location = useLocation();
+  let history = useHistory();
+  const auth = useAuth();
 
-    const handleClick = (event) => {
-        setAnchorEl(event.currentTarget);
-    };
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
 
-    const handleClose = () => {
-        setAnchorEl(null);
-    };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
-    const handleSignOut = () => {
-        handleClose();
-        const path = location.pathname.split("/");
+  const open = Boolean(anchorEl);
+  const id = open ? 'account-popover' : undefined;
 
-        if (path.length >= 2) {
-            if (path[1] === "account") history.replace("");
-            if (path[1] === "checkout") history.replace("/cart");
-        }
-
-        auth.signout();
-
-        enqueueSnackbar('Đã đăng xuất tài khoản!', {
-            variant: 'error'
-        });
-    }
-
-    const open = Boolean(anchorEl);
-    const id = open ? 'account-popover' : undefined;
-
-    return (
-        <div>
-            <Button
-                className={classes.accountBtn}
-                onClick={handleClick}
+  return (
+    <div>
+      <Button
+        className={classes.accountBtn}
+        onClick={handleClick}
+      >
+        <Typography noWrap>{email + email}</Typography>
+      </Button>
+      <Popover
+        id={id}
+        open={open}
+        anchorEl={anchorEl}
+        onClose={handleClose}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'center',
+        }}
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'center',
+        }}
+        className={classes.popover}
+      >
+        <Paper className={classes.paper}>
+          <List component="nav" aria-label="main mailbox folders">
+            <ListItem
+              key={1}
+              button
+              component={Link} to="/account/profile"
+              onClick={handleClose}
+              className={classes.listItem}
             >
-                <Typography noWrap>{props.email + props.email}</Typography>
-            </Button>
-            <Popover
-                id={id}
-                open={open}
-                anchorEl={anchorEl}
-                onClose={handleClose}
-                anchorOrigin={{
-                    vertical: 'bottom',
-                    horizontal: 'center',
-                }}
-                transformOrigin={{
-                    vertical: 'top',
-                    horizontal: 'center',
-                }}
-                className={classes.popover}
+              <ListItemText primary="Thông tin tài khoản" />
+            </ListItem>
+            <ListItem
+              key={2}
+              button
+              component={Link} to="/account/manage-orders"
+              onClick={handleClose}
+              className={classes.listItem}
             >
-                <Paper className={classes.paper}>
-                    <List component="nav" aria-label="main mailbox folders">
-                        <ListItem
-                            button
-                            component={Link} to="/account/profile"
-                            onClick={handleClose}
-                            className={classes.listItem}
-                        >
-                            <ListItemText primary="Thông tin tài khoản" />
-                        </ListItem>
-                        <ListItem
-                            button
-                            component={Link} to="/account/manage-orders"
-                            onClick={handleClose}
-                            className={classes.listItem}
-                        >
-                            <ListItemText primary="Đơn hàng" />
-                        </ListItem>
-                        <ListItem
-                            button
-                            onClick={handleSignOut}
-                            className={classes.listItem}
-                        >
-                            <ListItemText primary="Đăng xuất" />
-                        </ListItem>
-                    </List>
-                </Paper>
-            </Popover>
-        </div>
-    );
+              <ListItemText primary="Đơn hàng" />
+            </ListItem>
+            <ListItem
+              key={3}
+              button
+              onClick={() => handleSignOut(handleClose, location.pathname.split("/"), history, auth, enqueueSnackbar)}
+              className={classes.listItem}
+            >
+              <ListItemText primary="Đăng xuất" />
+            </ListItem>
+          </List>
+        </Paper>
+      </Popover>
+    </div>
+  );
+}
+
+const handleSignOut = (handleClose, path, history, auth, enqueueSnackbar) => {
+  handleClose();
+
+  if (path.length >= 2) {
+    if (path[1] === "account") history.replace("");
+    if (path[1] === "checkout") history.replace("/cart");
+  }
+
+  auth.signout();
+
+  enqueueSnackbar('Đã đăng xuất tài khoản!', {
+    variant: 'error'
+  });
 }

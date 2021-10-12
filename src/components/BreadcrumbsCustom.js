@@ -154,11 +154,11 @@ const convert = (path, breadCrumb, productUrl) => {
   return newPath;
 }
 
-export default function SimpleBreadcrumbs(props) {
+export default function SimpleBreadcrumbs({ breadCrumb }) {
   const location = useLocation();
   let path = location.pathname.split('/');
   path.shift();
-  const newpath = convert(path, props.breadCrumb, location.pathname);
+  const newpath = convert(path, breadCrumb, location.pathname);
 
   return (
     <Breadcrumbs aria-label="breadcrumb">

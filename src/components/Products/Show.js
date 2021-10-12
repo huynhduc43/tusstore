@@ -10,20 +10,20 @@ import FormLabel from '@material-ui/core/FormLabel';
 import Constants from '../Constants';
 
 const useStyles = makeStyles((theme) => ({
-    btnGroup: Constants.BUTTON_OUTLINED,
-    active: Constants.BUTTON_CONTAINED,
-    root: Constants.RADIO_GROUP,
+  btnGroup: Constants.BUTTON_OUTLINED,
+  active: Constants.BUTTON_CONTAINED,
+  root: Constants.RADIO_GROUP,
 }));
 
 export default function Show(props) {
-    const classes = useStyles();
-    const [value, setValue] = React.useState(props.perPage);
+  const classes = useStyles();
+  const [value, setValue] = React.useState(props.perPage);
 
   const handleChange = (event) => {
     setValue(event.target.value);
     props.onChangePerPage(event.target.value);
 
-    
+
   };
 
   //console.log("show: " + value);

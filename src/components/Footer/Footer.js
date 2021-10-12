@@ -50,8 +50,6 @@ export default function Footer() {
                     <Typography variant="body2"><EmailIcon />&nbsp;thanhduc4320@gmail.com</Typography>
                   </a>
                 </Grid>
-              
-
             </Grid>
 
             <Grid container item md={3} sm={6} xs={12} alignItems="flex-start">
@@ -94,7 +92,6 @@ export default function Footer() {
           </Grid>
         </Toolbar>
       </Container>
-
     </AppBar>
   )
 }

@@ -12,46 +12,46 @@ import { makeStyles } from '@material-ui/core';
 import Constants from "../Constants";
 
 const useStyles = makeStyles(theme => ({
-    searchBtn: Constants.BUTTON_CONTAINED,
+  searchBtn: Constants.BUTTON_CONTAINED,
 }))
 
-export default function SearchDialog(props) {
-    const classes = useStyles();
+export default function SearchDialog({status, onClickOpenSearch, }) {
+  const classes = useStyles();
 
-    const handleClose = () => {
-        props.onClickOpenSearch(false);
-    };
+  const handleClose = () => {
+    onClickOpenSearch(false);
+  };
 
-    return (
-        <div>
-            <Dialog open={props.status} onClose={handleClose} aria-labelledby="form-dialog-title"
-                maxWidth="sm"
-                fullWidth
-            >
-                <DialogTitle id="form-dialog-title">Tìm kiếm sản phẩm</DialogTitle>
-                <DialogContent>
-                    {/* <DialogContentText>
+  return (
+    <div>
+      <Dialog open={status} onClose={handleClose} aria-labelledby="form-dialog-title"
+        maxWidth="sm"
+        fullWidth
+      >
+        <DialogTitle id="form-dialog-title">Tìm kiếm sản phẩm</DialogTitle>
+        <DialogContent>
+          {/* <DialogContentText>
                         To subscribe to this website, please enter your email address here. We will send updates
                         occasionally.
                     </DialogContentText> */}
-                    <TextField
-                        autoFocus
-                        margin="dense"
-                        id="keywords"
-                        label="Từ khóa"
-                        type="text"
-                        fullWidth
-                    />
-                </DialogContent>
-                <DialogActions>
-                    <Button variant="outlined" onClick={handleClose} color="secondary">
-                        Hủy
-                    </Button>
-                    <Button variant="contained" onClick={handleClose} color="primary" className={classes.searchBtn}>
-                        Tìm kiếm
-                    </Button>
-                </DialogActions>
-            </Dialog>
-        </div>
-    );
+          <TextField
+            autoFocus
+            margin="dense"
+            id="keywords"
+            label="Từ khóa"
+            type="text"
+            fullWidth
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button variant="outlined" onClick={handleClose} color="secondary">
+            Hủy
+          </Button>
+          <Button variant="contained" onClick={handleClose} color="primary" className={classes.searchBtn}>
+            Tìm kiếm
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </div>
+  );
 }

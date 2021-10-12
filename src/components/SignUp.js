@@ -67,31 +67,6 @@ function SignUp() {
     setPassword(e.target.value);
   }
 
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const response = await axios.post('http://localhost:3001/sign-up', {
-        name: name,
-        password: password,
-        email: email,
-      });
-
-      if (response.data.notification === "success") {
-        enqueueSnackbar('Đã đăng ký thành công! Vui lòng đăng nhập tài khoản', {
-          variant: 'success'
-        });
-
-        setErrMsg('');
-        history.replace("/sign-in");
-      } else {
-        setErrMsg(response.data.notification);
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  }
-
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
@@ -102,7 +77,9 @@ function SignUp() {
         <Typography component="h1" variant="h5">
           Đăng ký
         </Typography>
-        <form className={classes.form} onSubmit={handleSubmit}>
+        <form className={classes.form} onSubmit={
+          (e) => handleSubmit(e, name, password, email, enqueueSnackbar, setErrMsg, history)
+        }>
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <TextField
@@ -128,7 +105,7 @@ function SignUp() {
                 autoComplete="email"
                 onChange={handleChangeEmail}
                 helperText={errMsg}
-                error={errMsg === '' ? false: true}
+                error={errMsg === '' ? false : true}
               />
             </Grid>
             <Grid item xs={12}>
@@ -172,6 +149,41 @@ function SignUp() {
       </div>
     </Container>
   );
+}
+
+/**
+ * Handle sign up
+ * @param {*} e event
+ * @param {*} name 
+ * @param {*} password 
+ * @param {*} email 
+ * @param {*} enqueueSnackbar 
+ * @param {*} setErrMsg 
+ * @param {*} history 
+ */
+
+const handleSubmit = async (e, name, password, email, enqueueSnackbar, setErrMsg, history) => {
+  e.preventDefault();
+  try {
+    const response = await axios.post('http://localhost:3001/sign-up', {
+      name: name,
+      password: password,
+      email: email,
+    });
+
+    if (response.data.notification === "success") {
+      enqueueSnackbar('Đã đăng ký thành công! Vui lòng đăng nhập tài khoản', {
+        variant: 'success'
+      });
+
+      setErrMsg('');
+      history.replace("/sign-in");
+    } else {
+      setErrMsg(response.data.notification);
+    }
+  } catch (error) {
+    console.error(error);
+  }
 }
 
 export default SignUp;

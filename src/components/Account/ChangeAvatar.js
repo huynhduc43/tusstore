@@ -28,7 +28,7 @@ const useStyles = makeStyles(theme => ({
     },
 }))
 
-export default function AlertDialog(props) {
+export default function AlertDialog({ avatar }) {
     const classes = useStyles();
     const [open, setOpen] = React.useState(false);
 
@@ -40,14 +40,13 @@ export default function AlertDialog(props) {
         setOpen(false);
     };
 
-
     return (
         <>
             <Grid item sm={12} xs={6}>
                 <img alt="avatar"
-                    src={props.avatar ? props.avatar
+                    src={avatar ? avatar
                         : "https://res.cloudinary.com/dnbjep0mp/image/upload/v1631088180/user_hkinox.svg"}
-                    className={classes.avatar} />
+                    className={avatar} />
             </Grid>
             <Grid container>
                 <Grid item xs={12}>

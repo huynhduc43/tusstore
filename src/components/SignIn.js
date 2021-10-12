@@ -5,17 +5,13 @@ import {
 } from "react-router-dom";
 
 import axios from 'axios';
-
 import React, { useState, useEffect } from 'react';
-
 import { useSnackbar } from 'notistack';
 
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
-//import FormControlLabel from '@material-ui/core/FormControlLabel';
-//import Checkbox from '@material-ui/core/Checkbox';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
@@ -73,54 +69,20 @@ export default function SignIn() {
     setPassword(e.target.value);
   }
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-   
-    try {
-      const response = await axios.post('http://localhost:3001/sign-in', {
-        password: password,
-        email: email,
-      });
-
-      if (response.data.isLogged) {
-        auth.signin(response.data.user);
-
-        //Redirect
-        history.replace(from);
-
-        if (response.data.user.cart.length !== 0) {
-          //handle sync cart in local
-          dispatch({
-            type: "SYNC_CART",
-            payload: { userCart: response.data.user.cart }
-          });
-        }
-
-        enqueueSnackbar('Đã đăng nhập thành công!', {
-          variant: 'success'
-        });
-      } else {
-        setErrMsg(response.data.errMsg);
-      }
-
-    } catch (error) {
-      console.error(error);
-    }
-  }
-
   useEffect(() => {
     //handle sync cart in server
     const updateCart = async () => {
-        await axios.put('http://localhost:3001/cart/update', {
-            userId: auth.user._id,
-            currentCart: cart,
-        });
+      await axios.put('http://localhost:3001/cart/update', {
+        userId: auth.user._id,
+        currentCart: cart,
+      });
     }
 
     if (auth.user) {
-        updateCart();
+      updateCart();
     }
-}, [cart, auth.user]);
+    // eslint-disable-next-line
+  }, [auth.user]);
 
   return (
     <>
@@ -133,7 +95,9 @@ export default function SignIn() {
           <Typography component="h1" variant="h5">
             Đăng nhập
           </Typography>
-          <form className={classes.form} onSubmit={handleSubmit}>
+          <form className={classes.form} onSubmit={
+            (e) => handleSubmit(e, email, password, auth, from, history, dispatch, enqueueSnackbar, setErrMsg)
+            }>
             <TextField
               variant="filled"
               margin="normal"
@@ -191,4 +155,39 @@ export default function SignIn() {
       </Container>
     </>
   );
+}
+
+const handleSubmit = async (e, email, password, auth, from, history, dispatch, enqueueSnackbar, setErrMsg) => {
+  e.preventDefault();
+
+  try {
+    const response = await axios.post('http://localhost:3001/sign-in', {
+      password: password,
+      email: email,
+    });
+
+    if (response.data.isLogged) {
+      auth.signin(response.data.user);
+
+      //Redirect
+      history.replace(from);
+
+      if (response.data.user.cart.length !== 0) {
+        //handle sync cart in local
+        dispatch({
+          type: "SYNC_CART",
+          payload: { userCart: response.data.user.cart }
+        });
+      }
+
+      enqueueSnackbar('Đã đăng nhập thành công!', {
+        variant: 'success'
+      });
+    } else {
+      setErrMsg(response.data.errMsg);
+    }
+
+  } catch (error) {
+    console.error(error);
+  }
 }
