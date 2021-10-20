@@ -80,7 +80,7 @@ export default function MouseOverPopover() {
 
   useEffect(() => {
     const updateCart = async () => {
-      await axios.put(process.env.REACT_APP_LOCAL_URL + '/cart/update', {
+      await axios.put(process.env.REACT_APP_REMOTE_URL + '/cart/update', {
         userId: auth.user._id,
         currentCart: cart,
       });

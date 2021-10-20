@@ -72,7 +72,7 @@ export default function SignIn() {
   useEffect(() => {
     //handle sync cart in server
     const updateCart = async () => {
-      await axios.put(process.env.REACT_APP_LOCAL_URL + '/cart/update', {
+      await axios.put(process.env.REACT_APP_REMOTE_URL + '/cart/update', {
         userId: auth.user._id,
         currentCart: cart,
       });
@@ -161,7 +161,7 @@ const handleSubmit = async (e, email, password, auth, from, history, dispatch, e
   e.preventDefault();
 
   try {
-    const response = await axios.post(process.env.REACT_APP_LOCAL_URL + '/sign-in', {
+    const response = await axios.post(process.env.REACT_APP_REMOTE_URL + '/sign-in', {
       password: password,
       email: email,
     });

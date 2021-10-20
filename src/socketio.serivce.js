@@ -2,7 +2,7 @@ import { io } from "socket.io-client";
 let socket;
 
 export const initiateSocketConnection = () => {
-    socket = io("http://localhost:3001");
+    socket = io("REACT_APP_REMOTE_URL");
     console.log(`Connecting socket...`);
 }
 

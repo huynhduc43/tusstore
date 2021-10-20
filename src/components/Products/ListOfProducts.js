@@ -87,9 +87,9 @@ export default function ListOfProducts({path}) {
     const fetchData = async () => {
       let response;
       if (filter === '') {
-        response = await axios.get(process.env.REACT_APP_LOCAL_URL + location.pathname + `${`?sort=${sort}` === location.search ? `?sort=${sort}` : `${location.search}`}`);
+        response = await axios.get(process.env.REACT_APP_REMOTE_URL + location.pathname + `${`?sort=${sort}` === location.search ? `?sort=${sort}` : `${location.search}`}`);
       } else {
-        response = await axios.get(process.env.REACT_APP_LOCAL_URL + location.pathname + location.search);
+        response = await axios.get(process.env.REACT_APP_REMOTE_URL + location.pathname + location.search);
       }
 
       setProducts(response.data.productList);
@@ -97,7 +97,7 @@ export default function ListOfProducts({path}) {
     }
 
     const fetchProductDetail = async () => {
-      const response = await axios.get(process.env.REACT_APP_LOCAL_URL + location.pathname);
+      const response = await axios.get(process.env.REACT_APP_REMOTE_URL + location.pathname);
       setProductDetail(response.data);
     }
 

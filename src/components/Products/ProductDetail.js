@@ -162,7 +162,7 @@ export default function ProductDetail({ productInfo }) {
       let path = location.pathname.split('/');
 
       if (path.length === 3 && path[1] === "products") {
-        let res = await axios.get(process.env.REACT_APP_LOCAL_URL + location.pathname);
+        let res = await axios.get(process.env.REACT_APP_REMOTE_URL + location.pathname);
         setProduct(res.data);
       }
     }

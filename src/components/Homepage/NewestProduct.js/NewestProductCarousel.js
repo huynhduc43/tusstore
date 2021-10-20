@@ -110,7 +110,7 @@ export default function NewestProductCarousel() {
 
         if (res) {
           setIsLoaded(true);
-          setNewestProducts(res.data);;
+          setNewestProducts(res.data);
         }
       } catch (error) {
         console.error(error);
@@ -135,7 +135,7 @@ export default function NewestProductCarousel() {
           <Grid container justifyContent="center">
             <Grid item xs={12}>
               <Carousel controls={isDownXS ? false : true} activeIndex={index} onSelect={handleSelect} className={classes.carousel}>
-                {newestProducts.length > 0 && newestProducts.map(product => (
+                {newestProducts.map(product => (
                   <Carousel.Item key={product._id}>
                     <Grid container item justifyContent="space-evenly">
                       {isDownSM && <>
