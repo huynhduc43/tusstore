@@ -10,7 +10,7 @@ import { makeStyles } from "@material-ui/core";
 import NumberFormat from 'react-number-format';
 
 //My component
-import Constants from '../Constants';
+import Constants from '../../Constants';
 
 const useStyles = makeStyles((theme) => ({
   root: {

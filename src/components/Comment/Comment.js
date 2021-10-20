@@ -79,7 +79,7 @@ export default function Comment({productId}) {
         sendComment(content);
         setContent("");
 
-        const res = await axios.post('http://localhost:3001/comments', {
+        const res = await axios.post(process.env.REACT_APP_LOCAL_URL + '/comments', {
           userId: auth.user._id,
           avatar: auth.user.avatar,
           name: auth.user.name,
@@ -104,7 +104,7 @@ export default function Comment({productId}) {
   }
 
   const handleChangeCmtPage = async (url) => {
-    const res = await axios.get('http://localhost:3001' + url);
+    const res = await axios.get(process.env.REACT_APP_LOCAL_URL + url);
     setCmtPagination(res.data.paginationInfo);
     setComments(res.data.comments);
   }
@@ -113,7 +113,7 @@ export default function Comment({productId}) {
 
   useEffect(() => {
     const fetchComment = async (productId) => {
-      const url = auth.commentPage ? `http://localhost:3001${auth.commentPage}`
+      const url = auth.commentPage ? `${process.env.REACT_APP_LOCAL_URL}${auth.commentPage}`
         : `http://localhost:3001/comments/${productId}`;
       const res = await axios.get(url);
 

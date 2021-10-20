@@ -24,7 +24,7 @@ import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
 import Comment from '../Comment/Comment';
-import HotProductCarousel from '../Homepage/HotProductCarousel';
+import HotProductCarousel from "../Homepage/HotProduct/HotProductCarousel";
 import { CartState } from "../../context/CartContext";
 
 const useStyles = makeStyles((theme) => ({
@@ -162,7 +162,7 @@ export default function ProductDetail({ productInfo }) {
       let path = location.pathname.split('/');
 
       if (path.length === 3 && path[1] === "products") {
-        let res = await axios.get('http://localhost:3001' + location.pathname);
+        let res = await axios.get(process.env.REACT_APP_LOCAL_URL + location.pathname);
         setProduct(res.data);
       }
     }

@@ -152,7 +152,7 @@ export default function ListOfProducts() {
     const updateCart = async () => {
       if (auth.user) {
         try {
-          await axios.put('http://localhost:3001/cart/update', {
+          await axios.put(process.env.REACT_APP_LOCAL_URL + '/cart/update', {
             userId: auth.user._id,
             currentCart: cart,
           });

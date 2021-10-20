@@ -61,7 +61,7 @@ const postLike = async (
 ) => {
   setIsClicked(false);
   if (auth.user) {
-    const likeRes = await axios.put('http://localhost:3001/comments/' + productId, {
+    const likeRes = await axios.put(process.env.REACT_APP_LOCAL_URL + '/comments/' + productId, {
       userId: auth.user._id,
       commentId: commentId,
     });

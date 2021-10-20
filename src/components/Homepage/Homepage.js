@@ -10,8 +10,8 @@ import { useMediaQuery } from "@material-ui/core";
 
 //My components
 import Constants from '../Constants'
-import NewestProductCarousel from './NewestProductCarousel';
-import HotProductCarousel from './HotProductCarousel';
+import NewestProductCarousel from './NewestProduct/NewestProductCarousel';
+import HotProductCarousel from "./HotProduct/HotProductCarousel";
 
 const useStyles = makeStyles(theme => ({
   container: {
