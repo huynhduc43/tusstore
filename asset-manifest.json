@@ -1,0 +1,25 @@
+{
+  "files": {
+    "main.css": "/tusstore/static/css/main.a11458ee.chunk.css",
+    "main.js": "/tusstore/static/js/main.ae943260.chunk.js",
+    "main.js.map": "/tusstore/static/js/main.ae943260.chunk.js.map",
+    "runtime-main.js": "/tusstore/static/js/runtime-main.59964090.js",
+    "runtime-main.js.map": "/tusstore/static/js/runtime-main.59964090.js.map",
+    "static/css/2.9082872e.chunk.css": "/tusstore/static/css/2.9082872e.chunk.css",
+    "static/js/2.cd879eb5.chunk.js": "/tusstore/static/js/2.cd879eb5.chunk.js",
+    "static/js/2.cd879eb5.chunk.js.map": "/tusstore/static/js/2.cd879eb5.chunk.js.map",
+    "static/js/3.7732f962.chunk.js": "/tusstore/static/js/3.7732f962.chunk.js",
+    "static/js/3.7732f962.chunk.js.map": "/tusstore/static/js/3.7732f962.chunk.js.map",
+    "index.html": "/tusstore/index.html",
+    "static/css/2.9082872e.chunk.css.map": "/tusstore/static/css/2.9082872e.chunk.css.map",
+    "static/css/main.a11458ee.chunk.css.map": "/tusstore/static/css/main.a11458ee.chunk.css.map",
+    "static/js/2.cd879eb5.chunk.js.LICENSE.txt": "/tusstore/static/js/2.cd879eb5.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.59964090.js",
+    "static/css/2.9082872e.chunk.css",
+    "static/js/2.cd879eb5.chunk.js",
+    "static/css/main.a11458ee.chunk.css",
+    "static/js/main.ae943260.chunk.js"
+  ]
+}
