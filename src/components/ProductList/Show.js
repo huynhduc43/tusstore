@@ -26,8 +26,6 @@ export default function Show(props) {
 
   };
 
-  //console.log("show: " + value);
-
   return (
     <FormControl component="fieldset" className={classes.root}>
       <FormLabel component="legend">Số sản phẩm mỗi trang</FormLabel>

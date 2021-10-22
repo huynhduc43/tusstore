@@ -114,7 +114,7 @@ export default function Comment({productId}) {
   useEffect(() => {
     const fetchComment = async (productId) => {
       const url = auth.commentPage ? `${process.env.REACT_APP_REMOTE_URL}${auth.commentPage}`
-        : `REACT_APP_REMOTE_URL/comments/${productId}`;
+        : `${process.env.REACT_APP_REMOTE_URL}/comments/${productId}`;
       const res = await axios.get(url);
 
       setCmtPagination(res.data.paginationInfo);

@@ -51,7 +51,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function ListOfProducts() {
+export default function ProductList() {
   const classes = useStyles();
   const {
     state: { cart },

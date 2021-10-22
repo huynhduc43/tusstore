@@ -2,7 +2,7 @@ import { io } from "socket.io-client";
 let socket;
 
 export const initiateSocketConnection = () => {
-    socket = io("REACT_APP_REMOTE_URL");
+    socket = io(process.env.REACT_APP_REMOTE_URL);
     console.log(`Connecting socket...`);
 }
 

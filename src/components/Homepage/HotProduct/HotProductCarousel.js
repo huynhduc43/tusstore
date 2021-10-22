@@ -65,11 +65,12 @@ export default function HotProductCarousel() {
   };
 
   useEffect(() => {
+    let mounted = true;
     const fetchHotProducts = async () => {
       try {
         const response = await axios.get(process.env.REACT_APP_REMOTE_URL + '/hot-products');
 
-        if (response) {
+        if (response && mounted) {
           setIsLoaded(true);
           setHotProducts(response.data);;
         }
@@ -81,6 +82,7 @@ export default function HotProductCarousel() {
     }
 
     fetchHotProducts();
+    return () => mounted = false;
   }, []);
 
   if (error) {

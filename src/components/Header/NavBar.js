@@ -164,6 +164,9 @@ const useStyles = makeStyles((theme) => ({
       textAlign: "center",
       textDecoration: "underline",
     }
+  },
+  signInBtn: {
+    ...Constants.BUTTON_CONTAINED
   }
 }));
 
@@ -241,7 +244,7 @@ export default function NavBar ({ data }) {
                   {auth.user ? (
                     <AccountButton email={auth.user.email} />
                   ) : (<>
-                    <Button component={Links} to="/sign-in" className={classes.button} color="inherit">
+                    <Button component={Links} to="/sign-in" className={classes.signInBtn} color="inherit" style={{marginRight: 10}}>
                       Đăng nhập
                     </Button>
                     <Button component={Links} to="/sign-up" className={classes.button} color="inherit">
@@ -265,7 +268,7 @@ export default function NavBar ({ data }) {
                     |
                     <AccountButton email={auth.user.email} />
                   </>) : (<>
-                    <Button component={Links} to="/sign-in" className={classes.button} color="inherit">
+                    <Button component={Links} to="/sign-in" className={classes.signInBtn} color="inherit" style={{marginRight: 10}}>
                       Đăng nhập
                     </Button>
                     <Button component={Links} to="/sign-up" className={classes.button} color="inherit">

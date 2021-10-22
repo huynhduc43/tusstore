@@ -63,14 +63,14 @@ const convert = (path, breadCrumb, productUrl) => {
         });
         break;
 
-      case "mediume-stone-lotus":
+      case "medium-stone-lotus":
         newPath.push({
           name: "Cỡ vừa",
           url: "/products/stone-lotus/medium-stone-lotus",
         });
         break;
 
-      case "smalle-stone-lotus":
+      case "small-stone-lotus":
         newPath.push({
           name: "Cỡ nhỏ",
           url: "/products/stone-lotus/small-stone-lotus",
@@ -160,17 +160,26 @@ export default function SimpleBreadcrumbs({ breadCrumb }) {
   path.shift();
   const newpath = convert(path, breadCrumb, location.pathname);
 
+  const items = newpath.slice(0, newpath.length - 1).map((item, i) => (
+    <Link key={i} color="inherit" component={Links} to={item.url}>
+      {item.name}
+    </Link>
+  ));
+
+  items.push(
+    <Link key={newpath.length - 1} color="primary" component={Links} to={newpath[newpath.length - 1].url}>
+      {newpath[newpath.length - 1].name}
+    </Link>
+  )
+
+
+
   return (
     <Breadcrumbs aria-label="breadcrumb">
       {location.pathname !== "/" && <Link color="inherit" component={Links} to="/">
         Home
       </Link>}
-      {newpath.map((item, i) => (
-        <Link key={i} color="inherit" component={Links} to={item.url}>
-          {item.name}
-          <span hidden>{item.url}</span> {/* ??? Fix: Warning: Failed prop type: The prop `children` is marked as required in `ForwardRef(Link)`, but its value is `undefined`. */}
-        </Link>
-      ))}
+      {items}
     </Breadcrumbs>
   );
 }

@@ -10,13 +10,11 @@ export default function AlertDialog({ dialogStatus, content, setDialogStatus, se
   const handleCloseWithNo = () => {
     setDialogStatus(false);
     setRemove(false);
-    console.log("NO")
   };
 
   const handleCloseWithYes = () => {
     setDialogStatus(false);
     setRemove(true);
-    console.log("YES")
   };
 
   return (

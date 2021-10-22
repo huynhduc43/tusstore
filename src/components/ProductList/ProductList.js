@@ -14,7 +14,7 @@ import {
 import axios from 'axios';
 
 //My components
-import Product from "./Product";
+import Product from './Products/Product';
 import BreadcrumbsCustom from '../BreadcrumbsCustom';
 import SortBy from "./SortBy";
 //import Show from './Show';
@@ -22,7 +22,8 @@ import AdvancedFilteringCactus from './AdvancedFilteringCactus';
 import PaginationCustom from "./PaginationCustom";
 import AdvancedFilteringStoneLotus from './AdvancedFilteringStoneLotus';
 import AdvancedFilteringPots from './AdvancedFilteringPots';
-import ProductDetail from './ProductDetail';
+import ProductDetail from './Products/ProductDetail';
+import ProductListSkeleton from "./ProductListSkeleton";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -57,12 +58,7 @@ const pathnameList = [
   "/products/pots",
 ]
 
-export default function ListOfProducts({path}) {
-  const classes = useStyles();
-  const location = useLocation();
-  const theme = useTheme();
-  const isDownSM = useMediaQuery(theme.breakpoints.down("sm"));
-  const isDownXS = useMediaQuery(theme.breakpoints.down("xs"));
+export default function ListOfProducts({ path }) {
   const [products, setProducts] = useState([]);
   const [pagination, setPagination] = useState({});
   const [productDetail, setProductDetail] = useState({});
@@ -82,23 +78,45 @@ export default function ListOfProducts({path}) {
     greenPlant: false,
     yellowPlant: false,
   });
+  const [error, setError] = useState(null);
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  const classes = useStyles();
+  const location = useLocation();
+  const theme = useTheme();
+  const isDownSM = useMediaQuery(theme.breakpoints.down("sm"));
+  const isDownXS = useMediaQuery(theme.breakpoints.down("xs"));
 
   React.useEffect(() => {
     const fetchData = async () => {
-      let response;
-      if (filter === '') {
-        response = await axios.get(process.env.REACT_APP_REMOTE_URL + location.pathname + `${`?sort=${sort}` === location.search ? `?sort=${sort}` : `${location.search}`}`);
-      } else {
-        response = await axios.get(process.env.REACT_APP_REMOTE_URL + location.pathname + location.search);
+      try {
+        let response;
+        if (filter === '') {
+          response = await axios.get(process.env.REACT_APP_REMOTE_URL + location.pathname + `${`?sort=${sort}` === location.search ? `?sort=${sort}` : `${location.search}`}`);
+        } else {
+          response = await axios.get(process.env.REACT_APP_REMOTE_URL + location.pathname + location.search);
+        }
+        setIsLoaded(true);
+        setProducts(response.data.productList);
+        setPagination(response.data.paginationInfo);
+      } catch (error) {
+        console.error(error);
+        setError(error);
+        setIsLoaded(true);
       }
-
-      setProducts(response.data.productList);
-      setPagination(response.data.paginationInfo);
     }
 
     const fetchProductDetail = async () => {
-      const response = await axios.get(process.env.REACT_APP_REMOTE_URL + location.pathname);
-      setProductDetail(response.data);
+      try {
+        const response = await axios.get(process.env.REACT_APP_REMOTE_URL + location.pathname);
+        setProductDetail(response.data);
+        setIsLoaded(true);
+      } catch (error) {
+        console.error(error);
+        setError(error);
+        setIsLoaded(true);
+      }
+
     }
 
     if (pathnameList.indexOf(location.pathname) !== -1) {
@@ -142,14 +160,14 @@ export default function ListOfProducts({path}) {
     <Container maxWidth="lg">
       <div className={classes.root}>
         <Route exact to={location.pathname}>
-          {pathnameList.indexOf(location.pathname) === -1 ? <ProductDetail productInfo={productDetail} /> :
+          {pathnameList.indexOf(location.pathname) === -1 ? <ProductDetail /> :
             <Grid container spacing={3}>
               <Grid item xs={12}>
                 <Paper className={classes.paper}>
                   <BreadcrumbsCustom
-                    path={location.pathname}
+                    pathname={location.pathname}
                     breadCrumb={productDetail.name}
-                    productUrl={productDetail._id}
+                  // productUrl={productDetail._id}
                   />
                 </Paper>
               </Grid>
@@ -197,69 +215,65 @@ export default function ListOfProducts({path}) {
 
                   {pathnameList.indexOf(location.pathname) === -1 ?
                     <Redirect to={location.pathname}>
-                      <ProductDetail product={productDetail} />
+                      <ProductDetail />
                     </Redirect>
                     :
-                    (<>
-                      {/* {!isDownSM &&
-                      <Grid item xs={12}>
-                        <Paper className={classes.paper}>xs=12</Paper>
-                      </Grid>
-                    } */}
-
-                      <Grid item xs={12}>
-                        <Paper className={classes.paper}>
-                          {pagination.total_results === 0 ? <>
-                            <img src='/search.svg' width="20%" alt="not-found" />
-                            <Typography variant="h6" color="secondary">Không có sản phẩm!</Typography>
-                          </> : (
-                            <Grid container item xs={12} spacing={1} alignItems="center">
-                              <Grid item sm={6} xs={12}>
-                                {/* <Show perPage={perPage} onChangePerPage={setPerPage} /> */}
-                                <Typography variant="body2">
-                                  Hiển thị <b>{pagination.first_result + 1} - {pagination.last_result + 1} / {pagination.total_results}</b> sản phẩm
-                                </Typography>
-                              </Grid>
-                              <Grid container item sm={6} xs={12} alignItems="center" justifyContent="center">
-                                <Grid item>Sắp xếp theo&nbsp;</Grid>
-                                <Grid item>
-                                  <SortBy
-                                    filter={filter}
-                                    onChangeSortValue={setSort}
-                                    sort={sort}
-                                  />
+                    (error ? <Typography variant="h4" color="error" align="center">Error: {error.message}</Typography>
+                      : (!isLoaded ? <ProductListSkeleton />
+                        : <>
+                          <Grid item xs={12}>
+                            <Paper className={classes.paper}>
+                              {pagination.total_results === 0 ? <>
+                                <img src='/search.svg' width="20%" alt="not-found" />
+                                <Typography variant="h6" color="secondary">Không có sản phẩm!</Typography>
+                              </> : (
+                                <Grid container item xs={12} spacing={1} alignItems="center">
+                                  <Grid item sm={6} xs={12}>
+                                    {/* <Show perPage={perPage} onChangePerPage={setPerPage} /> */}
+                                    <Typography variant="body2">
+                                      Hiển thị <b>{pagination.first_result + 1} - {pagination.last_result + 1} / {pagination.total_results}</b> sản phẩm
+                                    </Typography>
+                                  </Grid>
+                                  <Grid container item sm={6} xs={12} alignItems="center" justifyContent="center">
+                                    <Grid item>Sắp xếp theo&nbsp;</Grid>
+                                    <Grid item>
+                                      <SortBy
+                                        filter={filter}
+                                        onChangeSortValue={setSort}
+                                        sort={sort}
+                                      />
+                                    </Grid>
+                                  </Grid>
                                 </Grid>
-                              </Grid>
+                              )}
+
+                            </Paper>
+                          </Grid>
+
+                          <Grid item xs={12}>
+                            <Grid container spacing={isDownXS ? 1 : 3}>
+                              {products.map((product) => (
+                                <Product
+                                  key={product._id}
+                                  link={`${location.pathname}/${product._id}`}
+                                  _id={product._id}
+                                  name={product.name}
+                                  price={product.price}
+                                  primaryImg={product.primaryImg}
+                                  view={product.view}
+                                  rating={product.rating || 0}
+                                  quantity={product.quantity}
+                                />
+                              ))
+                              }
                             </Grid>
-                          )}
-
-                        </Paper>
-                      </Grid>
-
-                      <Grid item xs={12}>
-                        <Grid container spacing={isDownXS ? 1 : 3}>
-                          {products.map((product) => (
-                            <Product
-                              key={product._id}
-                              link={`${location.pathname}/${product._id}`}
-                              _id={product._id}
-                              name={product.name}
-                              price={product.price}
-                              primaryImg={product.primaryImg}
-                              view={product.view}
-                              rating={product.rating || 0}
-                              quantity={product.quantity}
-                            />
-                          ))
+                          </Grid>
+                          {pagination.total_results !== 0 &&
+                            <Grid container item xs={12} justifyContent="center" style={{ marginBottom: 10, }}>
+                              <PaginationCustom pagination={pagination} filter={filter} sort={sort} />
+                            </Grid>
                           }
-                        </Grid>
-                      </Grid>
-                      {pagination.total_results !== 0 &&
-                        <Grid container item xs={12} justifyContent="center" style={{ marginBottom: 10, }}>
-                          <PaginationCustom pagination={pagination} filter={filter} sort={sort} />
-                        </Grid>
-                      }
-                    </>)}
+                        </>))}
 
                 </Grid>
               </Grid>
@@ -268,5 +282,5 @@ export default function ListOfProducts({path}) {
         </Route>
       </div>
     </Container>
-  )
+  );
 }

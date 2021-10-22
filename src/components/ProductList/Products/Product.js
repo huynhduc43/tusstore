@@ -16,8 +16,8 @@ import StarIcon from '@material-ui/icons/Star';
 import NumberFormat from 'react-number-format';
 
 //My component
-import Constants from '../Constants.js';
-import { CartState } from "../../context/CartContext";
+import Constants from '../../Constants.js';
+import { CartState } from '../../../context/CartContext';
 
 const useStyles = makeStyles((theme) => ({
   root: {

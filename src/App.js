@@ -16,7 +16,7 @@ import SignIn from './components/SignIn';
 import Header from './components/Header/Header';
 import Footer from './components/Footer/Footer';
 import Homepage from './components/Homepage/Homepage';
-import ListOfProducts from './components/Products/ListOfProducts';
+import ProductList from './components/ProductList/ProductList'
 import Cart from './components/ShoppingCart/Cart';
 import Account from './components/Account/Account';
 import Constants from './components/Constants';
@@ -37,7 +37,7 @@ const Main = () => {
     }}>
       <Switch>
         <Route exact path="/" component={Homepage}></Route>
-        <Route path='/products' component={ListOfProducts} />
+        <Route path='/products' component={ProductList} />
         <Route path="/cart" component={Cart} />
         <Route path="/sign-up">
           <SignUp />
